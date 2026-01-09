@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url      = env("DATABASE_URL")
+}
+
+// User Roles Enum
+enum UserRole {
+  OWNER
+  ACCOUNTANT
+  PACKER
+  ADMIN
+}
+
+// NextAuth.js Account model (OAuth providers)
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? // @db.Text
+  access_token             String? // @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? // @db.Text
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refresh_token_expires_in Int?
+
+  @@unique([provider, providerAccountId])
+}
+
+// NextAuth.js Session model
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// User model (NextAuth.js v5 compatible + password for email/password auth)
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String // Hashed password for email/password authentication
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // NextAuth.js relations
+  accounts Account[]
+  sessions Session[]
+
+  // Multi-tenant relations
+  shopsOwned      Shop[]                @relation("ShopOwner")
+  shopMemberships ShopUser[]
+  
+  // Password reset
+  passwordResetTokens PasswordResetToken[]
+  
+  // Team invitations
+  invitationsSent Invitation[] @relation("InvitationsSent")
+}
+
+// Shop model (tenant entity for multi-tenancy)
+model Shop {
+  id              String   @id @default(cuid())
+  name            String
+  tinNumber       String // BIR Tax Identification Number
+  businessAddress String
+  ownerId         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  owner   User       @relation("ShopOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members ShopUser[]
+  invitations Invitation[]
+
+  @@index([ownerId])
+}
+
+// ShopUser junction model (many-to-many User-Shop with role)
+model ShopUser {
+  id       String   @id @default(cuid())
+  userId   String
+  shopId   String
+  role     UserRole
+  joinedAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shopId])
+  @@index([userId])
+  @@index([shopId])
+}
+
+// NextAuth.js VerificationToken model
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Password Reset Token model
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+// Invitation model (team member invitations)
+model Invitation {
+  id          String    @id @default(cuid())
+  email       String
+  shopId      String
+  role        UserRole
+  token       String    @unique
+  invitedById String
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  shop      Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  invitedBy User @relation("InvitationsSent", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([shopId])
+  @@index([token])
+  @@index([email])
+}
