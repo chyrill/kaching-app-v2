@@ -103,19 +103,36 @@ export default function DashboardPage({ params }: DashboardPageProps) {
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* Top bar with shop switcher */}
+        {/* Top bar with shop switcher and mobile menu */}
         <header className="border-b-2 border-gray-200 bg-gray-50">
           <div className="flex items-center justify-between px-6 py-4">
             <div className="flex items-center gap-4">
-              {/* Mobile menu button placeholder - handled in DashboardNav */}
-              <div className="lg:hidden">
-                <DashboardNav
-                  shopId={shopId}
-                  currentShop={currentShop}
-                  userEmail={session?.user.email}
-                  onSignOut={() => setShowLogoutModal(true)}
-                />
-              </div>
+              {/* Mobile menu button */}
+              <button
+                onClick={() => {
+                  const nav = document.querySelector('[data-mobile-nav]');
+                  if (nav) {
+                    const event = new CustomEvent('toggleNav');
+                    nav.dispatchEvent(event);
+                  }
+                }}
+                className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 lg:hidden"
+                aria-label="Toggle menu"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
               
               {shops && shops.length > 1 && (
                 <ShopSwitcher

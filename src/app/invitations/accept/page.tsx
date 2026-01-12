@@ -13,6 +13,7 @@ export default function AcceptInvitationPage() {
 
   const [error, setError] = useState("");
   const [showSignup, setShowSignup] = useState(false);
+  const [userExists, setUserExists] = useState<boolean | null>(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningUp, setIsSigningUp] = useState(false);
@@ -26,6 +27,24 @@ export default function AcceptInvitationPage() {
     { token: token ?? "" },
     { enabled: !!token },
   );
+
+  // Check if user exists (only when invitation is loaded and user is not authenticated)
+  const {
+    data: userExistsData,
+    isLoading: isCheckingUser,
+  } = api.team.checkUserExists.useQuery(
+    { email: invitation?.email ?? "" },
+    { 
+      enabled: !!invitation?.email && status === "unauthenticated",
+    },
+  );
+
+  // Update userExists state when data is available
+  useEffect(() => {
+    if (userExistsData !== undefined) {
+      setUserExists(userExistsData.exists);
+    }
+  }, [userExistsData]);
 
   // Accept invitation mutation
   const acceptMutation = api.team.acceptInvitation.useMutation({
@@ -61,8 +80,15 @@ export default function AcceptInvitationPage() {
         }),
       });
 
+      const data = await signupRes.json();
+
       if (!signupRes.ok) {
-        const data = await signupRes.json();
+        // If user already exists, show message to login instead
+        if (signupRes.status === 409) {
+          setError("An account with this email already exists. Please sign in instead.");
+          setIsSigningUp(false);
+          return;
+        }
         throw new Error(data.error || "Signup failed");
       }
 
@@ -91,14 +117,14 @@ export default function AcceptInvitationPage() {
     }
   }, [status, invitation]);
 
-  // Show signup form if unauthenticated
+  // Show signup form if unauthenticated and user doesn't exist
   useEffect(() => {
-    if (status === "unauthenticated" && invitation) {
+    if (status === "unauthenticated" && invitation && userExists === false) {
       setShowSignup(true);
     }
-  }, [status, invitation]);
+  }, [status, invitation, userExists]);
 
-  if (status === "loading" || isLoadingInvitation) {
+  if (status === "loading" || isLoadingInvitation || (status === "unauthenticated" && isCheckingUser)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-gray-600">Loading...</div>
@@ -146,8 +172,47 @@ export default function AcceptInvitationPage() {
     );
   }
 
-  // Show signup form if user is not authenticated
-  if (showSignup && status === "unauthenticated") {
+  // Show login prompt if user already exists
+  if (status === "unauthenticated" && userExists === true) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white p-6">
+        <div className="max-w-md rounded-lg border-2 border-gray-200 bg-gray-50 p-8">
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">
+            Sign In to Accept Invitation
+          </h1>
+          <p className="mb-6 text-sm text-gray-600">
+            You've been invited to join <span className="font-semibold text-gray-900">{invitation.shopName}</span>
+          </p>
+
+          <div className="mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-4">
+            <p className="text-sm text-emerald-800">
+              <strong>Good news!</strong> You already have an account with this email.
+            </p>
+            <p className="mt-2 text-sm text-emerald-700">
+              Please sign in to accept the invitation.
+            </p>
+          </div>
+
+          <button
+            onClick={() => router.push(`/auth/login?callbackUrl=${encodeURIComponent(`/invitations/accept?token=${token}`)}`)}
+            className="w-full rounded-lg bg-emerald-500 px-6 py-3 font-semibold text-white hover:bg-emerald-600"
+          >
+            Sign In to Accept
+          </button>
+
+          <p className="mt-4 text-center text-sm text-gray-600">
+            Wrong email?{" "}
+            <a href="/" className="text-emerald-600 hover:underline">
+              Go back home
+            </a>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show signup form if user is not authenticated and doesn't have an account
+  if (showSignup && status === "unauthenticated" && userExists === false) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white p-6">
         <div className="max-w-md rounded-lg border-2 border-gray-200 bg-gray-50 p-8">

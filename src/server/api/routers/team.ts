@@ -305,6 +305,23 @@ export const teamRouter = createTRPCRouter({
     }),
 
   /**
+   * Check if user exists by email (for invitation flow)
+   * Public endpoint to help users know if they need to sign up or login
+   */
+  checkUserExists: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { email: input.email },
+        select: { id: true }, // Only select id for minimal data exposure
+      });
+
+      return {
+        exists: !!user,
+      };
+    }),
+
+  /**
    * Accept invitation and join shop (requires auth)
    */
   acceptInvitation: protectedProcedure

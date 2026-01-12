@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,6 +22,23 @@ export default function DashboardNav({
 }: DashboardNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const navRef = useRef<HTMLDivElement>(null);
+
+  // Listen for toggle event from external button
+  useEffect(() => {
+    const handleToggle = () => setIsOpen(prev => !prev);
+    const element = navRef.current;
+    
+    if (element) {
+      element.addEventListener('toggleNav', handleToggle);
+    }
+    
+    return () => {
+      if (element) {
+        element.removeEventListener('toggleNav', handleToggle);
+      }
+    };
+  }, []);
 
   const isActive = (path: string) => pathname === path;
 
@@ -73,38 +90,11 @@ export default function DashboardNav({
 
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 lg:hidden"
-        aria-label="Toggle menu"
-      >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          {isOpen ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          )}
-        </svg>
-      </button>
-
-      {/* Sidebar for desktop */}
-      <aside className="hidden w-64 border-r-2 border-gray-200 bg-gray-50 lg:block">
+      {/* Hidden ref element for event listening */}
+      <div ref={navRef} data-mobile-nav className="sr-only" aria-hidden="true" />
+      
+      {/* Sidebar for desktop only */}
+      <aside className="hidden lg:block lg:w-64 border-r-2 border-gray-200 bg-gray-50">
         <div className="flex h-full flex-col">
           {/* Shop info */}
           <div className="border-b-2 border-gray-200 p-4">

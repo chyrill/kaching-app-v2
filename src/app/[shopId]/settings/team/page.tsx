@@ -223,7 +223,37 @@ export default function TeamManagementPage() {
           userEmail={session?.user.email}
           onSignOut={() => setShowLogoutModal(true)}
         />
-        <main className="flex-1 p-6">
+        <main className="flex-1">
+          {/* Mobile menu button */}
+          <div className="border-b-2 border-gray-200 bg-gray-50 p-4 lg:hidden">
+            <button
+              onClick={() => {
+                const nav = document.querySelector('[data-mobile-nav]');
+                if (nav) {
+                  const event = new CustomEvent('toggleNav');
+                  nav.dispatchEvent(event);
+                }
+              }}
+              className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+              aria-label="Toggle menu"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+          
+          <div className="p-6">
           <h1 className="mb-6 text-3xl font-bold text-gray-900">
             Team Management
           </h1>
@@ -231,6 +261,7 @@ export default function TeamManagementPage() {
             <p className="text-gray-600">
               You must be a shop owner to manage team members.
             </p>
+          </div>
           </div>
         </main>
       </div>
@@ -248,7 +279,37 @@ export default function TeamManagementPage() {
       />
 
       {/* Main Content */}
-      <main className="flex-1 p-6">
+      <main className="flex-1">
+        {/* Mobile menu button */}
+        <div className="border-b-2 border-gray-200 bg-gray-50 p-4 lg:hidden">
+          <button
+            onClick={() => {
+              const nav = document.querySelector('[data-mobile-nav]');
+              if (nav) {
+                const event = new CustomEvent('toggleNav');
+                nav.dispatchEvent(event);
+              }
+            }}
+            className="rounded-lg p-2 text-gray-700 hover:bg-gray-100"
+            aria-label="Toggle menu"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="p-6">
         <div className="mx-auto max-w-4xl">
           <h1 className="mb-6 text-3xl font-bold text-gray-900">Team Management</h1>
 
@@ -315,6 +376,7 @@ export default function TeamManagementPage() {
               {inviteMutation.isPending ? "Sending..." : "Send Invitation"}
             </button>
           </form>
+        </div>
         </div>
 
         {/* Pending Invitations */}
@@ -471,11 +533,11 @@ export default function TeamManagementPage() {
             </div>
           )}
         </div>
-      </div>
-    </main>
+        </div>
+      </main>
 
-    {/* Logout Confirmation Modal */}
-    {showLogoutModal && (
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
         <div className="w-full max-w-md rounded-lg border-2 border-gray-200 bg-white p-6 shadow-xl">
           <h2 className="mb-4 text-xl font-bold text-gray-900">
@@ -503,6 +565,6 @@ export default function TeamManagementPage() {
         </div>
       </div>
     )}
-  </div>
+    </div>
   );
 }
