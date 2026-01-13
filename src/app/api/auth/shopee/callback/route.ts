@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import crypto from "crypto";
+import { queueProductImport } from "~/lib/queue";
 
 interface ShopeeTokenResponse {
   access_token?: string;
@@ -160,7 +161,14 @@ async function exchangeCodeForToken(
       },
     });
 
-    // TODO: Queue background job to import product catalog (Story 4.2)
+    // Queue background job to import product catalog (Story 4.2)
+    try {
+      await queueProductImport(localShopId);
+      console.log(`[Shopee OAuth] Queued product import for shop ${localShopId}`);
+    } catch (queueError) {
+      console.error(`[Shopee OAuth] Failed to queue import job:`, queueError);
+      // Don't fail the entire OAuth flow if queue fails
+    }
 
     return { success: true };
     

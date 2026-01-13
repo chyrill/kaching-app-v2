@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   enforceOwner,
 } from "~/server/api/trpc";
+import { getImportJobStatus } from "~/lib/queue";
 
 export const shopeeRouter = createTRPCRouter({
   /**
@@ -50,6 +51,26 @@ export const shopeeRouter = createTRPCRouter({
         expiresAt: integration.expiresAt,
         isDeleted: !!integration.deletedAt,
         connectedAt: integration.createdAt,
+      };
+    }),
+
+  /**
+   * Get product import job status
+   * Shows progress of catalog import after OAuth connection
+   * Story 4.2: Import Product Catalog from Shopee
+   */
+  getImportStatus: protectedProcedure
+    .input(z.object({ shopId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // Enforce owner access
+      await enforceOwner(ctx, input.shopId);
+
+      const jobStatus = await getImportJobStatus(input.shopId);
+
+      return {
+        status: jobStatus.status,
+        progress: jobStatus.progress,
+        failedReason: jobStatus.failedReason,
       };
     }),
 

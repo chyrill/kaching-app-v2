@@ -62,11 +62,25 @@ export default function IntegrationsPage() {
   // Fetch Shopee integration status
   const {
     data: shopeeIntegration,
-    isLoading: isLoadingIntegration,
     refetch: refetchIntegration,
   } = api.shopee.getIntegrationStatus.useQuery(
     { shopId: shopId! },
     { enabled: mounted && !!shopId && !!isOwner }
+  );
+
+  // Fetch import job status (poll every 3 seconds while importing)
+  const { data: importStatus } = api.shopee.getImportStatus.useQuery(
+    { shopId: shopId! },
+    {
+      enabled: mounted && !!shopId && !!isOwner && shopeeIntegration?.connected,
+      refetchInterval: (data) => {
+        // Poll every 3 seconds while import is active
+        if (data?.status === "active" || data?.status === "waiting") {
+          return 3000;
+        }
+        return false;
+      },
+    }
   );
 
   const handleConnectShopee = () => {
@@ -245,7 +259,35 @@ export default function IntegrationsPage() {
                 </div>
               </div>
 
-              {isConnected && shopeeIntegration?.lastSyncAt && (
+              {/* Import Progress */}
+              {isConnected && importStatus && (importStatus.status === "active" || importStatus.status === "waiting") && (
+                <div className="mt-4 border-t-2 border-gray-100 pt-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-emerald-500" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">
+                        Importing products from Shopee...
+                      </p>
+                      {typeof importStatus.progress === "object" && (
+                        <div className="mt-2">
+                          <div className="flex justify-between text-xs text-gray-600">
+                            <span>{importStatus.progress.imported} of {importStatus.progress.total} products</span>
+                            <span>{Math.round((importStatus.progress.imported / importStatus.progress.total) * 100)}%</span>
+                          </div>
+                          <div className="mt-1 h-2 w-full rounded-full bg-gray-200">
+                            <div 
+                              className="h-2 rounded-full bg-emerald-500 transition-all duration-300"
+                              style={{ width: `${(importStatus.progress.imported / importStatus.progress.total) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isConnected && shopeeIntegration?.lastSyncAt && !importStatus?.status?.match(/active|waiting/) && (
                 <div className="mt-4 border-t-2 border-gray-100 pt-4">
                   <p className="text-sm text-gray-600">
                     Last synced: {new Date(shopeeIntegration.lastSyncAt).toLocaleString()}
