@@ -199,9 +199,75 @@ exports.Prisma.InvitationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ShopeeIntegrationScalarFieldEnum = {
+  id: 'id',
+  shopId: 'shopId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  shopeeShopId: 'shopeeShopId',
+  status: 'status',
+  lastSyncAt: 'lastSyncAt',
+  failureCount: 'failureCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  shopId: 'shopId',
+  platform: 'platform',
+  shopeeProductId: 'shopeeProductId',
+  name: 'name',
+  sku: 'sku',
+  stock: 'stock',
+  price: 'price',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  shopId: 'shopId',
+  platform: 'platform',
+  shopeeOrderId: 'shopeeOrderId',
+  orderNumber: 'orderNumber',
+  totalAmount: 'totalAmount',
+  customerName: 'customerName',
+  customerEmail: 'customerEmail',
+  customerPhone: 'customerPhone',
+  shippingAddress: 'shippingAddress',
+  orderDate: 'orderDate',
+  items: 'items',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WebhookPayloadScalarFieldEnum = {
+  id: 'id',
+  shopId: 'shopId',
+  platform: 'platform',
+  eventType: 'eventType',
+  rawPayload: 'rawPayload',
+  signature: 'signature',
+  status: 'status',
+  processedAt: 'processedAt',
+  errorMessage: 'errorMessage',
+  retryCount: 'retryCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -213,11 +279,36 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
   ACCOUNTANT: 'ACCOUNTANT',
   PACKER: 'PACKER',
   ADMIN: 'ADMIN'
+};
+
+exports.IntegrationStatus = exports.$Enums.IntegrationStatus = {
+  HEALTHY: 'HEALTHY',
+  UNHEALTHY: 'UNHEALTHY',
+  DISCONNECTED: 'DISCONNECTED'
+};
+
+exports.Platform = exports.$Enums.Platform = {
+  SHOPEE: 'SHOPEE',
+  LAZADA: 'LAZADA',
+  TIKTOK: 'TIKTOK'
+};
+
+exports.WebhookStatus = exports.$Enums.WebhookStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {
@@ -228,7 +319,11 @@ exports.Prisma.ModelName = {
   ShopUser: 'ShopUser',
   VerificationToken: 'VerificationToken',
   PasswordResetToken: 'PasswordResetToken',
-  Invitation: 'Invitation'
+  Invitation: 'Invitation',
+  ShopeeIntegration: 'ShopeeIntegration',
+  Product: 'Product',
+  Order: 'Order',
+  WebhookPayload: 'WebhookPayload'
 };
 
 /**

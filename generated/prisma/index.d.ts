@@ -53,6 +53,26 @@ export type PasswordResetToken = $Result.DefaultSelection<Prisma.$PasswordResetT
  * 
  */
 export type Invitation = $Result.DefaultSelection<Prisma.$InvitationPayload>
+/**
+ * Model ShopeeIntegration
+ * 
+ */
+export type ShopeeIntegration = $Result.DefaultSelection<Prisma.$ShopeeIntegrationPayload>
+/**
+ * Model Product
+ * 
+ */
+export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
+/**
+ * Model Order
+ * 
+ */
+export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
+/**
+ * Model WebhookPayload
+ * 
+ */
+export type WebhookPayload = $Result.DefaultSelection<Prisma.$WebhookPayloadPayload>
 
 /**
  * Enums
@@ -67,11 +87,51 @@ export namespace $Enums {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const Platform: {
+  SHOPEE: 'SHOPEE',
+  LAZADA: 'LAZADA',
+  TIKTOK: 'TIKTOK'
+};
+
+export type Platform = (typeof Platform)[keyof typeof Platform]
+
+
+export const IntegrationStatus: {
+  HEALTHY: 'HEALTHY',
+  UNHEALTHY: 'UNHEALTHY',
+  DISCONNECTED: 'DISCONNECTED'
+};
+
+export type IntegrationStatus = (typeof IntegrationStatus)[keyof typeof IntegrationStatus]
+
+
+export const WebhookStatus: {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type WebhookStatus = (typeof WebhookStatus)[keyof typeof WebhookStatus]
+
 }
 
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type Platform = $Enums.Platform
+
+export const Platform: typeof $Enums.Platform
+
+export type IntegrationStatus = $Enums.IntegrationStatus
+
+export const IntegrationStatus: typeof $Enums.IntegrationStatus
+
+export type WebhookStatus = $Enums.WebhookStatus
+
+export const WebhookStatus: typeof $Enums.WebhookStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -270,6 +330,46 @@ export class PrismaClient<
     * ```
     */
   get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.shopeeIntegration`: Exposes CRUD operations for the **ShopeeIntegration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ShopeeIntegrations
+    * const shopeeIntegrations = await prisma.shopeeIntegration.findMany()
+    * ```
+    */
+  get shopeeIntegration(): Prisma.ShopeeIntegrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.product`: Exposes CRUD operations for the **Product** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Products
+    * const products = await prisma.product.findMany()
+    * ```
+    */
+  get product(): Prisma.ProductDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.order`: Exposes CRUD operations for the **Order** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Orders
+    * const orders = await prisma.order.findMany()
+    * ```
+    */
+  get order(): Prisma.OrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.webhookPayload`: Exposes CRUD operations for the **WebhookPayload** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WebhookPayloads
+    * const webhookPayloads = await prisma.webhookPayload.findMany()
+    * ```
+    */
+  get webhookPayload(): Prisma.WebhookPayloadDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -718,7 +818,11 @@ export namespace Prisma {
     ShopUser: 'ShopUser',
     VerificationToken: 'VerificationToken',
     PasswordResetToken: 'PasswordResetToken',
-    Invitation: 'Invitation'
+    Invitation: 'Invitation',
+    ShopeeIntegration: 'ShopeeIntegration',
+    Product: 'Product',
+    Order: 'Order',
+    WebhookPayload: 'WebhookPayload'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -737,7 +841,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "session" | "user" | "shop" | "shopUser" | "verificationToken" | "passwordResetToken" | "invitation"
+      modelProps: "account" | "session" | "user" | "shop" | "shopUser" | "verificationToken" | "passwordResetToken" | "invitation" | "shopeeIntegration" | "product" | "order" | "webhookPayload"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1333,6 +1437,302 @@ export namespace Prisma {
           }
         }
       }
+      ShopeeIntegration: {
+        payload: Prisma.$ShopeeIntegrationPayload<ExtArgs>
+        fields: Prisma.ShopeeIntegrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ShopeeIntegrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ShopeeIntegrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          findFirst: {
+            args: Prisma.ShopeeIntegrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ShopeeIntegrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          findMany: {
+            args: Prisma.ShopeeIntegrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>[]
+          }
+          create: {
+            args: Prisma.ShopeeIntegrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          createMany: {
+            args: Prisma.ShopeeIntegrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ShopeeIntegrationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>[]
+          }
+          delete: {
+            args: Prisma.ShopeeIntegrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          update: {
+            args: Prisma.ShopeeIntegrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ShopeeIntegrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ShopeeIntegrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ShopeeIntegrationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ShopeeIntegrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ShopeeIntegrationPayload>
+          }
+          aggregate: {
+            args: Prisma.ShopeeIntegrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateShopeeIntegration>
+          }
+          groupBy: {
+            args: Prisma.ShopeeIntegrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ShopeeIntegrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ShopeeIntegrationCountArgs<ExtArgs>
+            result: $Utils.Optional<ShopeeIntegrationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Product: {
+        payload: Prisma.$ProductPayload<ExtArgs>
+        fields: Prisma.ProductFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          findMany: {
+            args: Prisma.ProductFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>[]
+          }
+          create: {
+            args: Prisma.ProductCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          createMany: {
+            args: Prisma.ProductCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          update: {
+            args: Prisma.ProductUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProduct>
+          }
+          groupBy: {
+            args: Prisma.ProductGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductCountAggregateOutputType> | number
+          }
+        }
+      }
+      Order: {
+        payload: Prisma.$OrderPayload<ExtArgs>
+        fields: Prisma.OrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findFirst: {
+            args: Prisma.OrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          findMany: {
+            args: Prisma.OrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          create: {
+            args: Prisma.OrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          createMany: {
+            args: Prisma.OrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          delete: {
+            args: Prisma.OrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          update: {
+            args: Prisma.OrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrderPayload>
+          }
+          aggregate: {
+            args: Prisma.OrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrder>
+          }
+          groupBy: {
+            args: Prisma.OrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrderCountArgs<ExtArgs>
+            result: $Utils.Optional<OrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      WebhookPayload: {
+        payload: Prisma.$WebhookPayloadPayload<ExtArgs>
+        fields: Prisma.WebhookPayloadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WebhookPayloadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WebhookPayloadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          findFirst: {
+            args: Prisma.WebhookPayloadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WebhookPayloadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          findMany: {
+            args: Prisma.WebhookPayloadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>[]
+          }
+          create: {
+            args: Prisma.WebhookPayloadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          createMany: {
+            args: Prisma.WebhookPayloadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WebhookPayloadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>[]
+          }
+          delete: {
+            args: Prisma.WebhookPayloadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          update: {
+            args: Prisma.WebhookPayloadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          deleteMany: {
+            args: Prisma.WebhookPayloadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WebhookPayloadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WebhookPayloadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>[]
+          }
+          upsert: {
+            args: Prisma.WebhookPayloadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookPayloadPayload>
+          }
+          aggregate: {
+            args: Prisma.WebhookPayloadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWebhookPayload>
+          }
+          groupBy: {
+            args: Prisma.WebhookPayloadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WebhookPayloadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WebhookPayloadCountArgs<ExtArgs>
+            result: $Utils.Optional<WebhookPayloadCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1437,6 +1837,10 @@ export namespace Prisma {
     verificationToken?: VerificationTokenOmit
     passwordResetToken?: PasswordResetTokenOmit
     invitation?: InvitationOmit
+    shopeeIntegration?: ShopeeIntegrationOmit
+    product?: ProductOmit
+    order?: OrderOmit
+    webhookPayload?: WebhookPayloadOmit
   }
 
   /* Types for Logging */
@@ -1595,11 +1999,17 @@ export namespace Prisma {
   export type ShopCountOutputType = {
     members: number
     invitations: number
+    products: number
+    orders: number
+    webhookPayloads: number
   }
 
   export type ShopCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | ShopCountOutputTypeCountMembersArgs
     invitations?: boolean | ShopCountOutputTypeCountInvitationsArgs
+    products?: boolean | ShopCountOutputTypeCountProductsArgs
+    orders?: boolean | ShopCountOutputTypeCountOrdersArgs
+    webhookPayloads?: boolean | ShopCountOutputTypeCountWebhookPayloadsArgs
   }
 
   // Custom InputTypes
@@ -1625,6 +2035,27 @@ export namespace Prisma {
    */
   export type ShopCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InvitationWhereInput
+  }
+
+  /**
+   * ShopCountOutputType without action
+   */
+  export type ShopCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+  }
+
+  /**
+   * ShopCountOutputType without action
+   */
+  export type ShopCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+  }
+
+  /**
+   * ShopCountOutputType without action
+   */
+  export type ShopCountOutputTypeCountWebhookPayloadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebhookPayloadWhereInput
   }
 
 
@@ -5309,6 +5740,10 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Shop$membersArgs<ExtArgs>
     invitations?: boolean | Shop$invitationsArgs<ExtArgs>
+    shopeeIntegration?: boolean | Shop$shopeeIntegrationArgs<ExtArgs>
+    products?: boolean | Shop$productsArgs<ExtArgs>
+    orders?: boolean | Shop$ordersArgs<ExtArgs>
+    webhookPayloads?: boolean | Shop$webhookPayloadsArgs<ExtArgs>
     _count?: boolean | ShopCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shop"]>
 
@@ -5349,6 +5784,10 @@ export namespace Prisma {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Shop$membersArgs<ExtArgs>
     invitations?: boolean | Shop$invitationsArgs<ExtArgs>
+    shopeeIntegration?: boolean | Shop$shopeeIntegrationArgs<ExtArgs>
+    products?: boolean | Shop$productsArgs<ExtArgs>
+    orders?: boolean | Shop$ordersArgs<ExtArgs>
+    webhookPayloads?: boolean | Shop$webhookPayloadsArgs<ExtArgs>
     _count?: boolean | ShopCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ShopIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5364,6 +5803,10 @@ export namespace Prisma {
       owner: Prisma.$UserPayload<ExtArgs>
       members: Prisma.$ShopUserPayload<ExtArgs>[]
       invitations: Prisma.$InvitationPayload<ExtArgs>[]
+      shopeeIntegration: Prisma.$ShopeeIntegrationPayload<ExtArgs> | null
+      products: Prisma.$ProductPayload<ExtArgs>[]
+      orders: Prisma.$OrderPayload<ExtArgs>[]
+      webhookPayloads: Prisma.$WebhookPayloadPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5770,6 +6213,10 @@ export namespace Prisma {
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     members<T extends Shop$membersArgs<ExtArgs> = {}>(args?: Subset<T, Shop$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invitations<T extends Shop$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Shop$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    shopeeIntegration<T extends Shop$shopeeIntegrationArgs<ExtArgs> = {}>(args?: Subset<T, Shop$shopeeIntegrationArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    products<T extends Shop$productsArgs<ExtArgs> = {}>(args?: Subset<T, Shop$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    orders<T extends Shop$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Shop$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    webhookPayloads<T extends Shop$webhookPayloadsArgs<ExtArgs> = {}>(args?: Subset<T, Shop$webhookPayloadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6247,6 +6694,97 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Shop.shopeeIntegration
+   */
+  export type Shop$shopeeIntegrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    where?: ShopeeIntegrationWhereInput
+  }
+
+  /**
+   * Shop.products
+   */
+  export type Shop$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Shop.orders
+   */
+  export type Shop$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    cursor?: OrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Shop.webhookPayloads
+   */
+  export type Shop$webhookPayloadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    where?: WebhookPayloadWhereInput
+    orderBy?: WebhookPayloadOrderByWithRelationInput | WebhookPayloadOrderByWithRelationInput[]
+    cursor?: WebhookPayloadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WebhookPayloadScalarFieldEnum | WebhookPayloadScalarFieldEnum[]
   }
 
   /**
@@ -10480,6 +11018,4760 @@ export namespace Prisma {
 
 
   /**
+   * Model ShopeeIntegration
+   */
+
+  export type AggregateShopeeIntegration = {
+    _count: ShopeeIntegrationCountAggregateOutputType | null
+    _avg: ShopeeIntegrationAvgAggregateOutputType | null
+    _sum: ShopeeIntegrationSumAggregateOutputType | null
+    _min: ShopeeIntegrationMinAggregateOutputType | null
+    _max: ShopeeIntegrationMaxAggregateOutputType | null
+  }
+
+  export type ShopeeIntegrationAvgAggregateOutputType = {
+    failureCount: number | null
+  }
+
+  export type ShopeeIntegrationSumAggregateOutputType = {
+    failureCount: number | null
+  }
+
+  export type ShopeeIntegrationMinAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    accessToken: string | null
+    refreshToken: string | null
+    expiresAt: Date | null
+    shopeeShopId: string | null
+    status: $Enums.IntegrationStatus | null
+    lastSyncAt: Date | null
+    failureCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ShopeeIntegrationMaxAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    accessToken: string | null
+    refreshToken: string | null
+    expiresAt: Date | null
+    shopeeShopId: string | null
+    status: $Enums.IntegrationStatus | null
+    lastSyncAt: Date | null
+    failureCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ShopeeIntegrationCountAggregateOutputType = {
+    id: number
+    shopId: number
+    accessToken: number
+    refreshToken: number
+    expiresAt: number
+    shopeeShopId: number
+    status: number
+    lastSyncAt: number
+    failureCount: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type ShopeeIntegrationAvgAggregateInputType = {
+    failureCount?: true
+  }
+
+  export type ShopeeIntegrationSumAggregateInputType = {
+    failureCount?: true
+  }
+
+  export type ShopeeIntegrationMinAggregateInputType = {
+    id?: true
+    shopId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiresAt?: true
+    shopeeShopId?: true
+    status?: true
+    lastSyncAt?: true
+    failureCount?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ShopeeIntegrationMaxAggregateInputType = {
+    id?: true
+    shopId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiresAt?: true
+    shopeeShopId?: true
+    status?: true
+    lastSyncAt?: true
+    failureCount?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ShopeeIntegrationCountAggregateInputType = {
+    id?: true
+    shopId?: true
+    accessToken?: true
+    refreshToken?: true
+    expiresAt?: true
+    shopeeShopId?: true
+    status?: true
+    lastSyncAt?: true
+    failureCount?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type ShopeeIntegrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShopeeIntegration to aggregate.
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShopeeIntegrations to fetch.
+     */
+    orderBy?: ShopeeIntegrationOrderByWithRelationInput | ShopeeIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ShopeeIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShopeeIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShopeeIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ShopeeIntegrations
+    **/
+    _count?: true | ShopeeIntegrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ShopeeIntegrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ShopeeIntegrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ShopeeIntegrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ShopeeIntegrationMaxAggregateInputType
+  }
+
+  export type GetShopeeIntegrationAggregateType<T extends ShopeeIntegrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateShopeeIntegration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateShopeeIntegration[P]>
+      : GetScalarType<T[P], AggregateShopeeIntegration[P]>
+  }
+
+
+
+
+  export type ShopeeIntegrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShopeeIntegrationWhereInput
+    orderBy?: ShopeeIntegrationOrderByWithAggregationInput | ShopeeIntegrationOrderByWithAggregationInput[]
+    by: ShopeeIntegrationScalarFieldEnum[] | ShopeeIntegrationScalarFieldEnum
+    having?: ShopeeIntegrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ShopeeIntegrationCountAggregateInputType | true
+    _avg?: ShopeeIntegrationAvgAggregateInputType
+    _sum?: ShopeeIntegrationSumAggregateInputType
+    _min?: ShopeeIntegrationMinAggregateInputType
+    _max?: ShopeeIntegrationMaxAggregateInputType
+  }
+
+  export type ShopeeIntegrationGroupByOutputType = {
+    id: string
+    shopId: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date
+    shopeeShopId: string
+    status: $Enums.IntegrationStatus
+    lastSyncAt: Date | null
+    failureCount: number
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: ShopeeIntegrationCountAggregateOutputType | null
+    _avg: ShopeeIntegrationAvgAggregateOutputType | null
+    _sum: ShopeeIntegrationSumAggregateOutputType | null
+    _min: ShopeeIntegrationMinAggregateOutputType | null
+    _max: ShopeeIntegrationMaxAggregateOutputType | null
+  }
+
+  type GetShopeeIntegrationGroupByPayload<T extends ShopeeIntegrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ShopeeIntegrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ShopeeIntegrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ShopeeIntegrationGroupByOutputType[P]>
+            : GetScalarType<T[P], ShopeeIntegrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ShopeeIntegrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiresAt?: boolean
+    shopeeShopId?: boolean
+    status?: boolean
+    lastSyncAt?: boolean
+    failureCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shopeeIntegration"]>
+
+  export type ShopeeIntegrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiresAt?: boolean
+    shopeeShopId?: boolean
+    status?: boolean
+    lastSyncAt?: boolean
+    failureCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shopeeIntegration"]>
+
+  export type ShopeeIntegrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiresAt?: boolean
+    shopeeShopId?: boolean
+    status?: boolean
+    lastSyncAt?: boolean
+    failureCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["shopeeIntegration"]>
+
+  export type ShopeeIntegrationSelectScalar = {
+    id?: boolean
+    shopId?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
+    expiresAt?: boolean
+    shopeeShopId?: boolean
+    status?: boolean
+    lastSyncAt?: boolean
+    failureCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type ShopeeIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "accessToken" | "refreshToken" | "expiresAt" | "shopeeShopId" | "status" | "lastSyncAt" | "failureCount" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shopeeIntegration"]>
+  export type ShopeeIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type ShopeeIntegrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type ShopeeIntegrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+
+  export type $ShopeeIntegrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ShopeeIntegration"
+    objects: {
+      shop: Prisma.$ShopPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shopId: string
+      accessToken: string
+      refreshToken: string
+      expiresAt: Date
+      shopeeShopId: string
+      status: $Enums.IntegrationStatus
+      lastSyncAt: Date | null
+      failureCount: number
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["shopeeIntegration"]>
+    composites: {}
+  }
+
+  type ShopeeIntegrationGetPayload<S extends boolean | null | undefined | ShopeeIntegrationDefaultArgs> = $Result.GetResult<Prisma.$ShopeeIntegrationPayload, S>
+
+  type ShopeeIntegrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ShopeeIntegrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ShopeeIntegrationCountAggregateInputType | true
+    }
+
+  export interface ShopeeIntegrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ShopeeIntegration'], meta: { name: 'ShopeeIntegration' } }
+    /**
+     * Find zero or one ShopeeIntegration that matches the filter.
+     * @param {ShopeeIntegrationFindUniqueArgs} args - Arguments to find a ShopeeIntegration
+     * @example
+     * // Get one ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ShopeeIntegrationFindUniqueArgs>(args: SelectSubset<T, ShopeeIntegrationFindUniqueArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ShopeeIntegration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ShopeeIntegrationFindUniqueOrThrowArgs} args - Arguments to find a ShopeeIntegration
+     * @example
+     * // Get one ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ShopeeIntegrationFindUniqueOrThrowArgs>(args: SelectSubset<T, ShopeeIntegrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShopeeIntegration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationFindFirstArgs} args - Arguments to find a ShopeeIntegration
+     * @example
+     * // Get one ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ShopeeIntegrationFindFirstArgs>(args?: SelectSubset<T, ShopeeIntegrationFindFirstArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ShopeeIntegration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationFindFirstOrThrowArgs} args - Arguments to find a ShopeeIntegration
+     * @example
+     * // Get one ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ShopeeIntegrationFindFirstOrThrowArgs>(args?: SelectSubset<T, ShopeeIntegrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ShopeeIntegrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ShopeeIntegrations
+     * const shopeeIntegrations = await prisma.shopeeIntegration.findMany()
+     * 
+     * // Get first 10 ShopeeIntegrations
+     * const shopeeIntegrations = await prisma.shopeeIntegration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const shopeeIntegrationWithIdOnly = await prisma.shopeeIntegration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ShopeeIntegrationFindManyArgs>(args?: SelectSubset<T, ShopeeIntegrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ShopeeIntegration.
+     * @param {ShopeeIntegrationCreateArgs} args - Arguments to create a ShopeeIntegration.
+     * @example
+     * // Create one ShopeeIntegration
+     * const ShopeeIntegration = await prisma.shopeeIntegration.create({
+     *   data: {
+     *     // ... data to create a ShopeeIntegration
+     *   }
+     * })
+     * 
+     */
+    create<T extends ShopeeIntegrationCreateArgs>(args: SelectSubset<T, ShopeeIntegrationCreateArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ShopeeIntegrations.
+     * @param {ShopeeIntegrationCreateManyArgs} args - Arguments to create many ShopeeIntegrations.
+     * @example
+     * // Create many ShopeeIntegrations
+     * const shopeeIntegration = await prisma.shopeeIntegration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ShopeeIntegrationCreateManyArgs>(args?: SelectSubset<T, ShopeeIntegrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ShopeeIntegrations and returns the data saved in the database.
+     * @param {ShopeeIntegrationCreateManyAndReturnArgs} args - Arguments to create many ShopeeIntegrations.
+     * @example
+     * // Create many ShopeeIntegrations
+     * const shopeeIntegration = await prisma.shopeeIntegration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ShopeeIntegrations and only return the `id`
+     * const shopeeIntegrationWithIdOnly = await prisma.shopeeIntegration.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ShopeeIntegrationCreateManyAndReturnArgs>(args?: SelectSubset<T, ShopeeIntegrationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ShopeeIntegration.
+     * @param {ShopeeIntegrationDeleteArgs} args - Arguments to delete one ShopeeIntegration.
+     * @example
+     * // Delete one ShopeeIntegration
+     * const ShopeeIntegration = await prisma.shopeeIntegration.delete({
+     *   where: {
+     *     // ... filter to delete one ShopeeIntegration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ShopeeIntegrationDeleteArgs>(args: SelectSubset<T, ShopeeIntegrationDeleteArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ShopeeIntegration.
+     * @param {ShopeeIntegrationUpdateArgs} args - Arguments to update one ShopeeIntegration.
+     * @example
+     * // Update one ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ShopeeIntegrationUpdateArgs>(args: SelectSubset<T, ShopeeIntegrationUpdateArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ShopeeIntegrations.
+     * @param {ShopeeIntegrationDeleteManyArgs} args - Arguments to filter ShopeeIntegrations to delete.
+     * @example
+     * // Delete a few ShopeeIntegrations
+     * const { count } = await prisma.shopeeIntegration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ShopeeIntegrationDeleteManyArgs>(args?: SelectSubset<T, ShopeeIntegrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShopeeIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ShopeeIntegrations
+     * const shopeeIntegration = await prisma.shopeeIntegration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ShopeeIntegrationUpdateManyArgs>(args: SelectSubset<T, ShopeeIntegrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ShopeeIntegrations and returns the data updated in the database.
+     * @param {ShopeeIntegrationUpdateManyAndReturnArgs} args - Arguments to update many ShopeeIntegrations.
+     * @example
+     * // Update many ShopeeIntegrations
+     * const shopeeIntegration = await prisma.shopeeIntegration.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ShopeeIntegrations and only return the `id`
+     * const shopeeIntegrationWithIdOnly = await prisma.shopeeIntegration.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ShopeeIntegrationUpdateManyAndReturnArgs>(args: SelectSubset<T, ShopeeIntegrationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ShopeeIntegration.
+     * @param {ShopeeIntegrationUpsertArgs} args - Arguments to update or create a ShopeeIntegration.
+     * @example
+     * // Update or create a ShopeeIntegration
+     * const shopeeIntegration = await prisma.shopeeIntegration.upsert({
+     *   create: {
+     *     // ... data to create a ShopeeIntegration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ShopeeIntegration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ShopeeIntegrationUpsertArgs>(args: SelectSubset<T, ShopeeIntegrationUpsertArgs<ExtArgs>>): Prisma__ShopeeIntegrationClient<$Result.GetResult<Prisma.$ShopeeIntegrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ShopeeIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationCountArgs} args - Arguments to filter ShopeeIntegrations to count.
+     * @example
+     * // Count the number of ShopeeIntegrations
+     * const count = await prisma.shopeeIntegration.count({
+     *   where: {
+     *     // ... the filter for the ShopeeIntegrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ShopeeIntegrationCountArgs>(
+      args?: Subset<T, ShopeeIntegrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ShopeeIntegrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ShopeeIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ShopeeIntegrationAggregateArgs>(args: Subset<T, ShopeeIntegrationAggregateArgs>): Prisma.PrismaPromise<GetShopeeIntegrationAggregateType<T>>
+
+    /**
+     * Group by ShopeeIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ShopeeIntegrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ShopeeIntegrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ShopeeIntegrationGroupByArgs['orderBy'] }
+        : { orderBy?: ShopeeIntegrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ShopeeIntegrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetShopeeIntegrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ShopeeIntegration model
+   */
+  readonly fields: ShopeeIntegrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ShopeeIntegration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ShopeeIntegrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    shop<T extends ShopDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopDefaultArgs<ExtArgs>>): Prisma__ShopClient<$Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ShopeeIntegration model
+   */
+  interface ShopeeIntegrationFieldRefs {
+    readonly id: FieldRef<"ShopeeIntegration", 'String'>
+    readonly shopId: FieldRef<"ShopeeIntegration", 'String'>
+    readonly accessToken: FieldRef<"ShopeeIntegration", 'String'>
+    readonly refreshToken: FieldRef<"ShopeeIntegration", 'String'>
+    readonly expiresAt: FieldRef<"ShopeeIntegration", 'DateTime'>
+    readonly shopeeShopId: FieldRef<"ShopeeIntegration", 'String'>
+    readonly status: FieldRef<"ShopeeIntegration", 'IntegrationStatus'>
+    readonly lastSyncAt: FieldRef<"ShopeeIntegration", 'DateTime'>
+    readonly failureCount: FieldRef<"ShopeeIntegration", 'Int'>
+    readonly createdAt: FieldRef<"ShopeeIntegration", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShopeeIntegration", 'DateTime'>
+    readonly deletedAt: FieldRef<"ShopeeIntegration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ShopeeIntegration findUnique
+   */
+  export type ShopeeIntegrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ShopeeIntegration to fetch.
+     */
+    where: ShopeeIntegrationWhereUniqueInput
+  }
+
+  /**
+   * ShopeeIntegration findUniqueOrThrow
+   */
+  export type ShopeeIntegrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ShopeeIntegration to fetch.
+     */
+    where: ShopeeIntegrationWhereUniqueInput
+  }
+
+  /**
+   * ShopeeIntegration findFirst
+   */
+  export type ShopeeIntegrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ShopeeIntegration to fetch.
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShopeeIntegrations to fetch.
+     */
+    orderBy?: ShopeeIntegrationOrderByWithRelationInput | ShopeeIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShopeeIntegrations.
+     */
+    cursor?: ShopeeIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShopeeIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShopeeIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShopeeIntegrations.
+     */
+    distinct?: ShopeeIntegrationScalarFieldEnum | ShopeeIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * ShopeeIntegration findFirstOrThrow
+   */
+  export type ShopeeIntegrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ShopeeIntegration to fetch.
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShopeeIntegrations to fetch.
+     */
+    orderBy?: ShopeeIntegrationOrderByWithRelationInput | ShopeeIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ShopeeIntegrations.
+     */
+    cursor?: ShopeeIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShopeeIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShopeeIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ShopeeIntegrations.
+     */
+    distinct?: ShopeeIntegrationScalarFieldEnum | ShopeeIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * ShopeeIntegration findMany
+   */
+  export type ShopeeIntegrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which ShopeeIntegrations to fetch.
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ShopeeIntegrations to fetch.
+     */
+    orderBy?: ShopeeIntegrationOrderByWithRelationInput | ShopeeIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ShopeeIntegrations.
+     */
+    cursor?: ShopeeIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ShopeeIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ShopeeIntegrations.
+     */
+    skip?: number
+    distinct?: ShopeeIntegrationScalarFieldEnum | ShopeeIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * ShopeeIntegration create
+   */
+  export type ShopeeIntegrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ShopeeIntegration.
+     */
+    data: XOR<ShopeeIntegrationCreateInput, ShopeeIntegrationUncheckedCreateInput>
+  }
+
+  /**
+   * ShopeeIntegration createMany
+   */
+  export type ShopeeIntegrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ShopeeIntegrations.
+     */
+    data: ShopeeIntegrationCreateManyInput | ShopeeIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ShopeeIntegration createManyAndReturn
+   */
+  export type ShopeeIntegrationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ShopeeIntegrations.
+     */
+    data: ShopeeIntegrationCreateManyInput | ShopeeIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShopeeIntegration update
+   */
+  export type ShopeeIntegrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ShopeeIntegration.
+     */
+    data: XOR<ShopeeIntegrationUpdateInput, ShopeeIntegrationUncheckedUpdateInput>
+    /**
+     * Choose, which ShopeeIntegration to update.
+     */
+    where: ShopeeIntegrationWhereUniqueInput
+  }
+
+  /**
+   * ShopeeIntegration updateMany
+   */
+  export type ShopeeIntegrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ShopeeIntegrations.
+     */
+    data: XOR<ShopeeIntegrationUpdateManyMutationInput, ShopeeIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which ShopeeIntegrations to update
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * Limit how many ShopeeIntegrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShopeeIntegration updateManyAndReturn
+   */
+  export type ShopeeIntegrationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to update ShopeeIntegrations.
+     */
+    data: XOR<ShopeeIntegrationUpdateManyMutationInput, ShopeeIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which ShopeeIntegrations to update
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * Limit how many ShopeeIntegrations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ShopeeIntegration upsert
+   */
+  export type ShopeeIntegrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ShopeeIntegration to update in case it exists.
+     */
+    where: ShopeeIntegrationWhereUniqueInput
+    /**
+     * In case the ShopeeIntegration found by the `where` argument doesn't exist, create a new ShopeeIntegration with this data.
+     */
+    create: XOR<ShopeeIntegrationCreateInput, ShopeeIntegrationUncheckedCreateInput>
+    /**
+     * In case the ShopeeIntegration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ShopeeIntegrationUpdateInput, ShopeeIntegrationUncheckedUpdateInput>
+  }
+
+  /**
+   * ShopeeIntegration delete
+   */
+  export type ShopeeIntegrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter which ShopeeIntegration to delete.
+     */
+    where: ShopeeIntegrationWhereUniqueInput
+  }
+
+  /**
+   * ShopeeIntegration deleteMany
+   */
+  export type ShopeeIntegrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ShopeeIntegrations to delete
+     */
+    where?: ShopeeIntegrationWhereInput
+    /**
+     * Limit how many ShopeeIntegrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ShopeeIntegration without action
+   */
+  export type ShopeeIntegrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShopeeIntegration
+     */
+    select?: ShopeeIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShopeeIntegration
+     */
+    omit?: ShopeeIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShopeeIntegrationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Product
+   */
+
+  export type AggregateProduct = {
+    _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
+    _min: ProductMinAggregateOutputType | null
+    _max: ProductMaxAggregateOutputType | null
+  }
+
+  export type ProductAvgAggregateOutputType = {
+    stock: number | null
+    price: Decimal | null
+  }
+
+  export type ProductSumAggregateOutputType = {
+    stock: number | null
+    price: Decimal | null
+  }
+
+  export type ProductMinAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    shopeeProductId: string | null
+    name: string | null
+    sku: string | null
+    stock: number | null
+    price: Decimal | null
+    imageUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductMaxAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    shopeeProductId: string | null
+    name: string | null
+    sku: string | null
+    stock: number | null
+    price: Decimal | null
+    imageUrl: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductCountAggregateOutputType = {
+    id: number
+    shopId: number
+    platform: number
+    shopeeProductId: number
+    name: number
+    sku: number
+    stock: number
+    price: number
+    imageUrl: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductAvgAggregateInputType = {
+    stock?: true
+    price?: true
+  }
+
+  export type ProductSumAggregateInputType = {
+    stock?: true
+    price?: true
+  }
+
+  export type ProductMinAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeProductId?: true
+    name?: true
+    sku?: true
+    stock?: true
+    price?: true
+    imageUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductMaxAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeProductId?: true
+    name?: true
+    sku?: true
+    stock?: true
+    price?: true
+    imageUrl?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductCountAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeProductId?: true
+    name?: true
+    sku?: true
+    stock?: true
+    price?: true
+    imageUrl?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Product to aggregate.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Products
+    **/
+    _count?: true | ProductCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductMaxAggregateInputType
+  }
+
+  export type GetProductAggregateType<T extends ProductAggregateArgs> = {
+        [P in keyof T & keyof AggregateProduct]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProduct[P]>
+      : GetScalarType<T[P], AggregateProduct[P]>
+  }
+
+
+
+
+  export type ProductGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithAggregationInput | ProductOrderByWithAggregationInput[]
+    by: ProductScalarFieldEnum[] | ProductScalarFieldEnum
+    having?: ProductScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductCountAggregateInputType | true
+    _avg?: ProductAvgAggregateInputType
+    _sum?: ProductSumAggregateInputType
+    _min?: ProductMinAggregateInputType
+    _max?: ProductMaxAggregateInputType
+  }
+
+  export type ProductGroupByOutputType = {
+    id: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeProductId: string | null
+    name: string
+    sku: string | null
+    stock: number
+    price: Decimal
+    imageUrl: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductCountAggregateOutputType | null
+    _avg: ProductAvgAggregateOutputType | null
+    _sum: ProductSumAggregateOutputType | null
+    _min: ProductMinAggregateOutputType | null
+    _max: ProductMaxAggregateOutputType | null
+  }
+
+  type GetProductGroupByPayload<T extends ProductGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    stock?: boolean
+    price?: boolean
+    imageUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product"]>
+
+  export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    stock?: boolean
+    price?: boolean
+    imageUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product"]>
+
+  export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    stock?: boolean
+    price?: boolean
+    imageUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["product"]>
+
+  export type ProductSelectScalar = {
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeProductId?: boolean
+    name?: boolean
+    sku?: boolean
+    stock?: boolean
+    price?: boolean
+    imageUrl?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "platform" | "shopeeProductId" | "name" | "sku" | "stock" | "price" | "imageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Product"
+    objects: {
+      shop: Prisma.$ShopPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shopId: string
+      platform: $Enums.Platform
+      shopeeProductId: string | null
+      name: string
+      sku: string | null
+      stock: number
+      price: Prisma.Decimal
+      imageUrl: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["product"]>
+    composites: {}
+  }
+
+  type ProductGetPayload<S extends boolean | null | undefined | ProductDefaultArgs> = $Result.GetResult<Prisma.$ProductPayload, S>
+
+  type ProductCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductCountAggregateInputType | true
+    }
+
+  export interface ProductDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Product'], meta: { name: 'Product' } }
+    /**
+     * Find zero or one Product that matches the filter.
+     * @param {ProductFindUniqueArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductFindUniqueArgs>(args: SelectSubset<T, ProductFindUniqueArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Product that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductFindUniqueOrThrowArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Product that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindFirstArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductFindFirstArgs>(args?: SelectSubset<T, ProductFindFirstArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Product that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindFirstOrThrowArgs} args - Arguments to find a Product
+     * @example
+     * // Get one Product
+     * const product = await prisma.product.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Products that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Products
+     * const products = await prisma.product.findMany()
+     * 
+     * // Get first 10 Products
+     * const products = await prisma.product.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productWithIdOnly = await prisma.product.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductFindManyArgs>(args?: SelectSubset<T, ProductFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Product.
+     * @param {ProductCreateArgs} args - Arguments to create a Product.
+     * @example
+     * // Create one Product
+     * const Product = await prisma.product.create({
+     *   data: {
+     *     // ... data to create a Product
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductCreateArgs>(args: SelectSubset<T, ProductCreateArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Products.
+     * @param {ProductCreateManyArgs} args - Arguments to create many Products.
+     * @example
+     * // Create many Products
+     * const product = await prisma.product.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductCreateManyArgs>(args?: SelectSubset<T, ProductCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Products and returns the data saved in the database.
+     * @param {ProductCreateManyAndReturnArgs} args - Arguments to create many Products.
+     * @example
+     * // Create many Products
+     * const product = await prisma.product.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Products and only return the `id`
+     * const productWithIdOnly = await prisma.product.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Product.
+     * @param {ProductDeleteArgs} args - Arguments to delete one Product.
+     * @example
+     * // Delete one Product
+     * const Product = await prisma.product.delete({
+     *   where: {
+     *     // ... filter to delete one Product
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductDeleteArgs>(args: SelectSubset<T, ProductDeleteArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Product.
+     * @param {ProductUpdateArgs} args - Arguments to update one Product.
+     * @example
+     * // Update one Product
+     * const product = await prisma.product.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductUpdateArgs>(args: SelectSubset<T, ProductUpdateArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Products.
+     * @param {ProductDeleteManyArgs} args - Arguments to filter Products to delete.
+     * @example
+     * // Delete a few Products
+     * const { count } = await prisma.product.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductDeleteManyArgs>(args?: SelectSubset<T, ProductDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Products.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Products
+     * const product = await prisma.product.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductUpdateManyArgs>(args: SelectSubset<T, ProductUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Products and returns the data updated in the database.
+     * @param {ProductUpdateManyAndReturnArgs} args - Arguments to update many Products.
+     * @example
+     * // Update many Products
+     * const product = await prisma.product.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Products and only return the `id`
+     * const productWithIdOnly = await prisma.product.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Product.
+     * @param {ProductUpsertArgs} args - Arguments to update or create a Product.
+     * @example
+     * // Update or create a Product
+     * const product = await prisma.product.upsert({
+     *   create: {
+     *     // ... data to create a Product
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Product we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductUpsertArgs>(args: SelectSubset<T, ProductUpsertArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Products.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductCountArgs} args - Arguments to filter Products to count.
+     * @example
+     * // Count the number of Products
+     * const count = await prisma.product.count({
+     *   where: {
+     *     // ... the filter for the Products we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductCountArgs>(
+      args?: Subset<T, ProductCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Product.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductAggregateArgs>(args: Subset<T, ProductAggregateArgs>): Prisma.PrismaPromise<GetProductAggregateType<T>>
+
+    /**
+     * Group by Product.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductGroupByArgs['orderBy'] }
+        : { orderBy?: ProductGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Product model
+   */
+  readonly fields: ProductFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Product.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    shop<T extends ShopDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopDefaultArgs<ExtArgs>>): Prisma__ShopClient<$Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Product model
+   */
+  interface ProductFieldRefs {
+    readonly id: FieldRef<"Product", 'String'>
+    readonly shopId: FieldRef<"Product", 'String'>
+    readonly platform: FieldRef<"Product", 'Platform'>
+    readonly shopeeProductId: FieldRef<"Product", 'String'>
+    readonly name: FieldRef<"Product", 'String'>
+    readonly sku: FieldRef<"Product", 'String'>
+    readonly stock: FieldRef<"Product", 'Int'>
+    readonly price: FieldRef<"Product", 'Decimal'>
+    readonly imageUrl: FieldRef<"Product", 'String'>
+    readonly createdAt: FieldRef<"Product", 'DateTime'>
+    readonly updatedAt: FieldRef<"Product", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Product findUnique
+   */
+  export type ProductFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product findUniqueOrThrow
+   */
+  export type ProductFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product findFirst
+   */
+  export type ProductFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Products.
+     */
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product findFirstOrThrow
+   */
+  export type ProductFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Product to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Products.
+     */
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product findMany
+   */
+  export type ProductFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter, which Products to fetch.
+     */
+    where?: ProductWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Products to fetch.
+     */
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Products.
+     */
+    cursor?: ProductWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Products from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Products.
+     */
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * Product create
+   */
+  export type ProductCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Product.
+     */
+    data: XOR<ProductCreateInput, ProductUncheckedCreateInput>
+  }
+
+  /**
+   * Product createMany
+   */
+  export type ProductCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Products.
+     */
+    data: ProductCreateManyInput | ProductCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Product createManyAndReturn
+   */
+  export type ProductCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * The data used to create many Products.
+     */
+    data: ProductCreateManyInput | ProductCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Product update
+   */
+  export type ProductUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Product.
+     */
+    data: XOR<ProductUpdateInput, ProductUncheckedUpdateInput>
+    /**
+     * Choose, which Product to update.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product updateMany
+   */
+  export type ProductUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Products.
+     */
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyInput>
+    /**
+     * Filter which Products to update
+     */
+    where?: ProductWhereInput
+    /**
+     * Limit how many Products to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Product updateManyAndReturn
+   */
+  export type ProductUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * The data used to update Products.
+     */
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyInput>
+    /**
+     * Filter which Products to update
+     */
+    where?: ProductWhereInput
+    /**
+     * Limit how many Products to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Product upsert
+   */
+  export type ProductUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Product to update in case it exists.
+     */
+    where: ProductWhereUniqueInput
+    /**
+     * In case the Product found by the `where` argument doesn't exist, create a new Product with this data.
+     */
+    create: XOR<ProductCreateInput, ProductUncheckedCreateInput>
+    /**
+     * In case the Product was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductUpdateInput, ProductUncheckedUpdateInput>
+  }
+
+  /**
+   * Product delete
+   */
+  export type ProductDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
+     * Filter which Product to delete.
+     */
+    where: ProductWhereUniqueInput
+  }
+
+  /**
+   * Product deleteMany
+   */
+  export type ProductDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Products to delete
+     */
+    where?: ProductWhereInput
+    /**
+     * Limit how many Products to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Product without action
+   */
+  export type ProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Order
+   */
+
+  export type AggregateOrder = {
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  export type OrderAvgAggregateOutputType = {
+    totalAmount: Decimal | null
+  }
+
+  export type OrderSumAggregateOutputType = {
+    totalAmount: Decimal | null
+  }
+
+  export type OrderMinAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    shopeeOrderId: string | null
+    orderNumber: string | null
+    totalAmount: Decimal | null
+    customerName: string | null
+    customerEmail: string | null
+    customerPhone: string | null
+    shippingAddress: string | null
+    orderDate: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderMaxAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    shopeeOrderId: string | null
+    orderNumber: string | null
+    totalAmount: Decimal | null
+    customerName: string | null
+    customerEmail: string | null
+    customerPhone: string | null
+    shippingAddress: string | null
+    orderDate: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrderCountAggregateOutputType = {
+    id: number
+    shopId: number
+    platform: number
+    shopeeOrderId: number
+    orderNumber: number
+    totalAmount: number
+    customerName: number
+    customerEmail: number
+    customerPhone: number
+    shippingAddress: number
+    orderDate: number
+    items: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OrderAvgAggregateInputType = {
+    totalAmount?: true
+  }
+
+  export type OrderSumAggregateInputType = {
+    totalAmount?: true
+  }
+
+  export type OrderMinAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeOrderId?: true
+    orderNumber?: true
+    totalAmount?: true
+    customerName?: true
+    customerEmail?: true
+    customerPhone?: true
+    shippingAddress?: true
+    orderDate?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderMaxAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeOrderId?: true
+    orderNumber?: true
+    totalAmount?: true
+    customerName?: true
+    customerEmail?: true
+    customerPhone?: true
+    shippingAddress?: true
+    orderDate?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrderCountAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    shopeeOrderId?: true
+    orderNumber?: true
+    totalAmount?: true
+    customerName?: true
+    customerEmail?: true
+    customerPhone?: true
+    shippingAddress?: true
+    orderDate?: true
+    items?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Order to aggregate.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Orders
+    **/
+    _count?: true | OrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: OrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type GetOrderAggregateType<T extends OrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrder[P]>
+      : GetScalarType<T[P], AggregateOrder[P]>
+  }
+
+
+
+
+  export type OrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput
+    orderBy?: OrderOrderByWithAggregationInput | OrderOrderByWithAggregationInput[]
+    by: OrderScalarFieldEnum[] | OrderScalarFieldEnum
+    having?: OrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrderCountAggregateInputType | true
+    _avg?: OrderAvgAggregateInputType
+    _sum?: OrderSumAggregateInputType
+    _min?: OrderMinAggregateInputType
+    _max?: OrderMaxAggregateInputType
+  }
+
+  export type OrderGroupByOutputType = {
+    id: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal
+    customerName: string
+    customerEmail: string | null
+    customerPhone: string | null
+    shippingAddress: string | null
+    orderDate: Date
+    items: JsonValue
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: OrderCountAggregateOutputType | null
+    _avg: OrderAvgAggregateOutputType | null
+    _sum: OrderSumAggregateOutputType | null
+    _min: OrderMinAggregateOutputType | null
+    _max: OrderMaxAggregateOutputType | null
+  }
+
+  type GetOrderGroupByPayload<T extends OrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrderGroupByOutputType[P]>
+            : GetScalarType<T[P], OrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeOrderId?: boolean
+    orderNumber?: boolean
+    totalAmount?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    customerPhone?: boolean
+    shippingAddress?: boolean
+    orderDate?: boolean
+    items?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeOrderId?: boolean
+    orderNumber?: boolean
+    totalAmount?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    customerPhone?: boolean
+    shippingAddress?: boolean
+    orderDate?: boolean
+    items?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeOrderId?: boolean
+    orderNumber?: boolean
+    totalAmount?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    customerPhone?: boolean
+    shippingAddress?: boolean
+    orderDate?: boolean
+    items?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["order"]>
+
+  export type OrderSelectScalar = {
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    shopeeOrderId?: boolean
+    orderNumber?: boolean
+    totalAmount?: boolean
+    customerName?: boolean
+    customerEmail?: boolean
+    customerPhone?: boolean
+    shippingAddress?: boolean
+    orderDate?: boolean
+    items?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "platform" | "shopeeOrderId" | "orderNumber" | "totalAmount" | "customerName" | "customerEmail" | "customerPhone" | "shippingAddress" | "orderDate" | "items" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type OrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+
+  export type $OrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Order"
+    objects: {
+      shop: Prisma.$ShopPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shopId: string
+      platform: $Enums.Platform
+      shopeeOrderId: string
+      orderNumber: string
+      totalAmount: Prisma.Decimal
+      customerName: string
+      customerEmail: string | null
+      customerPhone: string | null
+      shippingAddress: string | null
+      orderDate: Date
+      items: Prisma.JsonValue
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["order"]>
+    composites: {}
+  }
+
+  type OrderGetPayload<S extends boolean | null | undefined | OrderDefaultArgs> = $Result.GetResult<Prisma.$OrderPayload, S>
+
+  type OrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrderCountAggregateInputType | true
+    }
+
+  export interface OrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Order'], meta: { name: 'Order' } }
+    /**
+     * Find zero or one Order that matches the filter.
+     * @param {OrderFindUniqueArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrderFindUniqueArgs>(args: SelectSubset<T, OrderFindUniqueArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Order that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrderFindUniqueOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrderFindUniqueOrThrowArgs>(args: SelectSubset<T, OrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Order that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrderFindFirstArgs>(args?: SelectSubset<T, OrderFindFirstArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Order that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindFirstOrThrowArgs} args - Arguments to find a Order
+     * @example
+     * // Get one Order
+     * const order = await prisma.order.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrderFindFirstOrThrowArgs>(args?: SelectSubset<T, OrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Orders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Orders
+     * const orders = await prisma.order.findMany()
+     * 
+     * // Get first 10 Orders
+     * const orders = await prisma.order.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const orderWithIdOnly = await prisma.order.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrderFindManyArgs>(args?: SelectSubset<T, OrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Order.
+     * @param {OrderCreateArgs} args - Arguments to create a Order.
+     * @example
+     * // Create one Order
+     * const Order = await prisma.order.create({
+     *   data: {
+     *     // ... data to create a Order
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrderCreateArgs>(args: SelectSubset<T, OrderCreateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Orders.
+     * @param {OrderCreateManyArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrderCreateManyArgs>(args?: SelectSubset<T, OrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Orders and returns the data saved in the database.
+     * @param {OrderCreateManyAndReturnArgs} args - Arguments to create many Orders.
+     * @example
+     * // Create many Orders
+     * const order = await prisma.order.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Orders and only return the `id`
+     * const orderWithIdOnly = await prisma.order.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrderCreateManyAndReturnArgs>(args?: SelectSubset<T, OrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Order.
+     * @param {OrderDeleteArgs} args - Arguments to delete one Order.
+     * @example
+     * // Delete one Order
+     * const Order = await prisma.order.delete({
+     *   where: {
+     *     // ... filter to delete one Order
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrderDeleteArgs>(args: SelectSubset<T, OrderDeleteArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Order.
+     * @param {OrderUpdateArgs} args - Arguments to update one Order.
+     * @example
+     * // Update one Order
+     * const order = await prisma.order.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrderUpdateArgs>(args: SelectSubset<T, OrderUpdateArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Orders.
+     * @param {OrderDeleteManyArgs} args - Arguments to filter Orders to delete.
+     * @example
+     * // Delete a few Orders
+     * const { count } = await prisma.order.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrderDeleteManyArgs>(args?: SelectSubset<T, OrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrderUpdateManyArgs>(args: SelectSubset<T, OrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Orders and returns the data updated in the database.
+     * @param {OrderUpdateManyAndReturnArgs} args - Arguments to update many Orders.
+     * @example
+     * // Update many Orders
+     * const order = await prisma.order.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Orders and only return the `id`
+     * const orderWithIdOnly = await prisma.order.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrderUpdateManyAndReturnArgs>(args: SelectSubset<T, OrderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Order.
+     * @param {OrderUpsertArgs} args - Arguments to update or create a Order.
+     * @example
+     * // Update or create a Order
+     * const order = await prisma.order.upsert({
+     *   create: {
+     *     // ... data to create a Order
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Order we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrderUpsertArgs>(args: SelectSubset<T, OrderUpsertArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Orders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderCountArgs} args - Arguments to filter Orders to count.
+     * @example
+     * // Count the number of Orders
+     * const count = await prisma.order.count({
+     *   where: {
+     *     // ... the filter for the Orders we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrderCountArgs>(
+      args?: Subset<T, OrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrderAggregateArgs>(args: Subset<T, OrderAggregateArgs>): Prisma.PrismaPromise<GetOrderAggregateType<T>>
+
+    /**
+     * Group by Order.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrderGroupByArgs['orderBy'] }
+        : { orderBy?: OrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Order model
+   */
+  readonly fields: OrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Order.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    shop<T extends ShopDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopDefaultArgs<ExtArgs>>): Prisma__ShopClient<$Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Order model
+   */
+  interface OrderFieldRefs {
+    readonly id: FieldRef<"Order", 'String'>
+    readonly shopId: FieldRef<"Order", 'String'>
+    readonly platform: FieldRef<"Order", 'Platform'>
+    readonly shopeeOrderId: FieldRef<"Order", 'String'>
+    readonly orderNumber: FieldRef<"Order", 'String'>
+    readonly totalAmount: FieldRef<"Order", 'Decimal'>
+    readonly customerName: FieldRef<"Order", 'String'>
+    readonly customerEmail: FieldRef<"Order", 'String'>
+    readonly customerPhone: FieldRef<"Order", 'String'>
+    readonly shippingAddress: FieldRef<"Order", 'String'>
+    readonly orderDate: FieldRef<"Order", 'DateTime'>
+    readonly items: FieldRef<"Order", 'Json'>
+    readonly status: FieldRef<"Order", 'String'>
+    readonly createdAt: FieldRef<"Order", 'DateTime'>
+    readonly updatedAt: FieldRef<"Order", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Order findUnique
+   */
+  export type OrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findUniqueOrThrow
+   */
+  export type OrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order findFirst
+   */
+  export type OrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findFirstOrThrow
+   */
+  export type OrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Order to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Orders.
+     */
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order findMany
+   */
+  export type OrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter, which Orders to fetch.
+     */
+    where?: OrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Orders to fetch.
+     */
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Orders.
+     */
+    cursor?: OrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Orders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Orders.
+     */
+    skip?: number
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[]
+  }
+
+  /**
+   * Order create
+   */
+  export type OrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Order.
+     */
+    data: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+  }
+
+  /**
+   * Order createMany
+   */
+  export type OrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Order createManyAndReturn
+   */
+  export type OrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * The data used to create many Orders.
+     */
+    data: OrderCreateManyInput | OrderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Order update
+   */
+  export type OrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Order.
+     */
+    data: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+    /**
+     * Choose, which Order to update.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order updateMany
+   */
+  export type OrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Order updateManyAndReturn
+   */
+  export type OrderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * The data used to update Orders.
+     */
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyInput>
+    /**
+     * Filter which Orders to update
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Order upsert
+   */
+  export type OrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Order to update in case it exists.
+     */
+    where: OrderWhereUniqueInput
+    /**
+     * In case the Order found by the `where` argument doesn't exist, create a new Order with this data.
+     */
+    create: XOR<OrderCreateInput, OrderUncheckedCreateInput>
+    /**
+     * In case the Order was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrderUpdateInput, OrderUncheckedUpdateInput>
+  }
+
+  /**
+   * Order delete
+   */
+  export type OrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+    /**
+     * Filter which Order to delete.
+     */
+    where: OrderWhereUniqueInput
+  }
+
+  /**
+   * Order deleteMany
+   */
+  export type OrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Orders to delete
+     */
+    where?: OrderWhereInput
+    /**
+     * Limit how many Orders to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Order without action
+   */
+  export type OrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WebhookPayload
+   */
+
+  export type AggregateWebhookPayload = {
+    _count: WebhookPayloadCountAggregateOutputType | null
+    _avg: WebhookPayloadAvgAggregateOutputType | null
+    _sum: WebhookPayloadSumAggregateOutputType | null
+    _min: WebhookPayloadMinAggregateOutputType | null
+    _max: WebhookPayloadMaxAggregateOutputType | null
+  }
+
+  export type WebhookPayloadAvgAggregateOutputType = {
+    retryCount: number | null
+  }
+
+  export type WebhookPayloadSumAggregateOutputType = {
+    retryCount: number | null
+  }
+
+  export type WebhookPayloadMinAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    eventType: string | null
+    signature: string | null
+    status: $Enums.WebhookStatus | null
+    processedAt: Date | null
+    errorMessage: string | null
+    retryCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WebhookPayloadMaxAggregateOutputType = {
+    id: string | null
+    shopId: string | null
+    platform: $Enums.Platform | null
+    eventType: string | null
+    signature: string | null
+    status: $Enums.WebhookStatus | null
+    processedAt: Date | null
+    errorMessage: string | null
+    retryCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WebhookPayloadCountAggregateOutputType = {
+    id: number
+    shopId: number
+    platform: number
+    eventType: number
+    rawPayload: number
+    signature: number
+    status: number
+    processedAt: number
+    errorMessage: number
+    retryCount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WebhookPayloadAvgAggregateInputType = {
+    retryCount?: true
+  }
+
+  export type WebhookPayloadSumAggregateInputType = {
+    retryCount?: true
+  }
+
+  export type WebhookPayloadMinAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    eventType?: true
+    signature?: true
+    status?: true
+    processedAt?: true
+    errorMessage?: true
+    retryCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WebhookPayloadMaxAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    eventType?: true
+    signature?: true
+    status?: true
+    processedAt?: true
+    errorMessage?: true
+    retryCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WebhookPayloadCountAggregateInputType = {
+    id?: true
+    shopId?: true
+    platform?: true
+    eventType?: true
+    rawPayload?: true
+    signature?: true
+    status?: true
+    processedAt?: true
+    errorMessage?: true
+    retryCount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WebhookPayloadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebhookPayload to aggregate.
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookPayloads to fetch.
+     */
+    orderBy?: WebhookPayloadOrderByWithRelationInput | WebhookPayloadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WebhookPayloadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookPayloads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookPayloads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WebhookPayloads
+    **/
+    _count?: true | WebhookPayloadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WebhookPayloadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WebhookPayloadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WebhookPayloadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WebhookPayloadMaxAggregateInputType
+  }
+
+  export type GetWebhookPayloadAggregateType<T extends WebhookPayloadAggregateArgs> = {
+        [P in keyof T & keyof AggregateWebhookPayload]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWebhookPayload[P]>
+      : GetScalarType<T[P], AggregateWebhookPayload[P]>
+  }
+
+
+
+
+  export type WebhookPayloadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebhookPayloadWhereInput
+    orderBy?: WebhookPayloadOrderByWithAggregationInput | WebhookPayloadOrderByWithAggregationInput[]
+    by: WebhookPayloadScalarFieldEnum[] | WebhookPayloadScalarFieldEnum
+    having?: WebhookPayloadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WebhookPayloadCountAggregateInputType | true
+    _avg?: WebhookPayloadAvgAggregateInputType
+    _sum?: WebhookPayloadSumAggregateInputType
+    _min?: WebhookPayloadMinAggregateInputType
+    _max?: WebhookPayloadMaxAggregateInputType
+  }
+
+  export type WebhookPayloadGroupByOutputType = {
+    id: string
+    shopId: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonValue
+    signature: string | null
+    status: $Enums.WebhookStatus
+    processedAt: Date | null
+    errorMessage: string | null
+    retryCount: number
+    createdAt: Date
+    updatedAt: Date
+    _count: WebhookPayloadCountAggregateOutputType | null
+    _avg: WebhookPayloadAvgAggregateOutputType | null
+    _sum: WebhookPayloadSumAggregateOutputType | null
+    _min: WebhookPayloadMinAggregateOutputType | null
+    _max: WebhookPayloadMaxAggregateOutputType | null
+  }
+
+  type GetWebhookPayloadGroupByPayload<T extends WebhookPayloadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WebhookPayloadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WebhookPayloadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WebhookPayloadGroupByOutputType[P]>
+            : GetScalarType<T[P], WebhookPayloadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WebhookPayloadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    eventType?: boolean
+    rawPayload?: boolean
+    signature?: boolean
+    status?: boolean
+    processedAt?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webhookPayload"]>
+
+  export type WebhookPayloadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    eventType?: boolean
+    rawPayload?: boolean
+    signature?: boolean
+    status?: boolean
+    processedAt?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webhookPayload"]>
+
+  export type WebhookPayloadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    eventType?: boolean
+    rawPayload?: boolean
+    signature?: boolean
+    status?: boolean
+    processedAt?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["webhookPayload"]>
+
+  export type WebhookPayloadSelectScalar = {
+    id?: boolean
+    shopId?: boolean
+    platform?: boolean
+    eventType?: boolean
+    rawPayload?: boolean
+    signature?: boolean
+    status?: boolean
+    processedAt?: boolean
+    errorMessage?: boolean
+    retryCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WebhookPayloadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "platform" | "eventType" | "rawPayload" | "signature" | "status" | "processedAt" | "errorMessage" | "retryCount" | "createdAt" | "updatedAt", ExtArgs["result"]["webhookPayload"]>
+  export type WebhookPayloadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type WebhookPayloadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+  export type WebhookPayloadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    shop?: boolean | ShopDefaultArgs<ExtArgs>
+  }
+
+  export type $WebhookPayloadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WebhookPayload"
+    objects: {
+      shop: Prisma.$ShopPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      shopId: string
+      platform: $Enums.Platform
+      eventType: string
+      rawPayload: Prisma.JsonValue
+      signature: string | null
+      status: $Enums.WebhookStatus
+      processedAt: Date | null
+      errorMessage: string | null
+      retryCount: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["webhookPayload"]>
+    composites: {}
+  }
+
+  type WebhookPayloadGetPayload<S extends boolean | null | undefined | WebhookPayloadDefaultArgs> = $Result.GetResult<Prisma.$WebhookPayloadPayload, S>
+
+  type WebhookPayloadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WebhookPayloadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WebhookPayloadCountAggregateInputType | true
+    }
+
+  export interface WebhookPayloadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WebhookPayload'], meta: { name: 'WebhookPayload' } }
+    /**
+     * Find zero or one WebhookPayload that matches the filter.
+     * @param {WebhookPayloadFindUniqueArgs} args - Arguments to find a WebhookPayload
+     * @example
+     * // Get one WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WebhookPayloadFindUniqueArgs>(args: SelectSubset<T, WebhookPayloadFindUniqueArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WebhookPayload that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WebhookPayloadFindUniqueOrThrowArgs} args - Arguments to find a WebhookPayload
+     * @example
+     * // Get one WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WebhookPayloadFindUniqueOrThrowArgs>(args: SelectSubset<T, WebhookPayloadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebhookPayload that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadFindFirstArgs} args - Arguments to find a WebhookPayload
+     * @example
+     * // Get one WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WebhookPayloadFindFirstArgs>(args?: SelectSubset<T, WebhookPayloadFindFirstArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebhookPayload that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadFindFirstOrThrowArgs} args - Arguments to find a WebhookPayload
+     * @example
+     * // Get one WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WebhookPayloadFindFirstOrThrowArgs>(args?: SelectSubset<T, WebhookPayloadFindFirstOrThrowArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WebhookPayloads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WebhookPayloads
+     * const webhookPayloads = await prisma.webhookPayload.findMany()
+     * 
+     * // Get first 10 WebhookPayloads
+     * const webhookPayloads = await prisma.webhookPayload.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const webhookPayloadWithIdOnly = await prisma.webhookPayload.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WebhookPayloadFindManyArgs>(args?: SelectSubset<T, WebhookPayloadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WebhookPayload.
+     * @param {WebhookPayloadCreateArgs} args - Arguments to create a WebhookPayload.
+     * @example
+     * // Create one WebhookPayload
+     * const WebhookPayload = await prisma.webhookPayload.create({
+     *   data: {
+     *     // ... data to create a WebhookPayload
+     *   }
+     * })
+     * 
+     */
+    create<T extends WebhookPayloadCreateArgs>(args: SelectSubset<T, WebhookPayloadCreateArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WebhookPayloads.
+     * @param {WebhookPayloadCreateManyArgs} args - Arguments to create many WebhookPayloads.
+     * @example
+     * // Create many WebhookPayloads
+     * const webhookPayload = await prisma.webhookPayload.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WebhookPayloadCreateManyArgs>(args?: SelectSubset<T, WebhookPayloadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WebhookPayloads and returns the data saved in the database.
+     * @param {WebhookPayloadCreateManyAndReturnArgs} args - Arguments to create many WebhookPayloads.
+     * @example
+     * // Create many WebhookPayloads
+     * const webhookPayload = await prisma.webhookPayload.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WebhookPayloads and only return the `id`
+     * const webhookPayloadWithIdOnly = await prisma.webhookPayload.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WebhookPayloadCreateManyAndReturnArgs>(args?: SelectSubset<T, WebhookPayloadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WebhookPayload.
+     * @param {WebhookPayloadDeleteArgs} args - Arguments to delete one WebhookPayload.
+     * @example
+     * // Delete one WebhookPayload
+     * const WebhookPayload = await prisma.webhookPayload.delete({
+     *   where: {
+     *     // ... filter to delete one WebhookPayload
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WebhookPayloadDeleteArgs>(args: SelectSubset<T, WebhookPayloadDeleteArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WebhookPayload.
+     * @param {WebhookPayloadUpdateArgs} args - Arguments to update one WebhookPayload.
+     * @example
+     * // Update one WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WebhookPayloadUpdateArgs>(args: SelectSubset<T, WebhookPayloadUpdateArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WebhookPayloads.
+     * @param {WebhookPayloadDeleteManyArgs} args - Arguments to filter WebhookPayloads to delete.
+     * @example
+     * // Delete a few WebhookPayloads
+     * const { count } = await prisma.webhookPayload.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WebhookPayloadDeleteManyArgs>(args?: SelectSubset<T, WebhookPayloadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebhookPayloads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WebhookPayloads
+     * const webhookPayload = await prisma.webhookPayload.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WebhookPayloadUpdateManyArgs>(args: SelectSubset<T, WebhookPayloadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebhookPayloads and returns the data updated in the database.
+     * @param {WebhookPayloadUpdateManyAndReturnArgs} args - Arguments to update many WebhookPayloads.
+     * @example
+     * // Update many WebhookPayloads
+     * const webhookPayload = await prisma.webhookPayload.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WebhookPayloads and only return the `id`
+     * const webhookPayloadWithIdOnly = await prisma.webhookPayload.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WebhookPayloadUpdateManyAndReturnArgs>(args: SelectSubset<T, WebhookPayloadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WebhookPayload.
+     * @param {WebhookPayloadUpsertArgs} args - Arguments to update or create a WebhookPayload.
+     * @example
+     * // Update or create a WebhookPayload
+     * const webhookPayload = await prisma.webhookPayload.upsert({
+     *   create: {
+     *     // ... data to create a WebhookPayload
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WebhookPayload we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WebhookPayloadUpsertArgs>(args: SelectSubset<T, WebhookPayloadUpsertArgs<ExtArgs>>): Prisma__WebhookPayloadClient<$Result.GetResult<Prisma.$WebhookPayloadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WebhookPayloads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadCountArgs} args - Arguments to filter WebhookPayloads to count.
+     * @example
+     * // Count the number of WebhookPayloads
+     * const count = await prisma.webhookPayload.count({
+     *   where: {
+     *     // ... the filter for the WebhookPayloads we want to count
+     *   }
+     * })
+    **/
+    count<T extends WebhookPayloadCountArgs>(
+      args?: Subset<T, WebhookPayloadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WebhookPayloadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WebhookPayload.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WebhookPayloadAggregateArgs>(args: Subset<T, WebhookPayloadAggregateArgs>): Prisma.PrismaPromise<GetWebhookPayloadAggregateType<T>>
+
+    /**
+     * Group by WebhookPayload.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookPayloadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WebhookPayloadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WebhookPayloadGroupByArgs['orderBy'] }
+        : { orderBy?: WebhookPayloadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WebhookPayloadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWebhookPayloadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WebhookPayload model
+   */
+  readonly fields: WebhookPayloadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WebhookPayload.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WebhookPayloadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    shop<T extends ShopDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShopDefaultArgs<ExtArgs>>): Prisma__ShopClient<$Result.GetResult<Prisma.$ShopPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WebhookPayload model
+   */
+  interface WebhookPayloadFieldRefs {
+    readonly id: FieldRef<"WebhookPayload", 'String'>
+    readonly shopId: FieldRef<"WebhookPayload", 'String'>
+    readonly platform: FieldRef<"WebhookPayload", 'Platform'>
+    readonly eventType: FieldRef<"WebhookPayload", 'String'>
+    readonly rawPayload: FieldRef<"WebhookPayload", 'Json'>
+    readonly signature: FieldRef<"WebhookPayload", 'String'>
+    readonly status: FieldRef<"WebhookPayload", 'WebhookStatus'>
+    readonly processedAt: FieldRef<"WebhookPayload", 'DateTime'>
+    readonly errorMessage: FieldRef<"WebhookPayload", 'String'>
+    readonly retryCount: FieldRef<"WebhookPayload", 'Int'>
+    readonly createdAt: FieldRef<"WebhookPayload", 'DateTime'>
+    readonly updatedAt: FieldRef<"WebhookPayload", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WebhookPayload findUnique
+   */
+  export type WebhookPayloadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter, which WebhookPayload to fetch.
+     */
+    where: WebhookPayloadWhereUniqueInput
+  }
+
+  /**
+   * WebhookPayload findUniqueOrThrow
+   */
+  export type WebhookPayloadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter, which WebhookPayload to fetch.
+     */
+    where: WebhookPayloadWhereUniqueInput
+  }
+
+  /**
+   * WebhookPayload findFirst
+   */
+  export type WebhookPayloadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter, which WebhookPayload to fetch.
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookPayloads to fetch.
+     */
+    orderBy?: WebhookPayloadOrderByWithRelationInput | WebhookPayloadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebhookPayloads.
+     */
+    cursor?: WebhookPayloadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookPayloads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookPayloads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebhookPayloads.
+     */
+    distinct?: WebhookPayloadScalarFieldEnum | WebhookPayloadScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookPayload findFirstOrThrow
+   */
+  export type WebhookPayloadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter, which WebhookPayload to fetch.
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookPayloads to fetch.
+     */
+    orderBy?: WebhookPayloadOrderByWithRelationInput | WebhookPayloadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebhookPayloads.
+     */
+    cursor?: WebhookPayloadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookPayloads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookPayloads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebhookPayloads.
+     */
+    distinct?: WebhookPayloadScalarFieldEnum | WebhookPayloadScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookPayload findMany
+   */
+  export type WebhookPayloadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter, which WebhookPayloads to fetch.
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookPayloads to fetch.
+     */
+    orderBy?: WebhookPayloadOrderByWithRelationInput | WebhookPayloadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WebhookPayloads.
+     */
+    cursor?: WebhookPayloadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookPayloads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookPayloads.
+     */
+    skip?: number
+    distinct?: WebhookPayloadScalarFieldEnum | WebhookPayloadScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookPayload create
+   */
+  export type WebhookPayloadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WebhookPayload.
+     */
+    data: XOR<WebhookPayloadCreateInput, WebhookPayloadUncheckedCreateInput>
+  }
+
+  /**
+   * WebhookPayload createMany
+   */
+  export type WebhookPayloadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WebhookPayloads.
+     */
+    data: WebhookPayloadCreateManyInput | WebhookPayloadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WebhookPayload createManyAndReturn
+   */
+  export type WebhookPayloadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * The data used to create many WebhookPayloads.
+     */
+    data: WebhookPayloadCreateManyInput | WebhookPayloadCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebhookPayload update
+   */
+  export type WebhookPayloadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WebhookPayload.
+     */
+    data: XOR<WebhookPayloadUpdateInput, WebhookPayloadUncheckedUpdateInput>
+    /**
+     * Choose, which WebhookPayload to update.
+     */
+    where: WebhookPayloadWhereUniqueInput
+  }
+
+  /**
+   * WebhookPayload updateMany
+   */
+  export type WebhookPayloadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WebhookPayloads.
+     */
+    data: XOR<WebhookPayloadUpdateManyMutationInput, WebhookPayloadUncheckedUpdateManyInput>
+    /**
+     * Filter which WebhookPayloads to update
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * Limit how many WebhookPayloads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebhookPayload updateManyAndReturn
+   */
+  export type WebhookPayloadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * The data used to update WebhookPayloads.
+     */
+    data: XOR<WebhookPayloadUpdateManyMutationInput, WebhookPayloadUncheckedUpdateManyInput>
+    /**
+     * Filter which WebhookPayloads to update
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * Limit how many WebhookPayloads to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WebhookPayload upsert
+   */
+  export type WebhookPayloadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WebhookPayload to update in case it exists.
+     */
+    where: WebhookPayloadWhereUniqueInput
+    /**
+     * In case the WebhookPayload found by the `where` argument doesn't exist, create a new WebhookPayload with this data.
+     */
+    create: XOR<WebhookPayloadCreateInput, WebhookPayloadUncheckedCreateInput>
+    /**
+     * In case the WebhookPayload was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WebhookPayloadUpdateInput, WebhookPayloadUncheckedUpdateInput>
+  }
+
+  /**
+   * WebhookPayload delete
+   */
+  export type WebhookPayloadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+    /**
+     * Filter which WebhookPayload to delete.
+     */
+    where: WebhookPayloadWhereUniqueInput
+  }
+
+  /**
+   * WebhookPayload deleteMany
+   */
+  export type WebhookPayloadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebhookPayloads to delete
+     */
+    where?: WebhookPayloadWhereInput
+    /**
+     * Limit how many WebhookPayloads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebhookPayload without action
+   */
+  export type WebhookPayloadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookPayload
+     */
+    select?: WebhookPayloadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookPayload
+     */
+    omit?: WebhookPayloadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WebhookPayloadInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10595,12 +15887,93 @@ export namespace Prisma {
   export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
 
 
+  export const ShopeeIntegrationScalarFieldEnum: {
+    id: 'id',
+    shopId: 'shopId',
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
+    expiresAt: 'expiresAt',
+    shopeeShopId: 'shopeeShopId',
+    status: 'status',
+    lastSyncAt: 'lastSyncAt',
+    failureCount: 'failureCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type ShopeeIntegrationScalarFieldEnum = (typeof ShopeeIntegrationScalarFieldEnum)[keyof typeof ShopeeIntegrationScalarFieldEnum]
+
+
+  export const ProductScalarFieldEnum: {
+    id: 'id',
+    shopId: 'shopId',
+    platform: 'platform',
+    shopeeProductId: 'shopeeProductId',
+    name: 'name',
+    sku: 'sku',
+    stock: 'stock',
+    price: 'price',
+    imageUrl: 'imageUrl',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+  export const OrderScalarFieldEnum: {
+    id: 'id',
+    shopId: 'shopId',
+    platform: 'platform',
+    shopeeOrderId: 'shopeeOrderId',
+    orderNumber: 'orderNumber',
+    totalAmount: 'totalAmount',
+    customerName: 'customerName',
+    customerEmail: 'customerEmail',
+    customerPhone: 'customerPhone',
+    shippingAddress: 'shippingAddress',
+    orderDate: 'orderDate',
+    items: 'items',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+  export const WebhookPayloadScalarFieldEnum: {
+    id: 'id',
+    shopId: 'shopId',
+    platform: 'platform',
+    eventType: 'eventType',
+    rawPayload: 'rawPayload',
+    signature: 'signature',
+    status: 'status',
+    processedAt: 'processedAt',
+    errorMessage: 'errorMessage',
+    retryCount: 'retryCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WebhookPayloadScalarFieldEnum = (typeof WebhookPayloadScalarFieldEnum)[keyof typeof WebhookPayloadScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -10617,6 +15990,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -10677,6 +16059,76 @@ export namespace Prisma {
    * Reference to a field of type 'UserRole[]'
    */
   export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'IntegrationStatus'
+   */
+  export type EnumIntegrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IntegrationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'IntegrationStatus[]'
+   */
+  export type ListEnumIntegrationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IntegrationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Platform'
+   */
+  export type EnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform'>
+    
+
+
+  /**
+   * Reference to a field of type 'Platform[]'
+   */
+  export type ListEnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebhookStatus'
+   */
+  export type EnumWebhookStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebhookStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'WebhookStatus[]'
+   */
+  export type ListEnumWebhookStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebhookStatus[]'>
     
 
 
@@ -10944,6 +16396,10 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: ShopUserListRelationFilter
     invitations?: InvitationListRelationFilter
+    shopeeIntegration?: XOR<ShopeeIntegrationNullableScalarRelationFilter, ShopeeIntegrationWhereInput> | null
+    products?: ProductListRelationFilter
+    orders?: OrderListRelationFilter
+    webhookPayloads?: WebhookPayloadListRelationFilter
   }
 
   export type ShopOrderByWithRelationInput = {
@@ -10957,6 +16413,10 @@ export namespace Prisma {
     owner?: UserOrderByWithRelationInput
     members?: ShopUserOrderByRelationAggregateInput
     invitations?: InvitationOrderByRelationAggregateInput
+    shopeeIntegration?: ShopeeIntegrationOrderByWithRelationInput
+    products?: ProductOrderByRelationAggregateInput
+    orders?: OrderOrderByRelationAggregateInput
+    webhookPayloads?: WebhookPayloadOrderByRelationAggregateInput
   }
 
   export type ShopWhereUniqueInput = Prisma.AtLeast<{
@@ -10973,6 +16433,10 @@ export namespace Prisma {
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: ShopUserListRelationFilter
     invitations?: InvitationListRelationFilter
+    shopeeIntegration?: XOR<ShopeeIntegrationNullableScalarRelationFilter, ShopeeIntegrationWhereInput> | null
+    products?: ProductListRelationFilter
+    orders?: OrderListRelationFilter
+    webhookPayloads?: WebhookPayloadListRelationFilter
   }, "id">
 
   export type ShopOrderByWithAggregationInput = {
@@ -11234,6 +16698,386 @@ export namespace Prisma {
     expiresAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
     acceptedAt?: DateTimeNullableWithAggregatesFilter<"Invitation"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
+  }
+
+  export type ShopeeIntegrationWhereInput = {
+    AND?: ShopeeIntegrationWhereInput | ShopeeIntegrationWhereInput[]
+    OR?: ShopeeIntegrationWhereInput[]
+    NOT?: ShopeeIntegrationWhereInput | ShopeeIntegrationWhereInput[]
+    id?: StringFilter<"ShopeeIntegration"> | string
+    shopId?: StringFilter<"ShopeeIntegration"> | string
+    accessToken?: StringFilter<"ShopeeIntegration"> | string
+    refreshToken?: StringFilter<"ShopeeIntegration"> | string
+    expiresAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    shopeeShopId?: StringFilter<"ShopeeIntegration"> | string
+    status?: EnumIntegrationStatusFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
+    lastSyncAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
+    failureCount?: IntFilter<"ShopeeIntegration"> | number
+    createdAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }
+
+  export type ShopeeIntegrationOrderByWithRelationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiresAt?: SortOrder
+    shopeeShopId?: SortOrder
+    status?: SortOrder
+    lastSyncAt?: SortOrderInput | SortOrder
+    failureCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    shop?: ShopOrderByWithRelationInput
+  }
+
+  export type ShopeeIntegrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    shopId?: string
+    AND?: ShopeeIntegrationWhereInput | ShopeeIntegrationWhereInput[]
+    OR?: ShopeeIntegrationWhereInput[]
+    NOT?: ShopeeIntegrationWhereInput | ShopeeIntegrationWhereInput[]
+    accessToken?: StringFilter<"ShopeeIntegration"> | string
+    refreshToken?: StringFilter<"ShopeeIntegration"> | string
+    expiresAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    shopeeShopId?: StringFilter<"ShopeeIntegration"> | string
+    status?: EnumIntegrationStatusFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
+    lastSyncAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
+    failureCount?: IntFilter<"ShopeeIntegration"> | number
+    createdAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    updatedAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }, "id" | "shopId">
+
+  export type ShopeeIntegrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiresAt?: SortOrder
+    shopeeShopId?: SortOrder
+    status?: SortOrder
+    lastSyncAt?: SortOrderInput | SortOrder
+    failureCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: ShopeeIntegrationCountOrderByAggregateInput
+    _avg?: ShopeeIntegrationAvgOrderByAggregateInput
+    _max?: ShopeeIntegrationMaxOrderByAggregateInput
+    _min?: ShopeeIntegrationMinOrderByAggregateInput
+    _sum?: ShopeeIntegrationSumOrderByAggregateInput
+  }
+
+  export type ShopeeIntegrationScalarWhereWithAggregatesInput = {
+    AND?: ShopeeIntegrationScalarWhereWithAggregatesInput | ShopeeIntegrationScalarWhereWithAggregatesInput[]
+    OR?: ShopeeIntegrationScalarWhereWithAggregatesInput[]
+    NOT?: ShopeeIntegrationScalarWhereWithAggregatesInput | ShopeeIntegrationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ShopeeIntegration"> | string
+    shopId?: StringWithAggregatesFilter<"ShopeeIntegration"> | string
+    accessToken?: StringWithAggregatesFilter<"ShopeeIntegration"> | string
+    refreshToken?: StringWithAggregatesFilter<"ShopeeIntegration"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"ShopeeIntegration"> | Date | string
+    shopeeShopId?: StringWithAggregatesFilter<"ShopeeIntegration"> | string
+    status?: EnumIntegrationStatusWithAggregatesFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
+    lastSyncAt?: DateTimeNullableWithAggregatesFilter<"ShopeeIntegration"> | Date | string | null
+    failureCount?: IntWithAggregatesFilter<"ShopeeIntegration"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ShopeeIntegration"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShopeeIntegration"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ShopeeIntegration"> | Date | string | null
+  }
+
+  export type ProductWhereInput = {
+    AND?: ProductWhereInput | ProductWhereInput[]
+    OR?: ProductWhereInput[]
+    NOT?: ProductWhereInput | ProductWhereInput[]
+    id?: StringFilter<"Product"> | string
+    shopId?: StringFilter<"Product"> | string
+    platform?: EnumPlatformFilter<"Product"> | $Enums.Platform
+    shopeeProductId?: StringNullableFilter<"Product"> | string | null
+    name?: StringFilter<"Product"> | string
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock?: IntFilter<"Product"> | number
+    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    imageUrl?: StringNullableFilter<"Product"> | string | null
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }
+
+  export type ProductOrderByWithRelationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeProductId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    stock?: SortOrder
+    price?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    shop?: ShopOrderByWithRelationInput
+  }
+
+  export type ProductWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    shopId_shopeeProductId?: ProductShopIdShopeeProductIdCompoundUniqueInput
+    AND?: ProductWhereInput | ProductWhereInput[]
+    OR?: ProductWhereInput[]
+    NOT?: ProductWhereInput | ProductWhereInput[]
+    shopId?: StringFilter<"Product"> | string
+    platform?: EnumPlatformFilter<"Product"> | $Enums.Platform
+    shopeeProductId?: StringNullableFilter<"Product"> | string | null
+    name?: StringFilter<"Product"> | string
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock?: IntFilter<"Product"> | number
+    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    imageUrl?: StringNullableFilter<"Product"> | string | null
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }, "id" | "shopId_shopeeProductId">
+
+  export type ProductOrderByWithAggregationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeProductId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    stock?: SortOrder
+    price?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductCountOrderByAggregateInput
+    _avg?: ProductAvgOrderByAggregateInput
+    _max?: ProductMaxOrderByAggregateInput
+    _min?: ProductMinOrderByAggregateInput
+    _sum?: ProductSumOrderByAggregateInput
+  }
+
+  export type ProductScalarWhereWithAggregatesInput = {
+    AND?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
+    OR?: ProductScalarWhereWithAggregatesInput[]
+    NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Product"> | string
+    shopId?: StringWithAggregatesFilter<"Product"> | string
+    platform?: EnumPlatformWithAggregatesFilter<"Product"> | $Enums.Platform
+    shopeeProductId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    name?: StringWithAggregatesFilter<"Product"> | string
+    sku?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    stock?: IntWithAggregatesFilter<"Product"> | number
+    price?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    imageUrl?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+  }
+
+  export type OrderWhereInput = {
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    id?: StringFilter<"Order"> | string
+    shopId?: StringFilter<"Order"> | string
+    platform?: EnumPlatformFilter<"Order"> | $Enums.Platform
+    shopeeOrderId?: StringFilter<"Order"> | string
+    orderNumber?: StringFilter<"Order"> | string
+    totalAmount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
+    customerName?: StringFilter<"Order"> | string
+    customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    shippingAddress?: StringNullableFilter<"Order"> | string | null
+    orderDate?: DateTimeFilter<"Order"> | Date | string
+    items?: JsonFilter<"Order">
+    status?: StringFilter<"Order"> | string
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }
+
+  export type OrderOrderByWithRelationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeOrderId?: SortOrder
+    orderNumber?: SortOrder
+    totalAmount?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    shippingAddress?: SortOrderInput | SortOrder
+    orderDate?: SortOrder
+    items?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    shop?: ShopOrderByWithRelationInput
+  }
+
+  export type OrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    shopId_shopeeOrderId?: OrderShopIdShopeeOrderIdCompoundUniqueInput
+    AND?: OrderWhereInput | OrderWhereInput[]
+    OR?: OrderWhereInput[]
+    NOT?: OrderWhereInput | OrderWhereInput[]
+    shopId?: StringFilter<"Order"> | string
+    platform?: EnumPlatformFilter<"Order"> | $Enums.Platform
+    shopeeOrderId?: StringFilter<"Order"> | string
+    orderNumber?: StringFilter<"Order"> | string
+    totalAmount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
+    customerName?: StringFilter<"Order"> | string
+    customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    shippingAddress?: StringNullableFilter<"Order"> | string | null
+    orderDate?: DateTimeFilter<"Order"> | Date | string
+    items?: JsonFilter<"Order">
+    status?: StringFilter<"Order"> | string
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }, "id" | "shopId_shopeeOrderId">
+
+  export type OrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeOrderId?: SortOrder
+    orderNumber?: SortOrder
+    totalAmount?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrderInput | SortOrder
+    customerPhone?: SortOrderInput | SortOrder
+    shippingAddress?: SortOrderInput | SortOrder
+    orderDate?: SortOrder
+    items?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrderCountOrderByAggregateInput
+    _avg?: OrderAvgOrderByAggregateInput
+    _max?: OrderMaxOrderByAggregateInput
+    _min?: OrderMinOrderByAggregateInput
+    _sum?: OrderSumOrderByAggregateInput
+  }
+
+  export type OrderScalarWhereWithAggregatesInput = {
+    AND?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    OR?: OrderScalarWhereWithAggregatesInput[]
+    NOT?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Order"> | string
+    shopId?: StringWithAggregatesFilter<"Order"> | string
+    platform?: EnumPlatformWithAggregatesFilter<"Order"> | $Enums.Platform
+    shopeeOrderId?: StringWithAggregatesFilter<"Order"> | string
+    orderNumber?: StringWithAggregatesFilter<"Order"> | string
+    totalAmount?: DecimalWithAggregatesFilter<"Order"> | Decimal | DecimalJsLike | number | string
+    customerName?: StringWithAggregatesFilter<"Order"> | string
+    customerEmail?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    customerPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    shippingAddress?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    orderDate?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    items?: JsonWithAggregatesFilter<"Order">
+    status?: StringWithAggregatesFilter<"Order"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+  }
+
+  export type WebhookPayloadWhereInput = {
+    AND?: WebhookPayloadWhereInput | WebhookPayloadWhereInput[]
+    OR?: WebhookPayloadWhereInput[]
+    NOT?: WebhookPayloadWhereInput | WebhookPayloadWhereInput[]
+    id?: StringFilter<"WebhookPayload"> | string
+    shopId?: StringFilter<"WebhookPayload"> | string
+    platform?: EnumPlatformFilter<"WebhookPayload"> | $Enums.Platform
+    eventType?: StringFilter<"WebhookPayload"> | string
+    rawPayload?: JsonFilter<"WebhookPayload">
+    signature?: StringNullableFilter<"WebhookPayload"> | string | null
+    status?: EnumWebhookStatusFilter<"WebhookPayload"> | $Enums.WebhookStatus
+    processedAt?: DateTimeNullableFilter<"WebhookPayload"> | Date | string | null
+    errorMessage?: StringNullableFilter<"WebhookPayload"> | string | null
+    retryCount?: IntFilter<"WebhookPayload"> | number
+    createdAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+    updatedAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }
+
+  export type WebhookPayloadOrderByWithRelationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    eventType?: SortOrder
+    rawPayload?: SortOrder
+    signature?: SortOrderInput | SortOrder
+    status?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    retryCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    shop?: ShopOrderByWithRelationInput
+  }
+
+  export type WebhookPayloadWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WebhookPayloadWhereInput | WebhookPayloadWhereInput[]
+    OR?: WebhookPayloadWhereInput[]
+    NOT?: WebhookPayloadWhereInput | WebhookPayloadWhereInput[]
+    shopId?: StringFilter<"WebhookPayload"> | string
+    platform?: EnumPlatformFilter<"WebhookPayload"> | $Enums.Platform
+    eventType?: StringFilter<"WebhookPayload"> | string
+    rawPayload?: JsonFilter<"WebhookPayload">
+    signature?: StringNullableFilter<"WebhookPayload"> | string | null
+    status?: EnumWebhookStatusFilter<"WebhookPayload"> | $Enums.WebhookStatus
+    processedAt?: DateTimeNullableFilter<"WebhookPayload"> | Date | string | null
+    errorMessage?: StringNullableFilter<"WebhookPayload"> | string | null
+    retryCount?: IntFilter<"WebhookPayload"> | number
+    createdAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+    updatedAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+    shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
+  }, "id">
+
+  export type WebhookPayloadOrderByWithAggregationInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    eventType?: SortOrder
+    rawPayload?: SortOrder
+    signature?: SortOrderInput | SortOrder
+    status?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    retryCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WebhookPayloadCountOrderByAggregateInput
+    _avg?: WebhookPayloadAvgOrderByAggregateInput
+    _max?: WebhookPayloadMaxOrderByAggregateInput
+    _min?: WebhookPayloadMinOrderByAggregateInput
+    _sum?: WebhookPayloadSumOrderByAggregateInput
+  }
+
+  export type WebhookPayloadScalarWhereWithAggregatesInput = {
+    AND?: WebhookPayloadScalarWhereWithAggregatesInput | WebhookPayloadScalarWhereWithAggregatesInput[]
+    OR?: WebhookPayloadScalarWhereWithAggregatesInput[]
+    NOT?: WebhookPayloadScalarWhereWithAggregatesInput | WebhookPayloadScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WebhookPayload"> | string
+    shopId?: StringWithAggregatesFilter<"WebhookPayload"> | string
+    platform?: EnumPlatformWithAggregatesFilter<"WebhookPayload"> | $Enums.Platform
+    eventType?: StringWithAggregatesFilter<"WebhookPayload"> | string
+    rawPayload?: JsonWithAggregatesFilter<"WebhookPayload">
+    signature?: StringNullableWithAggregatesFilter<"WebhookPayload"> | string | null
+    status?: EnumWebhookStatusWithAggregatesFilter<"WebhookPayload"> | $Enums.WebhookStatus
+    processedAt?: DateTimeNullableWithAggregatesFilter<"WebhookPayload"> | Date | string | null
+    errorMessage?: StringNullableWithAggregatesFilter<"WebhookPayload"> | string | null
+    retryCount?: IntWithAggregatesFilter<"WebhookPayload"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"WebhookPayload"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WebhookPayload"> | Date | string
   }
 
   export type AccountCreateInput = {
@@ -11506,6 +17350,10 @@ export namespace Prisma {
     owner: UserCreateNestedOneWithoutShopsOwnedInput
     members?: ShopUserCreateNestedManyWithoutShopInput
     invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateInput = {
@@ -11518,6 +17366,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopUpdateInput = {
@@ -11530,6 +17382,10 @@ export namespace Prisma {
     owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
     members?: ShopUserUpdateManyWithoutShopNestedInput
     invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateInput = {
@@ -11542,6 +17398,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopCreateManyInput = {
@@ -11804,6 +17664,436 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShopeeIntegrationCreateInput = {
+    id?: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date | string
+    shopeeShopId: string
+    status?: $Enums.IntegrationStatus
+    lastSyncAt?: Date | string | null
+    failureCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    shop: ShopCreateNestedOneWithoutShopeeIntegrationInput
+  }
+
+  export type ShopeeIntegrationUncheckedCreateInput = {
+    id?: string
+    shopId: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date | string
+    shopeeShopId: string
+    status?: $Enums.IntegrationStatus
+    lastSyncAt?: Date | string | null
+    failureCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ShopeeIntegrationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    shop?: ShopUpdateOneRequiredWithoutShopeeIntegrationNestedInput
+  }
+
+  export type ShopeeIntegrationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ShopeeIntegrationCreateManyInput = {
+    id?: string
+    shopId: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date | string
+    shopeeShopId: string
+    status?: $Enums.IntegrationStatus
+    lastSyncAt?: Date | string | null
+    failureCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ShopeeIntegrationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ShopeeIntegrationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProductCreateInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    shop: ShopCreateNestedOneWithoutProductsInput
+  }
+
+  export type ProductUncheckedCreateInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shop?: ShopUpdateOneRequiredWithoutProductsNestedInput
+  }
+
+  export type ProductUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductCreateManyInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderCreateInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    shop: ShopCreateNestedOneWithoutOrdersInput
+  }
+
+  export type OrderUncheckedCreateInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shop?: ShopUpdateOneRequiredWithoutOrdersNestedInput
+  }
+
+  export type OrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderCreateManyInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadCreateInput = {
+    id?: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    shop: ShopCreateNestedOneWithoutWebhookPayloadsInput
+  }
+
+  export type WebhookPayloadUncheckedCreateInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookPayloadUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shop?: ShopUpdateOneRequiredWithoutWebhookPayloadsNestedInput
+  }
+
+  export type WebhookPayloadUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadCreateManyInput = {
+    id?: string
+    shopId: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookPayloadUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    shopId?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12136,6 +18426,41 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type ShopeeIntegrationNullableScalarRelationFilter = {
+    is?: ShopeeIntegrationWhereInput | null
+    isNot?: ShopeeIntegrationWhereInput | null
+  }
+
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
+  }
+
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput
+    some?: OrderWhereInput
+    none?: OrderWhereInput
+  }
+
+  export type WebhookPayloadListRelationFilter = {
+    every?: WebhookPayloadWhereInput
+    some?: WebhookPayloadWhereInput
+    none?: WebhookPayloadWhereInput
+  }
+
+  export type ProductOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WebhookPayloadOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ShopCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -12298,6 +18623,386 @@ export namespace Prisma {
     expiresAt?: SortOrder
     acceptedAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type EnumIntegrationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.IntegrationStatus | EnumIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIntegrationStatusFilter<$PrismaModel> | $Enums.IntegrationStatus
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type ShopeeIntegrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiresAt?: SortOrder
+    shopeeShopId?: SortOrder
+    status?: SortOrder
+    lastSyncAt?: SortOrder
+    failureCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ShopeeIntegrationAvgOrderByAggregateInput = {
+    failureCount?: SortOrder
+  }
+
+  export type ShopeeIntegrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiresAt?: SortOrder
+    shopeeShopId?: SortOrder
+    status?: SortOrder
+    lastSyncAt?: SortOrder
+    failureCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ShopeeIntegrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
+    expiresAt?: SortOrder
+    shopeeShopId?: SortOrder
+    status?: SortOrder
+    lastSyncAt?: SortOrder
+    failureCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ShopeeIntegrationSumOrderByAggregateInput = {
+    failureCount?: SortOrder
+  }
+
+  export type EnumIntegrationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IntegrationStatus | EnumIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIntegrationStatusWithAggregatesFilter<$PrismaModel> | $Enums.IntegrationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIntegrationStatusFilter<$PrismaModel>
+    _max?: NestedEnumIntegrationStatusFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumPlatformFilter<$PrismaModel = never> = {
+    equals?: $Enums.Platform | EnumPlatformFieldRefInput<$PrismaModel>
+    in?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlatformFilter<$PrismaModel> | $Enums.Platform
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type ProductShopIdShopeeProductIdCompoundUniqueInput = {
+    shopId: string
+    shopeeProductId: string
+  }
+
+  export type ProductCountOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    stock?: SortOrder
+    price?: SortOrder
+    imageUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductAvgOrderByAggregateInput = {
+    stock?: SortOrder
+    price?: SortOrder
+  }
+
+  export type ProductMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    stock?: SortOrder
+    price?: SortOrder
+    imageUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductMinOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeProductId?: SortOrder
+    name?: SortOrder
+    sku?: SortOrder
+    stock?: SortOrder
+    price?: SortOrder
+    imageUrl?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductSumOrderByAggregateInput = {
+    stock?: SortOrder
+    price?: SortOrder
+  }
+
+  export type EnumPlatformWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Platform | EnumPlatformFieldRefInput<$PrismaModel>
+    in?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlatformWithAggregatesFilter<$PrismaModel> | $Enums.Platform
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlatformFilter<$PrismaModel>
+    _max?: NestedEnumPlatformFilter<$PrismaModel>
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type OrderShopIdShopeeOrderIdCompoundUniqueInput = {
+    shopId: string
+    shopeeOrderId: string
+  }
+
+  export type OrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeOrderId?: SortOrder
+    orderNumber?: SortOrder
+    totalAmount?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    shippingAddress?: SortOrder
+    orderDate?: SortOrder
+    items?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderAvgOrderByAggregateInput = {
+    totalAmount?: SortOrder
+  }
+
+  export type OrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeOrderId?: SortOrder
+    orderNumber?: SortOrder
+    totalAmount?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    shippingAddress?: SortOrder
+    orderDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    shopeeOrderId?: SortOrder
+    orderNumber?: SortOrder
+    totalAmount?: SortOrder
+    customerName?: SortOrder
+    customerEmail?: SortOrder
+    customerPhone?: SortOrder
+    shippingAddress?: SortOrder
+    orderDate?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrderSumOrderByAggregateInput = {
+    totalAmount?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type EnumWebhookStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebhookStatus | EnumWebhookStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebhookStatusFilter<$PrismaModel> | $Enums.WebhookStatus
+  }
+
+  export type WebhookPayloadCountOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    eventType?: SortOrder
+    rawPayload?: SortOrder
+    signature?: SortOrder
+    status?: SortOrder
+    processedAt?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookPayloadAvgOrderByAggregateInput = {
+    retryCount?: SortOrder
+  }
+
+  export type WebhookPayloadMaxOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    eventType?: SortOrder
+    signature?: SortOrder
+    status?: SortOrder
+    processedAt?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookPayloadMinOrderByAggregateInput = {
+    id?: SortOrder
+    shopId?: SortOrder
+    platform?: SortOrder
+    eventType?: SortOrder
+    signature?: SortOrder
+    status?: SortOrder
+    processedAt?: SortOrder
+    errorMessage?: SortOrder
+    retryCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookPayloadSumOrderByAggregateInput = {
+    retryCount?: SortOrder
+  }
+
+  export type EnumWebhookStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebhookStatus | EnumWebhookStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebhookStatusWithAggregatesFilter<$PrismaModel> | $Enums.WebhookStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebhookStatusFilter<$PrismaModel>
+    _max?: NestedEnumWebhookStatusFilter<$PrismaModel>
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -12624,6 +19329,33 @@ export namespace Prisma {
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
   }
 
+  export type ShopeeIntegrationCreateNestedOneWithoutShopInput = {
+    create?: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+    connectOrCreate?: ShopeeIntegrationCreateOrConnectWithoutShopInput
+    connect?: ShopeeIntegrationWhereUniqueInput
+  }
+
+  export type ProductCreateNestedManyWithoutShopInput = {
+    create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
+    createMany?: ProductCreateManyShopInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type OrderCreateNestedManyWithoutShopInput = {
+    create?: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput> | OrderCreateWithoutShopInput[] | OrderUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutShopInput | OrderCreateOrConnectWithoutShopInput[]
+    createMany?: OrderCreateManyShopInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type WebhookPayloadCreateNestedManyWithoutShopInput = {
+    create?: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput> | WebhookPayloadCreateWithoutShopInput[] | WebhookPayloadUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: WebhookPayloadCreateOrConnectWithoutShopInput | WebhookPayloadCreateOrConnectWithoutShopInput[]
+    createMany?: WebhookPayloadCreateManyShopInputEnvelope
+    connect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+  }
+
   export type ShopUserUncheckedCreateNestedManyWithoutShopInput = {
     create?: XOR<ShopUserCreateWithoutShopInput, ShopUserUncheckedCreateWithoutShopInput> | ShopUserCreateWithoutShopInput[] | ShopUserUncheckedCreateWithoutShopInput[]
     connectOrCreate?: ShopUserCreateOrConnectWithoutShopInput | ShopUserCreateOrConnectWithoutShopInput[]
@@ -12636,6 +19368,33 @@ export namespace Prisma {
     connectOrCreate?: InvitationCreateOrConnectWithoutShopInput | InvitationCreateOrConnectWithoutShopInput[]
     createMany?: InvitationCreateManyShopInputEnvelope
     connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput = {
+    create?: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+    connectOrCreate?: ShopeeIntegrationCreateOrConnectWithoutShopInput
+    connect?: ShopeeIntegrationWhereUniqueInput
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutShopInput = {
+    create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
+    createMany?: ProductCreateManyShopInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type OrderUncheckedCreateNestedManyWithoutShopInput = {
+    create?: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput> | OrderCreateWithoutShopInput[] | OrderUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutShopInput | OrderCreateOrConnectWithoutShopInput[]
+    createMany?: OrderCreateManyShopInputEnvelope
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+  }
+
+  export type WebhookPayloadUncheckedCreateNestedManyWithoutShopInput = {
+    create?: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput> | WebhookPayloadCreateWithoutShopInput[] | WebhookPayloadUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: WebhookPayloadCreateOrConnectWithoutShopInput | WebhookPayloadCreateOrConnectWithoutShopInput[]
+    createMany?: WebhookPayloadCreateManyShopInputEnvelope
+    connect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutShopsOwnedNestedInput = {
@@ -12674,6 +19433,58 @@ export namespace Prisma {
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
+  export type ShopeeIntegrationUpdateOneWithoutShopNestedInput = {
+    create?: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+    connectOrCreate?: ShopeeIntegrationCreateOrConnectWithoutShopInput
+    upsert?: ShopeeIntegrationUpsertWithoutShopInput
+    disconnect?: ShopeeIntegrationWhereInput | boolean
+    delete?: ShopeeIntegrationWhereInput | boolean
+    connect?: ShopeeIntegrationWhereUniqueInput
+    update?: XOR<XOR<ShopeeIntegrationUpdateToOneWithWhereWithoutShopInput, ShopeeIntegrationUpdateWithoutShopInput>, ShopeeIntegrationUncheckedUpdateWithoutShopInput>
+  }
+
+  export type ProductUpdateManyWithoutShopNestedInput = {
+    create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutShopInput | ProductUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: ProductCreateManyShopInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutShopInput | ProductUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutShopInput | ProductUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type OrderUpdateManyWithoutShopNestedInput = {
+    create?: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput> | OrderCreateWithoutShopInput[] | OrderUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutShopInput | OrderCreateOrConnectWithoutShopInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutShopInput | OrderUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: OrderCreateManyShopInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutShopInput | OrderUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutShopInput | OrderUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type WebhookPayloadUpdateManyWithoutShopNestedInput = {
+    create?: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput> | WebhookPayloadCreateWithoutShopInput[] | WebhookPayloadUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: WebhookPayloadCreateOrConnectWithoutShopInput | WebhookPayloadCreateOrConnectWithoutShopInput[]
+    upsert?: WebhookPayloadUpsertWithWhereUniqueWithoutShopInput | WebhookPayloadUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: WebhookPayloadCreateManyShopInputEnvelope
+    set?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    disconnect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    delete?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    connect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    update?: WebhookPayloadUpdateWithWhereUniqueWithoutShopInput | WebhookPayloadUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: WebhookPayloadUpdateManyWithWhereWithoutShopInput | WebhookPayloadUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: WebhookPayloadScalarWhereInput | WebhookPayloadScalarWhereInput[]
+  }
+
   export type ShopUserUncheckedUpdateManyWithoutShopNestedInput = {
     create?: XOR<ShopUserCreateWithoutShopInput, ShopUserUncheckedCreateWithoutShopInput> | ShopUserCreateWithoutShopInput[] | ShopUserUncheckedCreateWithoutShopInput[]
     connectOrCreate?: ShopUserCreateOrConnectWithoutShopInput | ShopUserCreateOrConnectWithoutShopInput[]
@@ -12700,6 +19511,58 @@ export namespace Prisma {
     update?: InvitationUpdateWithWhereUniqueWithoutShopInput | InvitationUpdateWithWhereUniqueWithoutShopInput[]
     updateMany?: InvitationUpdateManyWithWhereWithoutShopInput | InvitationUpdateManyWithWhereWithoutShopInput[]
     deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput = {
+    create?: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+    connectOrCreate?: ShopeeIntegrationCreateOrConnectWithoutShopInput
+    upsert?: ShopeeIntegrationUpsertWithoutShopInput
+    disconnect?: ShopeeIntegrationWhereInput | boolean
+    delete?: ShopeeIntegrationWhereInput | boolean
+    connect?: ShopeeIntegrationWhereUniqueInput
+    update?: XOR<XOR<ShopeeIntegrationUpdateToOneWithWhereWithoutShopInput, ShopeeIntegrationUpdateWithoutShopInput>, ShopeeIntegrationUncheckedUpdateWithoutShopInput>
+  }
+
+  export type ProductUncheckedUpdateManyWithoutShopNestedInput = {
+    create?: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput> | ProductCreateWithoutShopInput[] | ProductUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutShopInput | ProductCreateOrConnectWithoutShopInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutShopInput | ProductUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: ProductCreateManyShopInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutShopInput | ProductUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutShopInput | ProductUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type OrderUncheckedUpdateManyWithoutShopNestedInput = {
+    create?: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput> | OrderCreateWithoutShopInput[] | OrderUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: OrderCreateOrConnectWithoutShopInput | OrderCreateOrConnectWithoutShopInput[]
+    upsert?: OrderUpsertWithWhereUniqueWithoutShopInput | OrderUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: OrderCreateManyShopInputEnvelope
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[]
+    update?: OrderUpdateWithWhereUniqueWithoutShopInput | OrderUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: OrderUpdateManyWithWhereWithoutShopInput | OrderUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[]
+  }
+
+  export type WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput = {
+    create?: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput> | WebhookPayloadCreateWithoutShopInput[] | WebhookPayloadUncheckedCreateWithoutShopInput[]
+    connectOrCreate?: WebhookPayloadCreateOrConnectWithoutShopInput | WebhookPayloadCreateOrConnectWithoutShopInput[]
+    upsert?: WebhookPayloadUpsertWithWhereUniqueWithoutShopInput | WebhookPayloadUpsertWithWhereUniqueWithoutShopInput[]
+    createMany?: WebhookPayloadCreateManyShopInputEnvelope
+    set?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    disconnect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    delete?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    connect?: WebhookPayloadWhereUniqueInput | WebhookPayloadWhereUniqueInput[]
+    update?: WebhookPayloadUpdateWithWhereUniqueWithoutShopInput | WebhookPayloadUpdateWithWhereUniqueWithoutShopInput[]
+    updateMany?: WebhookPayloadUpdateManyWithWhereWithoutShopInput | WebhookPayloadUpdateManyWithWhereWithoutShopInput[]
+    deleteMany?: WebhookPayloadScalarWhereInput | WebhookPayloadScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutShopMembershipsInput = {
@@ -12774,6 +19637,90 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutInvitationsSentInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvitationsSentInput, UserUpdateWithoutInvitationsSentInput>, UserUncheckedUpdateWithoutInvitationsSentInput>
+  }
+
+  export type ShopCreateNestedOneWithoutShopeeIntegrationInput = {
+    create?: XOR<ShopCreateWithoutShopeeIntegrationInput, ShopUncheckedCreateWithoutShopeeIntegrationInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutShopeeIntegrationInput
+    connect?: ShopWhereUniqueInput
+  }
+
+  export type EnumIntegrationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.IntegrationStatus
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ShopUpdateOneRequiredWithoutShopeeIntegrationNestedInput = {
+    create?: XOR<ShopCreateWithoutShopeeIntegrationInput, ShopUncheckedCreateWithoutShopeeIntegrationInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutShopeeIntegrationInput
+    upsert?: ShopUpsertWithoutShopeeIntegrationInput
+    connect?: ShopWhereUniqueInput
+    update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutShopeeIntegrationInput, ShopUpdateWithoutShopeeIntegrationInput>, ShopUncheckedUpdateWithoutShopeeIntegrationInput>
+  }
+
+  export type ShopCreateNestedOneWithoutProductsInput = {
+    create?: XOR<ShopCreateWithoutProductsInput, ShopUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutProductsInput
+    connect?: ShopWhereUniqueInput
+  }
+
+  export type EnumPlatformFieldUpdateOperationsInput = {
+    set?: $Enums.Platform
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type ShopUpdateOneRequiredWithoutProductsNestedInput = {
+    create?: XOR<ShopCreateWithoutProductsInput, ShopUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutProductsInput
+    upsert?: ShopUpsertWithoutProductsInput
+    connect?: ShopWhereUniqueInput
+    update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutProductsInput, ShopUpdateWithoutProductsInput>, ShopUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type ShopCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<ShopCreateWithoutOrdersInput, ShopUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutOrdersInput
+    connect?: ShopWhereUniqueInput
+  }
+
+  export type ShopUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<ShopCreateWithoutOrdersInput, ShopUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutOrdersInput
+    upsert?: ShopUpsertWithoutOrdersInput
+    connect?: ShopWhereUniqueInput
+    update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutOrdersInput, ShopUpdateWithoutOrdersInput>, ShopUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type ShopCreateNestedOneWithoutWebhookPayloadsInput = {
+    create?: XOR<ShopCreateWithoutWebhookPayloadsInput, ShopUncheckedCreateWithoutWebhookPayloadsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutWebhookPayloadsInput
+    connect?: ShopWhereUniqueInput
+  }
+
+  export type EnumWebhookStatusFieldUpdateOperationsInput = {
+    set?: $Enums.WebhookStatus
+  }
+
+  export type ShopUpdateOneRequiredWithoutWebhookPayloadsNestedInput = {
+    create?: XOR<ShopCreateWithoutWebhookPayloadsInput, ShopUncheckedCreateWithoutWebhookPayloadsInput>
+    connectOrCreate?: ShopCreateOrConnectWithoutWebhookPayloadsInput
+    upsert?: ShopUpsertWithoutWebhookPayloadsInput
+    connect?: ShopWhereUniqueInput
+    update?: XOR<XOR<ShopUpdateToOneWithWhereWithoutWebhookPayloadsInput, ShopUpdateWithoutWebhookPayloadsInput>, ShopUncheckedUpdateWithoutWebhookPayloadsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12952,6 +19899,134 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumIntegrationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.IntegrationStatus | EnumIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIntegrationStatusFilter<$PrismaModel> | $Enums.IntegrationStatus
+  }
+
+  export type NestedEnumIntegrationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IntegrationStatus | EnumIntegrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IntegrationStatus[] | ListEnumIntegrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumIntegrationStatusWithAggregatesFilter<$PrismaModel> | $Enums.IntegrationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIntegrationStatusFilter<$PrismaModel>
+    _max?: NestedEnumIntegrationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumPlatformFilter<$PrismaModel = never> = {
+    equals?: $Enums.Platform | EnumPlatformFieldRefInput<$PrismaModel>
+    in?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlatformFilter<$PrismaModel> | $Enums.Platform
+  }
+
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedEnumPlatformWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Platform | EnumPlatformFieldRefInput<$PrismaModel>
+    in?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Platform[] | ListEnumPlatformFieldRefInput<$PrismaModel>
+    not?: NestedEnumPlatformWithAggregatesFilter<$PrismaModel> | $Enums.Platform
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPlatformFilter<$PrismaModel>
+    _max?: NestedEnumPlatformFilter<$PrismaModel>
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumWebhookStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebhookStatus | EnumWebhookStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebhookStatusFilter<$PrismaModel> | $Enums.WebhookStatus
+  }
+
+  export type NestedEnumWebhookStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WebhookStatus | EnumWebhookStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WebhookStatus[] | ListEnumWebhookStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWebhookStatusWithAggregatesFilter<$PrismaModel> | $Enums.WebhookStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWebhookStatusFilter<$PrismaModel>
+    _max?: NestedEnumWebhookStatusFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -13185,6 +20260,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: ShopUserCreateNestedManyWithoutShopInput
     invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutOwnerInput = {
@@ -13196,6 +20275,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
     invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutOwnerInput = {
@@ -13556,6 +20639,157 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ShopeeIntegrationCreateWithoutShopInput = {
+    id?: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date | string
+    shopeeShopId: string
+    status?: $Enums.IntegrationStatus
+    lastSyncAt?: Date | string | null
+    failureCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ShopeeIntegrationUncheckedCreateWithoutShopInput = {
+    id?: string
+    accessToken: string
+    refreshToken: string
+    expiresAt: Date | string
+    shopeeShopId: string
+    status?: $Enums.IntegrationStatus
+    lastSyncAt?: Date | string | null
+    failureCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ShopeeIntegrationCreateOrConnectWithoutShopInput = {
+    where: ShopeeIntegrationWhereUniqueInput
+    create: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+  }
+
+  export type ProductCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductUncheckedCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductCreateOrConnectWithoutShopInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput>
+  }
+
+  export type ProductCreateManyShopInputEnvelope = {
+    data: ProductCreateManyShopInput | ProductCreateManyShopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrderCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderUncheckedCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateOrConnectWithoutShopInput = {
+    where: OrderWhereUniqueInput
+    create: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput>
+  }
+
+  export type OrderCreateManyShopInputEnvelope = {
+    data: OrderCreateManyShopInput | OrderCreateManyShopInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WebhookPayloadCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookPayloadUncheckedCreateWithoutShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookPayloadCreateOrConnectWithoutShopInput = {
+    where: WebhookPayloadWhereUniqueInput
+    create: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput>
+  }
+
+  export type WebhookPayloadCreateManyShopInputEnvelope = {
+    data: WebhookPayloadCreateManyShopInput | WebhookPayloadCreateManyShopInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutShopsOwnedInput = {
     update: XOR<UserUpdateWithoutShopsOwnedInput, UserUncheckedUpdateWithoutShopsOwnedInput>
     create: XOR<UserCreateWithoutShopsOwnedInput, UserUncheckedCreateWithoutShopsOwnedInput>
@@ -13631,6 +20865,149 @@ export namespace Prisma {
     data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutShopInput>
   }
 
+  export type ShopeeIntegrationUpsertWithoutShopInput = {
+    update: XOR<ShopeeIntegrationUpdateWithoutShopInput, ShopeeIntegrationUncheckedUpdateWithoutShopInput>
+    create: XOR<ShopeeIntegrationCreateWithoutShopInput, ShopeeIntegrationUncheckedCreateWithoutShopInput>
+    where?: ShopeeIntegrationWhereInput
+  }
+
+  export type ShopeeIntegrationUpdateToOneWithWhereWithoutShopInput = {
+    where?: ShopeeIntegrationWhereInput
+    data: XOR<ShopeeIntegrationUpdateWithoutShopInput, ShopeeIntegrationUncheckedUpdateWithoutShopInput>
+  }
+
+  export type ShopeeIntegrationUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ShopeeIntegrationUncheckedUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    refreshToken?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    shopeeShopId?: StringFieldUpdateOperationsInput | string
+    status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
+    lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failureCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutShopInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutShopInput, ProductUncheckedUpdateWithoutShopInput>
+    create: XOR<ProductCreateWithoutShopInput, ProductUncheckedCreateWithoutShopInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutShopInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutShopInput, ProductUncheckedUpdateWithoutShopInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutShopInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutShopInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: StringFilter<"Product"> | string
+    shopId?: StringFilter<"Product"> | string
+    platform?: EnumPlatformFilter<"Product"> | $Enums.Platform
+    shopeeProductId?: StringNullableFilter<"Product"> | string | null
+    name?: StringFilter<"Product"> | string
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock?: IntFilter<"Product"> | number
+    price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    imageUrl?: StringNullableFilter<"Product"> | string | null
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+    updatedAt?: DateTimeFilter<"Product"> | Date | string
+  }
+
+  export type OrderUpsertWithWhereUniqueWithoutShopInput = {
+    where: OrderWhereUniqueInput
+    update: XOR<OrderUpdateWithoutShopInput, OrderUncheckedUpdateWithoutShopInput>
+    create: XOR<OrderCreateWithoutShopInput, OrderUncheckedCreateWithoutShopInput>
+  }
+
+  export type OrderUpdateWithWhereUniqueWithoutShopInput = {
+    where: OrderWhereUniqueInput
+    data: XOR<OrderUpdateWithoutShopInput, OrderUncheckedUpdateWithoutShopInput>
+  }
+
+  export type OrderUpdateManyWithWhereWithoutShopInput = {
+    where: OrderScalarWhereInput
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutShopInput>
+  }
+
+  export type OrderScalarWhereInput = {
+    AND?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    OR?: OrderScalarWhereInput[]
+    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[]
+    id?: StringFilter<"Order"> | string
+    shopId?: StringFilter<"Order"> | string
+    platform?: EnumPlatformFilter<"Order"> | $Enums.Platform
+    shopeeOrderId?: StringFilter<"Order"> | string
+    orderNumber?: StringFilter<"Order"> | string
+    totalAmount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
+    customerName?: StringFilter<"Order"> | string
+    customerEmail?: StringNullableFilter<"Order"> | string | null
+    customerPhone?: StringNullableFilter<"Order"> | string | null
+    shippingAddress?: StringNullableFilter<"Order"> | string | null
+    orderDate?: DateTimeFilter<"Order"> | Date | string
+    items?: JsonFilter<"Order">
+    status?: StringFilter<"Order"> | string
+    createdAt?: DateTimeFilter<"Order"> | Date | string
+    updatedAt?: DateTimeFilter<"Order"> | Date | string
+  }
+
+  export type WebhookPayloadUpsertWithWhereUniqueWithoutShopInput = {
+    where: WebhookPayloadWhereUniqueInput
+    update: XOR<WebhookPayloadUpdateWithoutShopInput, WebhookPayloadUncheckedUpdateWithoutShopInput>
+    create: XOR<WebhookPayloadCreateWithoutShopInput, WebhookPayloadUncheckedCreateWithoutShopInput>
+  }
+
+  export type WebhookPayloadUpdateWithWhereUniqueWithoutShopInput = {
+    where: WebhookPayloadWhereUniqueInput
+    data: XOR<WebhookPayloadUpdateWithoutShopInput, WebhookPayloadUncheckedUpdateWithoutShopInput>
+  }
+
+  export type WebhookPayloadUpdateManyWithWhereWithoutShopInput = {
+    where: WebhookPayloadScalarWhereInput
+    data: XOR<WebhookPayloadUpdateManyMutationInput, WebhookPayloadUncheckedUpdateManyWithoutShopInput>
+  }
+
+  export type WebhookPayloadScalarWhereInput = {
+    AND?: WebhookPayloadScalarWhereInput | WebhookPayloadScalarWhereInput[]
+    OR?: WebhookPayloadScalarWhereInput[]
+    NOT?: WebhookPayloadScalarWhereInput | WebhookPayloadScalarWhereInput[]
+    id?: StringFilter<"WebhookPayload"> | string
+    shopId?: StringFilter<"WebhookPayload"> | string
+    platform?: EnumPlatformFilter<"WebhookPayload"> | $Enums.Platform
+    eventType?: StringFilter<"WebhookPayload"> | string
+    rawPayload?: JsonFilter<"WebhookPayload">
+    signature?: StringNullableFilter<"WebhookPayload"> | string | null
+    status?: EnumWebhookStatusFilter<"WebhookPayload"> | $Enums.WebhookStatus
+    processedAt?: DateTimeNullableFilter<"WebhookPayload"> | Date | string | null
+    errorMessage?: StringNullableFilter<"WebhookPayload"> | string | null
+    retryCount?: IntFilter<"WebhookPayload"> | number
+    createdAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+    updatedAt?: DateTimeFilter<"WebhookPayload"> | Date | string
+  }
+
   export type UserCreateWithoutShopMembershipsInput = {
     id?: string
     name?: string | null
@@ -13677,6 +21054,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutShopsOwnedInput
     invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutMembersInput = {
@@ -13688,6 +21069,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutMembersInput = {
@@ -13758,6 +21143,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
     invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutMembersInput = {
@@ -13769,6 +21158,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type UserCreateWithoutPasswordResetTokensInput = {
@@ -13860,6 +21253,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutShopsOwnedInput
     members?: ShopUserCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
   }
 
   export type ShopUncheckedCreateWithoutInvitationsInput = {
@@ -13871,6 +21268,10 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type ShopCreateOrConnectWithoutInvitationsInput = {
@@ -13935,6 +21336,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
     members?: ShopUserUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutInvitationsInput = {
@@ -13946,6 +21351,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type UserUpsertWithoutInvitationsSentInput = {
@@ -13989,6 +21398,310 @@ export namespace Prisma {
     shopsOwned?: ShopUncheckedUpdateManyWithoutOwnerNestedInput
     shopMemberships?: ShopUserUncheckedUpdateManyWithoutUserNestedInput
     passwordResetTokens?: PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ShopCreateWithoutShopeeIntegrationInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutShopsOwnedInput
+    members?: ShopUserCreateNestedManyWithoutShopInput
+    invitations?: InvitationCreateNestedManyWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopUncheckedCreateWithoutShopeeIntegrationInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopCreateOrConnectWithoutShopeeIntegrationInput = {
+    where: ShopWhereUniqueInput
+    create: XOR<ShopCreateWithoutShopeeIntegrationInput, ShopUncheckedCreateWithoutShopeeIntegrationInput>
+  }
+
+  export type ShopUpsertWithoutShopeeIntegrationInput = {
+    update: XOR<ShopUpdateWithoutShopeeIntegrationInput, ShopUncheckedUpdateWithoutShopeeIntegrationInput>
+    create: XOR<ShopCreateWithoutShopeeIntegrationInput, ShopUncheckedCreateWithoutShopeeIntegrationInput>
+    where?: ShopWhereInput
+  }
+
+  export type ShopUpdateToOneWithWhereWithoutShopeeIntegrationInput = {
+    where?: ShopWhereInput
+    data: XOR<ShopUpdateWithoutShopeeIntegrationInput, ShopUncheckedUpdateWithoutShopeeIntegrationInput>
+  }
+
+  export type ShopUpdateWithoutShopeeIntegrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
+    members?: ShopUserUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUpdateManyWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopUncheckedUpdateWithoutShopeeIntegrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutShopsOwnedInput
+    members?: ShopUserCreateNestedManyWithoutShopInput
+    invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopCreateOrConnectWithoutProductsInput = {
+    where: ShopWhereUniqueInput
+    create: XOR<ShopCreateWithoutProductsInput, ShopUncheckedCreateWithoutProductsInput>
+  }
+
+  export type ShopUpsertWithoutProductsInput = {
+    update: XOR<ShopUpdateWithoutProductsInput, ShopUncheckedUpdateWithoutProductsInput>
+    create: XOR<ShopCreateWithoutProductsInput, ShopUncheckedCreateWithoutProductsInput>
+    where?: ShopWhereInput
+  }
+
+  export type ShopUpdateToOneWithWhereWithoutProductsInput = {
+    where?: ShopWhereInput
+    data: XOR<ShopUpdateWithoutProductsInput, ShopUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type ShopUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
+    members?: ShopUserUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutShopsOwnedInput
+    members?: ShopUserCreateNestedManyWithoutShopInput
+    invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    webhookPayloads?: WebhookPayloadUncheckedCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopCreateOrConnectWithoutOrdersInput = {
+    where: ShopWhereUniqueInput
+    create: XOR<ShopCreateWithoutOrdersInput, ShopUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type ShopUpsertWithoutOrdersInput = {
+    update: XOR<ShopUpdateWithoutOrdersInput, ShopUncheckedUpdateWithoutOrdersInput>
+    create: XOR<ShopCreateWithoutOrdersInput, ShopUncheckedCreateWithoutOrdersInput>
+    where?: ShopWhereInput
+  }
+
+  export type ShopUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: ShopWhereInput
+    data: XOR<ShopUpdateWithoutOrdersInput, ShopUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type ShopUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
+    members?: ShopUserUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopCreateWithoutWebhookPayloadsInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owner: UserCreateNestedOneWithoutShopsOwnedInput
+    members?: ShopUserCreateNestedManyWithoutShopInput
+    invitations?: InvitationCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationCreateNestedOneWithoutShopInput
+    products?: ProductCreateNestedManyWithoutShopInput
+    orders?: OrderCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopUncheckedCreateWithoutWebhookPayloadsInput = {
+    id?: string
+    name: string
+    tinNumber: string
+    businessAddress: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ShopUserUncheckedCreateNestedManyWithoutShopInput
+    invitations?: InvitationUncheckedCreateNestedManyWithoutShopInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedCreateNestedOneWithoutShopInput
+    products?: ProductUncheckedCreateNestedManyWithoutShopInput
+    orders?: OrderUncheckedCreateNestedManyWithoutShopInput
+  }
+
+  export type ShopCreateOrConnectWithoutWebhookPayloadsInput = {
+    where: ShopWhereUniqueInput
+    create: XOR<ShopCreateWithoutWebhookPayloadsInput, ShopUncheckedCreateWithoutWebhookPayloadsInput>
+  }
+
+  export type ShopUpsertWithoutWebhookPayloadsInput = {
+    update: XOR<ShopUpdateWithoutWebhookPayloadsInput, ShopUncheckedUpdateWithoutWebhookPayloadsInput>
+    create: XOR<ShopCreateWithoutWebhookPayloadsInput, ShopUncheckedCreateWithoutWebhookPayloadsInput>
+    where?: ShopWhereInput
+  }
+
+  export type ShopUpdateToOneWithWhereWithoutWebhookPayloadsInput = {
+    where?: ShopWhereInput
+    data: XOR<ShopUpdateWithoutWebhookPayloadsInput, ShopUncheckedUpdateWithoutWebhookPayloadsInput>
+  }
+
+  export type ShopUpdateWithoutWebhookPayloadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owner?: UserUpdateOneRequiredWithoutShopsOwnedNestedInput
+    members?: ShopUserUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+  }
+
+  export type ShopUncheckedUpdateWithoutWebhookPayloadsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    tinNumber?: StringFieldUpdateOperationsInput | string
+    businessAddress?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
+    invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -14118,6 +21831,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ShopUserUpdateManyWithoutShopNestedInput
     invitations?: InvitationUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUpdateOneWithoutShopNestedInput
+    products?: ProductUpdateManyWithoutShopNestedInput
+    orders?: OrderUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateWithoutOwnerInput = {
@@ -14129,6 +21846,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ShopUserUncheckedUpdateManyWithoutShopNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutShopNestedInput
+    shopeeIntegration?: ShopeeIntegrationUncheckedUpdateOneWithoutShopNestedInput
+    products?: ProductUncheckedUpdateManyWithoutShopNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutShopNestedInput
+    webhookPayloads?: WebhookPayloadUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type ShopUncheckedUpdateManyWithoutOwnerInput = {
@@ -14233,6 +21954,50 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ProductCreateManyShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeProductId?: string | null
+    name: string
+    sku?: string | null
+    stock?: number
+    price: Decimal | DecimalJsLike | number | string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrderCreateManyShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    shopeeOrderId: string
+    orderNumber: string
+    totalAmount: Decimal | DecimalJsLike | number | string
+    customerName: string
+    customerEmail?: string | null
+    customerPhone?: string | null
+    shippingAddress?: string | null
+    orderDate: Date | string
+    items: JsonNullValueInput | InputJsonValue
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookPayloadCreateManyShopInput = {
+    id?: string
+    platform: $Enums.Platform
+    eventType: string
+    rawPayload: JsonNullValueInput | InputJsonValue
+    signature?: string | null
+    status?: $Enums.WebhookStatus
+    processedAt?: Date | string | null
+    errorMessage?: string | null
+    retryCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ShopUserUpdateWithoutShopInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
@@ -14285,6 +22050,138 @@ export namespace Prisma {
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUncheckedUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUncheckedUpdateManyWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrderUncheckedUpdateManyWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    shopeeOrderId?: StringFieldUpdateOperationsInput | string
+    orderNumber?: StringFieldUpdateOperationsInput | string
+    totalAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerName?: StringFieldUpdateOperationsInput | string
+    customerEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    customerPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    shippingAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadUncheckedUpdateWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookPayloadUncheckedUpdateManyWithoutShopInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
+    eventType?: StringFieldUpdateOperationsInput | string
+    rawPayload?: JsonNullValueInput | InputJsonValue
+    signature?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumWebhookStatusFieldUpdateOperationsInput | $Enums.WebhookStatus
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    retryCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
