@@ -1,4 +1,4 @@
-import { Queue, Worker, Job } from "bullmq";
+import { Queue } from "bullmq";
 import { Redis } from "ioredis";
 
 // Redis connection for BullMQ
@@ -12,9 +12,17 @@ export interface ImportProductsJobData {
   offset?: number;
 }
 
+export interface WebhookProcessJobData {
+  webhookId: string;
+  shopId: string;
+  platform: "SHOPEE" | "LAZADA" | "TIKTOK";
+  eventType: string;
+}
+
 // Queue for Shopee catalog import
 export const shopeeImportQueue = new Queue("shopee:catalog:import", {
-  connection,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+  connection: connection as any, // Type mismatch between ioredis versions
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -64,4 +72,39 @@ export async function getImportJobStatus(shopId: string) {
     progress: typeof progress === "number" ? progress : progress,
     failedReason: job.failedReason,
   };
+}
+
+// Queue for webhook processing
+export const webhookQueue = new Queue<WebhookProcessJobData>("shopee:webhook:process", {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+  connection: connection as any, // Type mismatch between ioredis versions
+  defaultJobOptions: {
+    attempts: 5,
+    backoff: {
+      type: "exponential",
+      delay: 3000,
+    },
+    removeOnComplete: {
+      count: 100,
+    },
+    removeOnFail: {
+      count: 200, // Keep more failed webhooks for debugging
+    },
+  },
+});
+
+/**
+ * Queue webhook processing job
+ */
+export async function queueWebhookProcessing(data: WebhookProcessJobData): Promise<void> {
+  await webhookQueue.add(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+    "process-webhook" as any, // BullMQ type issue with job names
+    data,
+    {
+      jobId: `webhook-${data.webhookId}`, // Prevent duplicate processing
+      removeOnComplete: false, // Keep for audit
+      removeOnFail: false,
+    }
+  );
 }
