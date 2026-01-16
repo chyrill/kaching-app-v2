@@ -20,7 +20,7 @@ export interface WebhookProcessJobData {
 }
 
 // Queue for Shopee catalog import
-export const shopeeImportQueue = new Queue("shopee:catalog:import", {
+export const shopeeImportQueue = new Queue("shopee-catalog-import", {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
   connection: connection as any, // Type mismatch between ioredis versions
   defaultJobOptions: {
@@ -75,7 +75,7 @@ export async function getImportJobStatus(shopId: string) {
 }
 
 // Queue for webhook processing
-export const webhookQueue = new Queue<WebhookProcessJobData>("shopee:webhook:process", {
+export const webhookQueue = new Queue<WebhookProcessJobData>("shopee-webhook-process", {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
   connection: connection as any, // Type mismatch between ioredis versions
   defaultJobOptions: {

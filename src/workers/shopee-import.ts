@@ -13,7 +13,7 @@ const connection = new Redis(process.env.REDIS_URL ?? "redis://localhost:6379", 
  * Story 4.2: Import Product Catalog from Shopee
  */
 export const shopeeImportWorker = new Worker(
-  "shopee:catalog:import",
+  "shopee-catalog-import",
   async (job) => {
     const { shopId, offset = 0 } = job.data as ImportProductsJobData;
     const shopeeClient = new ShopeeAPIClient();
