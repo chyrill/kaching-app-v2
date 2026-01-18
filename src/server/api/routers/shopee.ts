@@ -233,4 +233,51 @@ export const shopeeRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
+  /**
+   * Get unhealthy integrations (admin/monitoring)
+   * Story 4.8: Health monitoring
+   */
+  getUnhealthyIntegrations: protectedProcedure
+    .query(async ({ ctx }) => {
+      // Get all shops where user is OWNER
+      const ownedShops = await ctx.db.shopUser.findMany({
+        where: {
+          userId: ctx.session.user.id,
+          role: "OWNER",
+        },
+        select: {
+          shopId: true,
+        },
+      });
+
+      const shopIds = ownedShops.map((m) => m.shopId);
+
+      // Get unhealthy integrations for those shops
+      const unhealthyIntegrations = await ctx.db.shopeeIntegration.findMany({
+        where: {
+          shopId: { in: shopIds },
+          status: "UNHEALTHY",
+          deletedAt: null,
+        },
+        include: {
+          shop: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          lastFailureAt: "desc",
+        },
+      });
+
+      return unhealthyIntegrations.map((integration) => ({
+        shopId: integration.shopId,
+        shopName: integration.shop.name,
+        failureCount: integration.failureCount,
+        lastFailureAt: integration.lastFailureAt ?? null,
+        lastSyncAt: integration.lastSyncAt,
+      }));
+    }),
 });

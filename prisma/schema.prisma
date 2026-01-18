@@ -188,18 +188,19 @@ enum WebhookStatus {
 
 // Shopee Integration model (OAuth tokens and connection status)
 model ShopeeIntegration {
-  id           String            @id @default(cuid())
-  shopId       String            @unique
-  accessToken  String // Encrypted access token
-  refreshToken String // Encrypted refresh token
-  expiresAt    DateTime
-  shopeeShopId String // Shopee shop ID from OAuth
-  status       IntegrationStatus @default(HEALTHY)
-  lastSyncAt   DateTime?
-  failureCount Int               @default(0)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  deletedAt    DateTime? // Soft delete for disconnection
+  id            String            @id @default(cuid())
+  shopId        String            @unique
+  accessToken   String // Encrypted access token
+  refreshToken  String // Encrypted refresh token
+  expiresAt     DateTime
+  shopeeShopId  String // Shopee shop ID from OAuth
+  status        IntegrationStatus @default(HEALTHY)
+  lastSyncAt    DateTime?
+  failureCount  Int               @default(0)
+  lastFailureAt DateTime? // Last time an API call failed
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  deletedAt     DateTime? // Soft delete for disconnection
 
   // Relations
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)

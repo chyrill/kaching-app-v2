@@ -11,7 +11,7 @@ interface DashboardNavProps {
     role: string;
   };
   userEmail?: string | null;
-  onSignOut: () => void;
+  onSignOut?: () => void;
 }
 
 export default function DashboardNav({

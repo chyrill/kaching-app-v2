@@ -11047,6 +11047,7 @@ export namespace Prisma {
     status: $Enums.IntegrationStatus | null
     lastSyncAt: Date | null
     failureCount: number | null
+    lastFailureAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -11062,6 +11063,7 @@ export namespace Prisma {
     status: $Enums.IntegrationStatus | null
     lastSyncAt: Date | null
     failureCount: number | null
+    lastFailureAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -11077,6 +11079,7 @@ export namespace Prisma {
     status: number
     lastSyncAt: number
     failureCount: number
+    lastFailureAt: number
     createdAt: number
     updatedAt: number
     deletedAt: number
@@ -11102,6 +11105,7 @@ export namespace Prisma {
     status?: true
     lastSyncAt?: true
     failureCount?: true
+    lastFailureAt?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -11117,6 +11121,7 @@ export namespace Prisma {
     status?: true
     lastSyncAt?: true
     failureCount?: true
+    lastFailureAt?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -11132,6 +11137,7 @@ export namespace Prisma {
     status?: true
     lastSyncAt?: true
     failureCount?: true
+    lastFailureAt?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -11234,6 +11240,7 @@ export namespace Prisma {
     status: $Enums.IntegrationStatus
     lastSyncAt: Date | null
     failureCount: number
+    lastFailureAt: Date | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -11268,6 +11275,7 @@ export namespace Prisma {
     status?: boolean
     lastSyncAt?: boolean
     failureCount?: boolean
+    lastFailureAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -11284,6 +11292,7 @@ export namespace Prisma {
     status?: boolean
     lastSyncAt?: boolean
     failureCount?: boolean
+    lastFailureAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -11300,6 +11309,7 @@ export namespace Prisma {
     status?: boolean
     lastSyncAt?: boolean
     failureCount?: boolean
+    lastFailureAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -11316,12 +11326,13 @@ export namespace Prisma {
     status?: boolean
     lastSyncAt?: boolean
     failureCount?: boolean
+    lastFailureAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
   }
 
-  export type ShopeeIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "accessToken" | "refreshToken" | "expiresAt" | "shopeeShopId" | "status" | "lastSyncAt" | "failureCount" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shopeeIntegration"]>
+  export type ShopeeIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "accessToken" | "refreshToken" | "expiresAt" | "shopeeShopId" | "status" | "lastSyncAt" | "failureCount" | "lastFailureAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["shopeeIntegration"]>
   export type ShopeeIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     shop?: boolean | ShopDefaultArgs<ExtArgs>
   }
@@ -11347,6 +11358,7 @@ export namespace Prisma {
       status: $Enums.IntegrationStatus
       lastSyncAt: Date | null
       failureCount: number
+      lastFailureAt: Date | null
       createdAt: Date
       updatedAt: Date
       deletedAt: Date | null
@@ -11783,6 +11795,7 @@ export namespace Prisma {
     readonly status: FieldRef<"ShopeeIntegration", 'IntegrationStatus'>
     readonly lastSyncAt: FieldRef<"ShopeeIntegration", 'DateTime'>
     readonly failureCount: FieldRef<"ShopeeIntegration", 'Int'>
+    readonly lastFailureAt: FieldRef<"ShopeeIntegration", 'DateTime'>
     readonly createdAt: FieldRef<"ShopeeIntegration", 'DateTime'>
     readonly updatedAt: FieldRef<"ShopeeIntegration", 'DateTime'>
     readonly deletedAt: FieldRef<"ShopeeIntegration", 'DateTime'>
@@ -15897,6 +15910,7 @@ export namespace Prisma {
     status: 'status',
     lastSyncAt: 'lastSyncAt',
     failureCount: 'failureCount',
+    lastFailureAt: 'lastFailureAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     deletedAt: 'deletedAt'
@@ -16713,6 +16727,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
     lastSyncAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
     failureCount?: IntFilter<"ShopeeIntegration"> | number
+    lastFailureAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
     createdAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
     updatedAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
     deletedAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
@@ -16729,6 +16744,7 @@ export namespace Prisma {
     status?: SortOrder
     lastSyncAt?: SortOrderInput | SortOrder
     failureCount?: SortOrder
+    lastFailureAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -16748,6 +16764,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
     lastSyncAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
     failureCount?: IntFilter<"ShopeeIntegration"> | number
+    lastFailureAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
     createdAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
     updatedAt?: DateTimeFilter<"ShopeeIntegration"> | Date | string
     deletedAt?: DateTimeNullableFilter<"ShopeeIntegration"> | Date | string | null
@@ -16764,6 +16781,7 @@ export namespace Prisma {
     status?: SortOrder
     lastSyncAt?: SortOrderInput | SortOrder
     failureCount?: SortOrder
+    lastFailureAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -16787,6 +16805,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusWithAggregatesFilter<"ShopeeIntegration"> | $Enums.IntegrationStatus
     lastSyncAt?: DateTimeNullableWithAggregatesFilter<"ShopeeIntegration"> | Date | string | null
     failureCount?: IntWithAggregatesFilter<"ShopeeIntegration"> | number
+    lastFailureAt?: DateTimeNullableWithAggregatesFilter<"ShopeeIntegration"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ShopeeIntegration"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ShopeeIntegration"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"ShopeeIntegration"> | Date | string | null
@@ -17675,6 +17694,7 @@ export namespace Prisma {
     status?: $Enums.IntegrationStatus
     lastSyncAt?: Date | string | null
     failureCount?: number
+    lastFailureAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -17691,6 +17711,7 @@ export namespace Prisma {
     status?: $Enums.IntegrationStatus
     lastSyncAt?: Date | string | null
     failureCount?: number
+    lastFailureAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -17705,6 +17726,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17721,6 +17743,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17736,6 +17759,7 @@ export namespace Prisma {
     status?: $Enums.IntegrationStatus
     lastSyncAt?: Date | string | null
     failureCount?: number
+    lastFailureAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -17750,6 +17774,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17765,6 +17790,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18653,6 +18679,7 @@ export namespace Prisma {
     status?: SortOrder
     lastSyncAt?: SortOrder
     failureCount?: SortOrder
+    lastFailureAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -18672,6 +18699,7 @@ export namespace Prisma {
     status?: SortOrder
     lastSyncAt?: SortOrder
     failureCount?: SortOrder
+    lastFailureAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -18687,6 +18715,7 @@ export namespace Prisma {
     status?: SortOrder
     lastSyncAt?: SortOrder
     failureCount?: SortOrder
+    lastFailureAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -20648,6 +20677,7 @@ export namespace Prisma {
     status?: $Enums.IntegrationStatus
     lastSyncAt?: Date | string | null
     failureCount?: number
+    lastFailureAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20662,6 +20692,7 @@ export namespace Prisma {
     status?: $Enums.IntegrationStatus
     lastSyncAt?: Date | string | null
     failureCount?: number
+    lastFailureAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20885,6 +20916,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20899,6 +20931,7 @@ export namespace Prisma {
     status?: EnumIntegrationStatusFieldUpdateOperationsInput | $Enums.IntegrationStatus
     lastSyncAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     failureCount?: IntFieldUpdateOperationsInput | number
+    lastFailureAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

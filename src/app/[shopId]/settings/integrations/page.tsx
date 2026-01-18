@@ -21,8 +21,8 @@ export default function IntegrationsPage() {
   const shopId = typeof rawShopId === 'string' ? rawShopId : Array.isArray(rawShopId) ? rawShopId[0] : undefined;
 
   const [mounted, setMounted] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -68,14 +68,27 @@ export default function IntegrationsPage() {
     { enabled: mounted && !!shopId && !!isOwner }
   );
 
+  // Disconnect mutation
+  const disconnectMutation = api.shopee.disconnect.useMutation({
+    onSuccess: () => {
+      setNotification({ type: 'success', message: 'Shopee disconnected successfully!' });
+      setShowDisconnectModal(false);
+      void refetchIntegration();
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message ?? 'Failed to disconnect Shopee.' });
+      setShowDisconnectModal(false);
+    },
+  });
+
   // Fetch import job status (poll every 3 seconds while importing)
   const { data: importStatus } = api.shopee.getImportStatus.useQuery(
     { shopId: shopId! },
     {
       enabled: mounted && !!shopId && !!isOwner && shopeeIntegration?.connected,
-      refetchInterval: (data) => {
+      refetchInterval: (query) => {
         // Poll every 3 seconds while import is active
-        if (data?.status === "active" || data?.status === "waiting") {
+        if (query?.state.data?.status === "active" || query?.state.data?.status === "waiting") {
           return 3000;
         }
         return false;
@@ -87,6 +100,11 @@ export default function IntegrationsPage() {
     if (!shopId) return;
     // Redirect to OAuth authorization endpoint
     window.location.href = `/api/auth/shopee/authorize?shopId=${shopId}`;
+  };
+
+  const handleDisconnect = () => {
+    if (!shopId) return;
+    disconnectMutation.mutate({ shopId });
   };
 
   if (status === "loading" || isLoadingShops || !shopId || !mounted) {
@@ -125,7 +143,6 @@ export default function IntegrationsPage() {
           shopId={shopId}
           currentShop={currentShop}
           userEmail={session?.user.email}
-          onSignOut={() => setShowLogoutModal(true)}
         />
         <main className="flex-1">
           <div className="border-b-2 border-gray-200 bg-gray-50 p-4 lg:hidden">
@@ -166,7 +183,6 @@ export default function IntegrationsPage() {
         shopId={shopId}
         currentShop={currentShop}
         userEmail={session?.user.email}
-        onSignOut={() => setShowLogoutModal(true)}
       />
 
       <main className="flex-1">
@@ -250,8 +266,8 @@ export default function IntegrationsPage() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => {/* TODO: Implement disconnect */}}
-                      className="rounded-lg border-2 border-gray-200 bg-white px-6 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+                      onClick={() => setShowDisconnectModal(true)}
+                      className="rounded-lg border-2 border-red-200 bg-white px-6 py-2 font-semibold text-red-600 hover:bg-red-50"
                     >
                       Disconnect
                     </button>
@@ -325,6 +341,42 @@ export default function IntegrationsPage() {
           </div>
         </div>
       </main>
+
+      {/* Disconnect Confirmation Modal */}
+      {showDisconnectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="text-xl font-bold text-gray-900">Disconnect Shopee?</h3>
+            <p className="mt-3 text-sm text-gray-600">
+              Are you sure you want to disconnect your Shopee integration? This will:
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-gray-600">
+              <li>Stop automatic order syncing</li>
+              <li>Stop inventory updates from Shopee</li>
+              <li>Remove stored access tokens</li>
+            </ul>
+            <p className="mt-3 text-sm font-semibold text-gray-700">
+              Your existing product and order data will be preserved.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => setShowDisconnectModal(false)}
+                disabled={disconnectMutation.isPending}
+                className="flex-1 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDisconnect}
+                disabled={disconnectMutation.isPending}
+                className="flex-1 rounded-lg bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 disabled:opacity-50"
+              >
+                {disconnectMutation.isPending ? 'Disconnecting...' : 'Disconnect'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

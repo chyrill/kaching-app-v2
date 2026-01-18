@@ -1,10 +1,11 @@
 import { Worker } from "bullmq";
-import { Redis } from "ioredis";
+import IORedis from "ioredis";
 import { ShopeeAPIClient } from "~/lib/shopee-api";
 import { db } from "~/server/db";
+import { shopeeImportQueue } from "~/lib/queue";
 import type { ImportProductsJobData } from "~/lib/queue";
 
-const connection = new Redis(process.env.REDIS_URL ?? "redis://localhost:6379", {
+const connection = new IORedis(process.env.REDIS_URL ?? "redis://localhost:6379", {
   maxRetriesPerRequest: null,
 });
 
@@ -73,7 +74,7 @@ export const shopeeImportWorker = new Worker(
       // Queue next page if there are more products
       if (result.hasNextPage) {
         console.log(`[Shopee Import] Queueing next page at offset ${result.nextOffset}`);
-        await job.queue.add(
+        await shopeeImportQueue.add(
           "import-products",
           {
             shopId,
@@ -128,7 +129,7 @@ export const shopeeImportWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any, // Type mismatch between ioredis versions
     concurrency: 2, // Process 2 imports concurrently
     limiter: {
       max: 10,

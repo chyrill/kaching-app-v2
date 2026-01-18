@@ -209,6 +209,7 @@ exports.Prisma.ShopeeIntegrationScalarFieldEnum = {
   status: 'status',
   lastSyncAt: 'lastSyncAt',
   failureCount: 'failureCount',
+  lastFailureAt: 'lastFailureAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'

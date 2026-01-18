@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
-import crypto from "crypto";
 import { queueProductImport } from "~/lib/queue";
 
 interface ShopeeTokenResponse {
@@ -39,7 +38,7 @@ export async function GET(req: Request) {
     let stateData: { shopId: string; nonce: string };
     try {
       const decoded = Buffer.from(state, "base64url").toString("utf-8");
-      stateData = JSON.parse(decoded);
+      stateData = JSON.parse(decoded) as { shopId: string; nonce: string };
     } catch {
       return NextResponse.redirect("/?error=invalid_state");
     }
@@ -96,14 +95,7 @@ async function exchangeCodeForToken(
     }
 
     // Generate signature for API request
-    const timestamp = Math.floor(Date.now() / 1000);
     const path = "/api/v2/auth/token/get";
-    const baseString = `${partnerId}${path}${timestamp}`;
-    // Signature will be used in production for request signing
-    const _signature = crypto
-      .createHmac("sha256", partnerKey)
-      .update(baseString)
-      .digest("hex");
 
     // Request access token from Shopee
     const tokenUrl = `${process.env.SHOPEE_API_BASE_URL}${path}`;

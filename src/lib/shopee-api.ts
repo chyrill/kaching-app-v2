@@ -57,6 +57,7 @@ export class ShopeeAPIClient {
 
   /**
    * Make authenticated request to Shopee API
+   * Tracks failures and updates integration health status
    */
   private async makeRequest<T>(
     path: string,
@@ -74,19 +75,86 @@ export class ShopeeAPIClient {
     url.searchParams.set("shop_id", shopId);
     url.searchParams.set("sign", signature);
 
-    const response = await fetch(url.toString(), {
-      method: body ? "POST" : "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
+    try {
+      const response = await fetch(url.toString(), {
+        method: body ? "POST" : "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
 
-    if (!response.ok) {
-      throw new Error(`Shopee API error: ${response.status} ${response.statusText}`);
+      if (!response.ok) {
+        await this.recordFailure(shopId);
+        throw new Error(`Shopee API error: ${response.status} ${response.statusText}`);
+      }
+
+      // Success - reset failure count
+      await this.recordSuccess(shopId);
+      
+      return response.json() as Promise<T>;
+    } catch (error) {
+      await this.recordFailure(shopId);
+      throw error;
     }
+  }
 
-    return response.json() as Promise<T>;
+  /**
+   * Record successful API call - reset failure count and mark HEALTHY
+   */
+  private async recordSuccess(shopeeShopId: string): Promise<void> {
+    try {
+      const integration = await db.shopeeIntegration.findFirst({
+        where: { shopeeShopId },
+      });
+
+      if (integration && integration.failureCount > 0) {
+        await db.shopeeIntegration.update({
+          where: { shopId: integration.shopId },
+          data: {
+            failureCount: 0,
+            status: "HEALTHY",
+            lastFailureAt: null,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("[Shopee API] Failed to record success:", error);
+    }
+  }
+
+  /**
+   * Record API failure - increment failure count and mark UNHEALTHY after threshold
+   */
+  private async recordFailure(shopeeShopId: string): Promise<void> {
+    try {
+      const integration = await db.shopeeIntegration.findFirst({
+        where: { shopeeShopId },
+      });
+
+      if (!integration) return;
+
+      const newFailureCount = integration.failureCount + 1;
+      const shouldMarkUnhealthy = newFailureCount >= 5;
+
+      await db.shopeeIntegration.update({
+        where: { shopId: integration.shopId },
+        data: {
+          failureCount: newFailureCount,
+          status: shouldMarkUnhealthy ? "UNHEALTHY" : integration.status,
+          lastFailureAt: new Date(),
+        },
+      });
+
+      if (shouldMarkUnhealthy) {
+        console.error(
+          `[Shopee API] Integration ${integration.shopId} marked UNHEALTHY after ${newFailureCount} failures`
+        );
+        // TODO: Send admin notification/email
+      }
+    } catch (error) {
+      console.error("[Shopee API] Failed to record failure:", error);
+    }
   }
 
   /**
@@ -187,13 +255,7 @@ export class ShopeeAPIClient {
 
     const refreshToken = Buffer.from(integration.refreshToken, "base64").toString("utf-8");
 
-    const timestamp = Math.floor(Date.now() / 1000);
     const path = "/api/v2/auth/access_token/get";
-    const baseString = `${this.partnerId}${path}${timestamp}`;
-    const signature = crypto
-      .createHmac("sha256", this.partnerKey)
-      .update(baseString)
-      .digest("hex");
 
     const response = await fetch(`${this.baseUrl}${path}`, {
       method: "POST",
