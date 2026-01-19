@@ -235,6 +235,65 @@ export const shopeeRouter = createTRPCRouter({
     }),
 
   /**
+   * Get single order details
+   * Story 5.2: Order details page
+   */
+  getOrderDetails: protectedProcedure
+    .input(z.object({ 
+      shopId: z.string(),
+      orderId: z.string(),
+    }))
+    .query(async ({ ctx, input }) => {
+      // Check user has access to shop
+      const membership = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!membership) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have access to this shop",
+        });
+      }
+
+      // Only OWNER and ACCOUNTANT can view orders
+      if (membership.role !== "OWNER" && membership.role !== "ACCOUNTANT") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have permission to view orders",
+        });
+      }
+
+      const order = await ctx.db.order.findUnique({
+        where: {
+          id: input.orderId,
+        },
+      });
+
+      if (!order) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      // Verify order belongs to the shop
+      if (order.shopId !== input.shopId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Order does not belong to this shop",
+        });
+      }
+
+      return order;
+    }),
+
+  /**
    * Get unhealthy integrations (admin/monitoring)
    * Story 4.8: Health monitoring
    */

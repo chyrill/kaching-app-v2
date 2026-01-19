@@ -83,6 +83,26 @@ export default function DashboardNav({
       ownerOnly: true,
     },
     {
+      name: "Orders",
+      href: `/${shopId}/orders`,
+      icon: (
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+          />
+        </svg>
+      ),
+      ownerAccountantOnly: true,
+    },
+    {
       name: "Integrations",
       href: `/${shopId}/settings/integrations`,
       icon: (
@@ -104,9 +124,15 @@ export default function DashboardNav({
     },
   ];
 
-  const visibleNavItems = navItems.filter(
-    (item) => !item.ownerOnly || currentShop.role === "OWNER"
-  );
+  const visibleNavItems = navItems.filter((item) => {
+    if (item.ownerOnly) {
+      return currentShop.role === "OWNER";
+    }
+    if (item.ownerAccountantOnly) {
+      return currentShop.role === "OWNER" || currentShop.role === "ACCOUNTANT";
+    }
+    return true;
+  });
 
   return (
     <>
