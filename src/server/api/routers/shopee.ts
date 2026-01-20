@@ -294,6 +294,97 @@ export const shopeeRouter = createTRPCRouter({
     }),
 
   /**
+   * Update order status
+   * Story 5.3: Order status management
+   */
+  updateOrderStatus: protectedProcedure
+    .input(z.object({
+      shopId: z.string(),
+      orderId: z.string(),
+      newStatus: z.enum(["pending", "processing", "shipped", "completed", "cancelled"]),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      // Check user has access to shop
+      const membership = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!membership) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have access to this shop",
+        });
+      }
+
+      // Only OWNER and ACCOUNTANT can update order status
+      if (membership.role !== "OWNER" && membership.role !== "ACCOUNTANT") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have permission to update order status",
+        });
+      }
+
+      // Get current order
+      const order = await ctx.db.order.findUnique({
+        where: {
+          id: input.orderId,
+        },
+      });
+
+      if (!order) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      // Verify order belongs to the shop
+      if (order.shopId !== input.shopId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Order does not belong to this shop",
+        });
+      }
+
+      // Validate status transition
+      const currentStatus = order.status.toLowerCase();
+      const validTransitions: Record<string, string[]> = {
+        pending: ["processing", "cancelled"],
+        processing: ["shipped", "cancelled"],
+        shipped: ["completed", "cancelled"],
+        completed: [],
+        cancelled: [],
+      };
+
+      const allowedTransitions = validTransitions[currentStatus] ?? [];
+      
+      if (!allowedTransitions.includes(input.newStatus) && currentStatus !== input.newStatus) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Cannot transition from ${currentStatus} to ${input.newStatus}. Allowed transitions: ${allowedTransitions.join(", ") || "none"}`,
+        });
+      }
+
+      // Update order status
+      const updatedOrder = await ctx.db.order.update({
+        where: {
+          id: input.orderId,
+        },
+        data: {
+          status: input.newStatus,
+          updatedAt: new Date(),
+        },
+      });
+
+      return updatedOrder;
+    }),
+
+  /**
    * Get unhealthy integrations (admin/monitoring)
    * Story 4.8: Health monitoring
    */

@@ -28,6 +28,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const orderId = typeof rawOrderId === 'string' ? rawOrderId : Array.isArray(rawOrderId) ? rawOrderId[0] : undefined;
 
   const [mounted, setMounted] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -46,6 +49,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
     data: order,
     isLoading: isLoadingOrder,
     error: orderError,
+    refetch: refetchOrder,
   } = api.shopee.getOrderDetails.useQuery(
     {
       shopId: shopId!,
@@ -55,6 +59,51 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       enabled: mounted && !!shopId && !!orderId && canViewOrders,
     }
   );
+
+  // Update order status mutation
+  const updateStatusMutation = api.shopee.updateOrderStatus.useMutation({
+    onSuccess: () => {
+      setNotification({ type: 'success', message: 'Order status updated successfully!' });
+      setShowStatusModal(false);
+      void refetchOrder();
+      setTimeout(() => setNotification(null), 5000);
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message });
+      setShowStatusModal(false);
+      setTimeout(() => setNotification(null), 5000);
+    },
+  });
+
+  const handleStatusUpdate = () => {
+    if (!shopId || !orderId || !selectedStatus) return;
+    updateStatusMutation.mutate({
+      shopId,
+      orderId,
+      newStatus: selectedStatus as "pending" | "processing" | "shipped" | "completed" | "cancelled",
+    });
+  };
+
+  // Get available status transitions
+  const getAvailableStatuses = (currentStatus: string) => {
+    const transitions: Record<string, Array<{ value: string; label: string; color: string }>> = {
+      pending: [
+        { value: "processing", label: "Processing", color: "bg-blue-500" },
+        { value: "cancelled", label: "Cancelled", color: "bg-red-500" },
+      ],
+      processing: [
+        { value: "shipped", label: "Shipped", color: "bg-purple-500" },
+        { value: "cancelled", label: "Cancelled", color: "bg-red-500" },
+      ],
+      shipped: [
+        { value: "completed", label: "Completed", color: "bg-emerald-500" },
+        { value: "cancelled", label: "Cancelled", color: "bg-red-500" },
+      ],
+      completed: [],
+      cancelled: [],
+    };
+    return transitions[currentStatus.toLowerCase()] ?? [];
+  };
 
   // Parse order items from JSON
   let orderItems: OrderItem[] = [];
@@ -474,21 +523,119 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     Print Invoice
                   </div>
                 </button>
-                <button
-                  disabled
-                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-100 px-4 py-3 font-semibold text-gray-400 cursor-not-allowed transition"
-                  title="Coming in Story 5.3"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    Update Status
+                {getAvailableStatuses(order.status).length > 0 ? (
+                  <button
+                    onClick={() => setShowStatusModal(true)}
+                    className="w-full rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-3 font-semibold text-white hover:bg-emerald-600 transition"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      Update Status
+                    </div>
+                  </button>
+                ) : (
+                  <div className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-center">
+                    <p className="text-sm text-gray-600">
+                      {order.status === "completed" ? "Order is completed" : "Order is cancelled"}
+                    </p>
                   </div>
-                </button>
+                )}
               </div>
             </div>
           </div>
+
+          {/* Notification Toast */}
+          {notification && (
+            <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+              <div
+                className={`rounded-lg border-2 px-6 py-4 shadow-lg ${
+                  notification.type === 'success'
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-red-200 bg-red-50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {notification.type === 'success' ? (
+                    <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                  <p
+                    className={`font-medium ${
+                      notification.type === 'success' ? 'text-emerald-900' : 'text-red-900'
+                    }`}
+                  >
+                    {notification.message}
+                  </p>
+                  <button
+                    onClick={() => setNotification(null)}
+                    className={`ml-2 ${
+                      notification.type === 'success' ? 'text-emerald-600 hover:text-emerald-800' : 'text-red-600 hover:text-red-800'
+                    }`}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Status Update Modal */}
+          {showStatusModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                <h3 className="text-xl font-bold text-gray-900">Update Order Status</h3>
+                <p className="mt-2 text-sm text-gray-600">
+                  Current status: <span className="font-semibold">{order.status}</span>
+                </p>
+                
+                <div className="mt-4 space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Select new status:
+                  </label>
+                  {getAvailableStatuses(order.status).map((status) => (
+                    <button
+                      key={status.value}
+                      onClick={() => setSelectedStatus(status.value)}
+                      className={`w-full rounded-lg border-2 px-4 py-3 text-left font-semibold transition ${
+                        selectedStatus === status.value
+                          ? `${status.color} border-transparent text-white`
+                          : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {status.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex gap-3">
+                  <button
+                    onClick={() => {
+                      setShowStatusModal(false);
+                      setSelectedStatus("");
+                    }}
+                    disabled={updateStatusMutation.isPending}
+                    className="flex-1 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleStatusUpdate}
+                    disabled={!selectedStatus || updateStatusMutation.isPending}
+                    className="flex-1 rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
+                  >
+                    {updateStatusMutation.isPending ? 'Updating...' : 'Update Status'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
