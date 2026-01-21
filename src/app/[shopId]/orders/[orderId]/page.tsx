@@ -31,6 +31,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [showTrackingModal, setShowTrackingModal] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const [carrier, setCarrier] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -75,6 +78,35 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
     },
   });
 
+  // Update fulfillment tracking mutation
+  const updateFulfillmentMutation = api.shopee.updateOrderFulfillment.useMutation({
+    onSuccess: () => {
+      setNotification({ type: 'success', message: 'Tracking information added successfully!' });
+      setShowTrackingModal(false);
+      setTrackingNumber("");
+      setCarrier("");
+      void refetchOrder();
+      setTimeout(() => setNotification(null), 5000);
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message });
+      setTimeout(() => setNotification(null), 5000);
+    },
+  });
+
+  // Mark order as delivered mutation
+  const markDeliveredMutation = api.shopee.markOrderDelivered.useMutation({
+    onSuccess: () => {
+      setNotification({ type: 'success', message: 'Order marked as delivered!' });
+      void refetchOrder();
+      setTimeout(() => setNotification(null), 5000);
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message });
+      setTimeout(() => setNotification(null), 5000);
+    },
+  });
+
   const handleStatusUpdate = () => {
     if (!shopId || !orderId || !selectedStatus) return;
     updateStatusMutation.mutate({
@@ -82,6 +114,23 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       orderId,
       newStatus: selectedStatus as "pending" | "processing" | "shipped" | "completed" | "cancelled",
     });
+  };
+
+  const handleAddTracking = () => {
+    if (!shopId || !orderId || !trackingNumber.trim() || !carrier.trim()) return;
+    updateFulfillmentMutation.mutate({
+      shopId,
+      orderId,
+      trackingNumber: trackingNumber.trim(),
+      carrier: carrier.trim(),
+    });
+  };
+
+  const handleMarkDelivered = () => {
+    if (!shopId || !orderId) return;
+    if (confirm('Mark this order as delivered and completed?')) {
+      markDeliveredMutation.mutate({ shopId, orderId });
+    }
   };
 
   // Get available status transitions
@@ -453,6 +502,44 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     </div>
                   )}
 
+                  {order.shippedAt && (
+                    <div className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-100">
+                          <svg className="h-4 w-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
+                          </svg>
+                        </div>
+                        {order.deliveredAt && <div className="h-full w-0.5 bg-gray-200"></div>}
+                      </div>
+                      <div className={order.deliveredAt ? "pb-4" : ""}>
+                        <p className="font-semibold text-gray-900">Shipped</p>
+                        <p className="text-sm text-gray-600">
+                          {new Date(order.shippedAt).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {order.deliveredAt && (
+                    <div className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100">
+                          <svg className="h-4 w-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">Delivered</p>
+                        <p className="text-sm text-gray-600">
+                          {new Date(order.deliveredAt).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex gap-4">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
                       <svg className="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -507,6 +594,60 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   </p>
                 ) : (
                   <p className="text-sm text-gray-500 italic">No shipping address available</p>
+                )}
+              </div>
+
+              {/* Fulfillment Information */}
+              <div className="rounded-lg border-2 border-gray-200 bg-white p-6">
+                <h2 className="mb-4 text-xl font-bold text-gray-900">Fulfillment Information</h2>
+                {order.trackingNumber ? (
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Carrier</p>
+                      <p className="mt-1 text-base text-gray-900">{order.carrier}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Tracking Number</p>
+                      <p className="mt-1 text-base font-mono text-gray-900">{order.trackingNumber}</p>
+                    </div>
+                    {order.shippedAt && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">Shipped Date</p>
+                        <p className="mt-1 text-base text-gray-900">
+                          {new Date(order.shippedAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )}
+                    {order.deliveredAt && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">Delivered Date</p>
+                        <p className="mt-1 text-base text-gray-900">
+                          {new Date(order.deliveredAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    )}
+                    {!order.deliveredAt && order.status === "shipped" && (
+                      <button
+                        onClick={handleMarkDelivered}
+                        disabled={markDeliveredMutation.isPending}
+                        className="mt-4 w-full rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50 transition"
+                      >
+                        {markDeliveredMutation.isPending ? 'Marking...' : 'Mark as Delivered'}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <p className="mb-4 text-sm text-gray-500 italic">No tracking information yet</p>
+                    {(order.status === "shipped" || order.status === "completed") && (
+                      <button
+                        onClick={() => setShowTrackingModal(true)}
+                        className="w-full rounded-lg border-2 border-blue-500 bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 transition"
+                      >
+                        Add Tracking
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -631,6 +772,66 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                     className="flex-1 rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
                   >
                     {updateStatusMutation.isPending ? 'Updating...' : 'Update Status'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Add Tracking Modal */}
+          {showTrackingModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                <h3 className="text-xl font-bold text-gray-900">Add Tracking Information</h3>
+                <p className="mt-2 text-sm text-gray-600">
+                  Order: <span className="font-semibold">{order.orderNumber}</span>
+                </p>
+                
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Carrier *
+                    </label>
+                    <input
+                      type="text"
+                      value={carrier}
+                      onChange={(e) => setCarrier(e.target.value)}
+                      placeholder="e.g., J&T Express, LBC, Ninja Van"
+                      className="w-full rounded-lg border-2 border-gray-200 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tracking Number *
+                    </label>
+                    <input
+                      type="text"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      placeholder="Enter tracking number"
+                      className="w-full rounded-lg border-2 border-gray-200 px-4 py-2 font-mono focus:border-blue-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6 flex gap-3">
+                  <button
+                    onClick={() => {
+                      setShowTrackingModal(false);
+                      setTrackingNumber("");
+                      setCarrier("");
+                    }}
+                    disabled={updateFulfillmentMutation.isPending}
+                    className="flex-1 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddTracking}
+                    disabled={!trackingNumber.trim() || !carrier.trim() || updateFulfillmentMutation.isPending}
+                    className="flex-1 rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    {updateFulfillmentMutation.isPending ? 'Adding...' : 'Add Tracking'}
                   </button>
                 </div>
               </div>

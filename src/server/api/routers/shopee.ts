@@ -385,6 +385,138 @@ export const shopeeRouter = createTRPCRouter({
     }),
 
   /**
+   * Update order fulfillment tracking (Story 5.4)
+   */
+  updateOrderFulfillment: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        orderId: z.string(),
+        trackingNumber: z.string().min(1, "Tracking number is required"),
+        carrier: z.string().min(1, "Carrier is required"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to update order fulfillment",
+        });
+      }
+
+      // Verify order belongs to the shop
+      const order = await ctx.db.order.findUnique({
+        where: {
+          id: input.orderId,
+        },
+      });
+
+      if (order?.shopId !== input.shopId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      // Only allow tracking for shipped or completed orders
+      if (order.status !== "shipped" && order.status !== "completed") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Can only add tracking for shipped or completed orders",
+        });
+      }
+
+      // Update order with fulfillment info
+      const updatedOrder = await ctx.db.order.update({
+        where: {
+          id: input.orderId,
+        },
+        data: {
+          trackingNumber: input.trackingNumber,
+          carrier: input.carrier,
+          shippedAt: order.shippedAt ?? new Date(), // Set shippedAt if not already set
+          updatedAt: new Date(),
+        },
+      });
+
+      return updatedOrder;
+    }),
+
+  /**
+   * Mark order as delivered (Story 5.4)
+   */
+  markOrderDelivered: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        orderId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to mark orders as delivered",
+        });
+      }
+
+      // Verify order belongs to the shop and has tracking
+      const order = await ctx.db.order.findUnique({
+        where: {
+          id: input.orderId,
+        },
+      });
+
+      if (order?.shopId !== input.shopId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      if (!order.trackingNumber) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Order must have tracking information before marking as delivered",
+        });
+      }
+
+      // Update order with delivery timestamp
+      const updatedOrder = await ctx.db.order.update({
+        where: {
+          id: input.orderId,
+        },
+        data: {
+          deliveredAt: new Date(),
+          status: "completed", // Auto-complete when delivered
+          updatedAt: new Date(),
+        },
+      });
+
+      return updatedOrder;
+    }),
+
+  /**
    * Get unhealthy integrations (admin/monitoring)
    * Story 4.8: Health monitoring
    */

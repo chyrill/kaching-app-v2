@@ -243,6 +243,10 @@ exports.Prisma.OrderScalarFieldEnum = {
   orderDate: 'orderDate',
   items: 'items',
   status: 'status',
+  trackingNumber: 'trackingNumber',
+  carrier: 'carrier',
+  shippedAt: 'shippedAt',
+  deliveredAt: 'deliveredAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

@@ -234,12 +234,12 @@ model Product {
 
 // Order model (from Shopee webhooks)
 model Order {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   shopId          String
   platform        Platform
   shopeeOrderId   String // Shopee order ID
   orderNumber     String
-  totalAmount     Decimal  @db.Decimal(10, 2)
+  totalAmount     Decimal   @db.Decimal(10, 2)
   customerName    String
   customerEmail   String?
   customerPhone   String?
@@ -247,8 +247,15 @@ model Order {
   orderDate       DateTime
   items           Json // Array of order items
   status          String // e.g., "completed", "cancelled", "pending"
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  
+  // Fulfillment tracking fields (Story 5.4)
+  trackingNumber  String?
+  carrier         String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   // Relations
   shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
