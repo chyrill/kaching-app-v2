@@ -22,6 +22,9 @@ export default function OrdersPage({ params }: OrdersPageProps) {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [platformFilter, setPlatformFilter] = useState<string>("all");
   const [dateRangeFilter, setDateRangeFilter] = useState<string>("all");
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
+  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -42,6 +45,7 @@ export default function OrdersPage({ params }: OrdersPageProps) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch: refetchOrders,
   } = api.shopee.getOrders.useInfiniteQuery(
     {
       shopId: shopId!,
@@ -95,6 +99,85 @@ export default function OrdersPage({ params }: OrdersPageProps) {
 
     return true;
   });
+
+  // Export orders mutation
+  const exportOrdersMutation = api.shopee.exportOrders.useQuery(
+    {
+      shopId: shopId!,
+      search: searchQuery || undefined,
+      status: statusFilter !== "all" ? statusFilter : undefined,
+      platform: platformFilter !== "all" ? platformFilter : undefined,
+      dateRange: dateRangeFilter !== "all" ? dateRangeFilter : undefined,
+    },
+    {
+      enabled: false, // Only run when manually triggered
+    }
+  );
+
+  // Bulk update mutation
+  const bulkUpdateMutation = api.shopee.bulkUpdateOrderStatus.useMutation({
+    onSuccess: (result) => {
+      setNotification({ type: 'success', message: `Successfully updated ${result.count} orders` });
+      setSelectedOrders(new Set());
+      setShowBulkActions(false);
+      void refetchOrders();
+      setTimeout(() => setNotification(null), 5000);
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message });
+      setTimeout(() => setNotification(null), 5000);
+    },
+  });
+
+  // Handle select all toggle
+  const handleSelectAll = () => {
+    if (selectedOrders.size === filteredOrders.length) {
+      setSelectedOrders(new Set());
+    } else {
+      setSelectedOrders(new Set(filteredOrders.map((o) => o.id)));
+    }
+  };
+
+  // Handle individual order selection
+  const handleSelectOrder = (orderId: string) => {
+    const newSelected = new Set(selectedOrders);
+    if (newSelected.has(orderId)) {
+      newSelected.delete(orderId);
+    } else {
+      newSelected.add(orderId);
+    }
+    setSelectedOrders(newSelected);
+  };
+
+  // Handle CSV export
+  const handleExport = async () => {
+    const result = await exportOrdersMutation.refetch();
+    if (result.data) {
+      const blob = new Blob([result.data.csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `orders-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      setNotification({ type: 'success', message: `Exported ${result.data.count} orders` });
+      setTimeout(() => setNotification(null), 5000);
+    }
+  };
+
+  // Handle bulk status update
+  const handleBulkUpdate = (newStatus: string) => {
+    if (!shopId || selectedOrders.size === 0) return;
+    if (confirm(`Update ${selectedOrders.size} orders to ${newStatus}?`)) {
+      bulkUpdateMutation.mutate({
+        shopId,
+        orderIds: Array.from(selectedOrders),
+        newStatus: newStatus as "pending" | "processing" | "shipped" | "completed" | "cancelled",
+      });
+    }
+  };
 
   // Calculate summary stats
   const totalOrders = filteredOrders.length;
@@ -292,8 +375,73 @@ export default function OrdersPage({ params }: OrdersPageProps) {
             </div>
           </div>
 
+          {/* Bulk Actions Bar */}
+          {selectedOrders.size > 0 && (
+            <div className="mb-6 rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+              <div className="flex items-center justify-between">
+                <p className="font-semibold text-blue-900">
+                  {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedOrders(new Set())}
+                    className="rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+                  >
+                    Clear Selection
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowBulkActions(!showBulkActions)}
+                      className="rounded-lg border-2 border-blue-500 bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
+                    >
+                      Update Status
+                    </button>
+                    {showBulkActions && (
+                      <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border-2 border-gray-200 bg-white shadow-lg">
+                        <button
+                          onClick={() => handleBulkUpdate('processing')}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                          Set to Processing
+                        </button>
+                        <button
+                          onClick={() => handleBulkUpdate('shipped')}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                          Set to Shipped
+                        </button>
+                        <button
+                          onClick={() => handleBulkUpdate('completed')}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-50"
+                        >
+                          Set to Completed
+                        </button>
+                        <button
+                          onClick={() => handleBulkUpdate('cancelled')}
+                          className="w-full px-4 py-2 text-left text-red-600 hover:bg-gray-50"
+                        >
+                          Set to Cancelled
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Filters & Search */}
           <div className="mb-6 rounded-lg border-2 border-gray-200 bg-white p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+              <button
+                onClick={handleExport}
+                disabled={exportOrdersMutation.isFetching}
+                className="rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
+              >
+                {exportOrdersMutation.isFetching ? 'Exporting...' : 'Export CSV'}
+              </button>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {/* Search */}
               <div className="lg:col-span-2">
@@ -431,6 +579,14 @@ export default function OrdersPage({ params }: OrdersPageProps) {
                   <table className="w-full">
                     <thead className="border-b-2 border-gray-200 bg-gray-50">
                       <tr>
+                        <th className="px-6 py-3 text-left">
+                          <input
+                            type="checkbox"
+                            checked={selectedOrders.size === filteredOrders.length && filteredOrders.length > 0}
+                            onChange={handleSelectAll}
+                            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                        </th>
                         <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                           Order Number
                         </th>
@@ -457,6 +613,14 @@ export default function OrdersPage({ params }: OrdersPageProps) {
                     <tbody className="divide-y divide-gray-200">
                       {filteredOrders.map((order) => (
                         <tr key={order.id} className="hover:bg-gray-50 transition">
+                          <td className="px-6 py-4">
+                            <input
+                              type="checkbox"
+                              checked={selectedOrders.has(order.id)}
+                              onChange={() => handleSelectOrder(order.id)}
+                              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </td>
                           <td className="px-6 py-4 text-sm font-medium text-gray-900">
                             {order.orderNumber}
                           </td>
@@ -505,6 +669,46 @@ export default function OrdersPage({ params }: OrdersPageProps) {
                 </div>
               )}
             </>
+          )}
+
+          {/* Notification Toast */}
+          {notification && (
+            <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+              <div
+                className={`rounded-lg border-2 px-6 py-4 shadow-lg ${
+                  notification.type === 'success'
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-red-200 bg-red-50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {notification.type === 'success' ? (
+                    <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                  <p
+                    className={`font-medium ${
+                      notification.type === 'success' ? 'text-emerald-900' : 'text-red-900'
+                    }`}
+                  >
+                    {notification.message}
+                  </p>
+                  <button
+                    onClick={() => setNotification(null)}
+                    className={`ml-2 ${
+                      notification.type === 'success' ? 'text-emerald-600 hover:text-emerald-800' : 'text-red-600 hover:text-red-800'
+                    }`}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </main>

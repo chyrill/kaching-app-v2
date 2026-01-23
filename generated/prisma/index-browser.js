@@ -247,6 +247,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   carrier: 'carrier',
   shippedAt: 'shippedAt',
   deliveredAt: 'deliveredAt',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

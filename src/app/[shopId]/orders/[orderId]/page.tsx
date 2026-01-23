@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import DashboardNav from "~/components/DashboardNav";
@@ -34,6 +34,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const [showTrackingModal, setShowTrackingModal] = useState(false);
   const [trackingNumber, setTrackingNumber] = useState("");
   const [carrier, setCarrier] = useState("");
+  const [notes, setNotes] = useState("");
+  const [notesSaved, setNotesSaved] = useState(false);
+  const notesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -132,6 +135,46 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       markDeliveredMutation.mutate({ shopId, orderId });
     }
   };
+
+  // Update order notes mutation
+  const updateNotesMutation = api.shopee.updateOrderNotes.useMutation({
+    onSuccess: () => {
+      setNotesSaved(true);
+      setTimeout(() => setNotesSaved(false), 2000);
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.message });
+      setTimeout(() => setNotification(null), 5000);
+    },
+  });
+
+  // Handle notes change with debounce
+  const handleNotesChange = (value: string) => {
+    setNotes(value);
+    setNotesSaved(false);
+    
+    // Clear existing timeout
+    if (notesTimeoutRef.current) {
+      clearTimeout(notesTimeoutRef.current);
+    }
+    
+    // Set new timeout for auto-save
+    notesTimeoutRef.current = setTimeout(() => {
+      if (!shopId || !orderId) return;
+      updateNotesMutation.mutate({
+        shopId,
+        orderId,
+        notes: value,
+      });
+    }, 1000); // 1 second debounce
+  };
+
+  // Initialize notes from order data
+  useEffect(() => {
+    if (order?.notes) {
+      setNotes(order.notes);
+    }
+  }, [order?.notes]);
 
   // Get available status transitions
   const getAvailableStatuses = (currentStatus: string) => {
@@ -334,6 +377,20 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
   return (
     <div className="flex min-h-screen bg-white">
+      <style jsx global>{`
+        @media print {
+          .no-print {
+            display: none !important;
+          }
+          .print-full-width {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+          body {
+            background: white !important;
+          }
+        }
+      `}</style>
       <DashboardNav
         shopId={shopId}
         currentShop={currentShop}
@@ -342,7 +399,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
       <main className="flex-1">
         {/* Mobile Menu Toggle */}
-        <div className="border-b-2 border-gray-200 bg-gray-50 p-4 lg:hidden">
+        <div className="border-b-2 border-gray-200 bg-gray-50 p-4 lg:hidden no-print">
           <button
             onClick={() => {
               const nav = document.querySelector('[data-mobile-nav]');
@@ -366,7 +423,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push(`/${shopId}/orders`)}
-                className="rounded-lg border-2 border-gray-200 bg-white p-2 text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border-2 border-gray-200 bg-white p-2 text-gray-700 hover:bg-gray-50 no-print"
                 aria-label="Back to orders"
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -651,8 +708,30 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                 )}
               </div>
 
+              {/* Order Notes */}
+              <div className="rounded-lg border-2 border-gray-200 bg-white p-6 no-print">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-900">Order Notes</h2>
+                  {notesSaved && (
+                    <span className="flex items-center gap-1 text-sm text-emerald-600">
+                      <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Saved
+                    </span>
+                  )}
+                </div>
+                <textarea
+                  value={notes}
+                  onChange={(e) => handleNotesChange(e.target.value)}
+                  placeholder="Add notes about this order..."
+                  className="w-full min-h-[120px] rounded-lg border-2 border-gray-200 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-y"
+                />
+                <p className="mt-2 text-xs text-gray-500">Notes are auto-saved</p>
+              </div>
+
               {/* Action Buttons */}
-              <div className="space-y-2">
+              <div className="space-y-2 no-print">
                 <button
                   onClick={() => window.print()}
                   className="w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-semibold text-gray-700 hover:bg-gray-50 transition"

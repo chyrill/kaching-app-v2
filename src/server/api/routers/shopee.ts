@@ -562,4 +562,259 @@ export const shopeeRouter = createTRPCRouter({
         lastSyncAt: integration.lastSyncAt,
       }));
     }),
+
+  /**
+   * Export orders to CSV (Story 5.5)
+   */
+  exportOrders: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        search: z.string().optional(),
+        status: z.string().optional(),
+        platform: z.string().optional(),
+        dateRange: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to export orders",
+        });
+      }
+
+      // Build where clause (same logic as getOrders)
+      const where: any = { shopId: input.shopId };
+
+      if (input.search) {
+        where.OR = [
+          { orderNumber: { contains: input.search, mode: "insensitive" } },
+          { customerName: { contains: input.search, mode: "insensitive" } },
+        ];
+      }
+
+      if (input.status && input.status !== "all") {
+        where.status = input.status;
+      }
+
+      if (input.platform && input.platform !== "all") {
+        where.platform = input.platform.toUpperCase();
+      }
+
+      if (input.dateRange && input.dateRange !== "all") {
+        const now = new Date();
+        let startDate: Date;
+
+        switch (input.dateRange) {
+          case "today":
+            startDate = new Date(now.setHours(0, 0, 0, 0));
+            break;
+          case "week":
+            startDate = new Date(now.setDate(now.getDate() - 7));
+            break;
+          case "month":
+            startDate = new Date(now.setDate(now.getDate() - 30));
+            break;
+          case "quarter":
+            startDate = new Date(now.setDate(now.getDate() - 90));
+            break;
+          default:
+            startDate = new Date(0);
+        }
+
+        where.orderDate = { gte: startDate };
+      }
+
+      // Fetch all matching orders (no limit)
+      const orders = await ctx.db.order.findMany({
+        where,
+        orderBy: { orderDate: "desc" },
+      });
+
+      // Generate CSV content
+      const headers = [
+        "Order Number",
+        "Customer Name",
+        "Email",
+        "Phone",
+        "Order Date",
+        "Platform",
+        "Status",
+        "Total Amount",
+        "Tracking Number",
+        "Carrier",
+        "Shipped Date",
+        "Delivered Date",
+        "Notes",
+      ];
+
+      const rows = orders.map((order) => [
+        order.orderNumber,
+        order.customerName,
+        order.customerEmail ?? "",
+        order.customerPhone ?? "",
+        new Date(order.orderDate).toLocaleDateString(),
+        order.platform,
+        order.status,
+        order.totalAmount.toString(),
+        order.trackingNumber ?? "",
+        order.carrier ?? "",
+        order.shippedAt ? new Date(order.shippedAt).toLocaleDateString() : "",
+        order.deliveredAt ? new Date(order.deliveredAt).toLocaleDateString() : "",
+        order.notes ?? "",
+      ]);
+
+      const csvContent = [
+        headers.join(","),
+        ...rows.map((row) =>
+          row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+        ),
+      ].join("\n");
+
+      return { csv: csvContent, count: orders.length };
+    }),
+
+  /**
+   * Update order notes (Story 5.5)
+   */
+  updateOrderNotes: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        orderId: z.string(),
+        notes: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to update order notes",
+        });
+      }
+
+      // Verify order belongs to the shop
+      const order = await ctx.db.order.findUnique({
+        where: { id: input.orderId },
+      });
+
+      if (!order || order.shopId !== input.shopId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Order not found",
+        });
+      }
+
+      // Update order notes
+      const updatedOrder = await ctx.db.order.update({
+        where: { id: input.orderId },
+        data: {
+          notes: input.notes,
+          updatedAt: new Date(),
+        },
+      });
+
+      return updatedOrder;
+    }),
+
+  /**
+   * Bulk update order status (Story 5.5)
+   */
+  bulkUpdateOrderStatus: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        orderIds: z.array(z.string()).min(1, "At least one order must be selected"),
+        newStatus: z.enum(["pending", "processing", "shipped", "completed", "cancelled"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to update orders",
+        });
+      }
+
+      // Verify all orders belong to the shop
+      const orders = await ctx.db.order.findMany({
+        where: {
+          id: { in: input.orderIds },
+          shopId: input.shopId,
+        },
+      });
+
+      if (orders.length !== input.orderIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Some orders were not found or don't belong to this shop",
+        });
+      }
+
+      // Validate status transitions for each order
+      const statusTransitions: Record<string, string[]> = {
+        pending: ["processing", "cancelled"],
+        processing: ["shipped", "cancelled"],
+        shipped: ["completed", "cancelled"],
+        completed: [],
+        cancelled: [],
+      };
+
+      const invalidOrders = orders.filter((order) => {
+        const allowedStatuses = statusTransitions[order.status.toLowerCase()] ?? [];
+        return !allowedStatuses.includes(input.newStatus.toLowerCase());
+      });
+
+      if (invalidOrders.length > 0) {
+        const orderNumbers = invalidOrders.map((o) => o.orderNumber).join(", ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Cannot update status for orders: ${orderNumbers}. Check current status and allowed transitions.`,
+        });
+      }
+
+      // Update all orders
+      const result = await ctx.db.order.updateMany({
+        where: {
+          id: { in: input.orderIds },
+        },
+        data: {
+          status: input.newStatus,
+          updatedAt: new Date(),
+        },
+      });
+
+      return { count: result.count };
+    }),
 });

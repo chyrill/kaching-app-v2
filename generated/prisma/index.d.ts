@@ -13424,6 +13424,7 @@ export namespace Prisma {
     carrier: string | null
     shippedAt: Date | null
     deliveredAt: Date | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13445,6 +13446,7 @@ export namespace Prisma {
     carrier: string | null
     shippedAt: Date | null
     deliveredAt: Date | null
+    notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13467,6 +13469,7 @@ export namespace Prisma {
     carrier: number
     shippedAt: number
     deliveredAt: number
+    notes: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13498,6 +13501,7 @@ export namespace Prisma {
     carrier?: true
     shippedAt?: true
     deliveredAt?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13519,6 +13523,7 @@ export namespace Prisma {
     carrier?: true
     shippedAt?: true
     deliveredAt?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13541,6 +13546,7 @@ export namespace Prisma {
     carrier?: true
     shippedAt?: true
     deliveredAt?: true
+    notes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13650,6 +13656,7 @@ export namespace Prisma {
     carrier: string | null
     shippedAt: Date | null
     deliveredAt: Date | null
+    notes: string | null
     createdAt: Date
     updatedAt: Date
     _count: OrderCountAggregateOutputType | null
@@ -13691,6 +13698,7 @@ export namespace Prisma {
     carrier?: boolean
     shippedAt?: boolean
     deliveredAt?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     shop?: boolean | ShopDefaultArgs<ExtArgs>
@@ -13714,6 +13722,7 @@ export namespace Prisma {
     carrier?: boolean
     shippedAt?: boolean
     deliveredAt?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     shop?: boolean | ShopDefaultArgs<ExtArgs>
@@ -13737,6 +13746,7 @@ export namespace Prisma {
     carrier?: boolean
     shippedAt?: boolean
     deliveredAt?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     shop?: boolean | ShopDefaultArgs<ExtArgs>
@@ -13760,11 +13770,12 @@ export namespace Prisma {
     carrier?: boolean
     shippedAt?: boolean
     deliveredAt?: boolean
+    notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "platform" | "shopeeOrderId" | "orderNumber" | "totalAmount" | "customerName" | "customerEmail" | "customerPhone" | "shippingAddress" | "orderDate" | "items" | "status" | "trackingNumber" | "carrier" | "shippedAt" | "deliveredAt" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "shopId" | "platform" | "shopeeOrderId" | "orderNumber" | "totalAmount" | "customerName" | "customerEmail" | "customerPhone" | "shippingAddress" | "orderDate" | "items" | "status" | "trackingNumber" | "carrier" | "shippedAt" | "deliveredAt" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     shop?: boolean | ShopDefaultArgs<ExtArgs>
   }
@@ -13798,6 +13809,7 @@ export namespace Prisma {
       carrier: string | null
       shippedAt: Date | null
       deliveredAt: Date | null
+      notes: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["order"]>
@@ -14241,6 +14253,7 @@ export namespace Prisma {
     readonly carrier: FieldRef<"Order", 'String'>
     readonly shippedAt: FieldRef<"Order", 'DateTime'>
     readonly deliveredAt: FieldRef<"Order", 'DateTime'>
+    readonly notes: FieldRef<"Order", 'String'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
   }
@@ -16006,6 +16019,7 @@ export namespace Prisma {
     carrier: 'carrier',
     shippedAt: 'shippedAt',
     deliveredAt: 'deliveredAt',
+    notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16976,6 +16990,7 @@ export namespace Prisma {
     carrier?: StringNullableFilter<"Order"> | string | null
     shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
@@ -16999,6 +17014,7 @@ export namespace Prisma {
     carrier?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
     deliveredAt?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     shop?: ShopOrderByWithRelationInput
@@ -17026,6 +17042,7 @@ export namespace Prisma {
     carrier?: StringNullableFilter<"Order"> | string | null
     shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     shop?: XOR<ShopScalarRelationFilter, ShopWhereInput>
@@ -17049,6 +17066,7 @@ export namespace Prisma {
     carrier?: SortOrderInput | SortOrder
     shippedAt?: SortOrderInput | SortOrder
     deliveredAt?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: OrderCountOrderByAggregateInput
@@ -17079,6 +17097,7 @@ export namespace Prisma {
     carrier?: StringNullableWithAggregatesFilter<"Order"> | string | null
     shippedAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
     deliveredAt?: DateTimeNullableWithAggregatesFilter<"Order"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"Order"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
   }
@@ -17986,6 +18005,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     shop: ShopCreateNestedOneWithoutOrdersInput
@@ -18009,6 +18029,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18030,6 +18051,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     shop?: ShopUpdateOneRequiredWithoutOrdersNestedInput
@@ -18053,6 +18075,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18075,6 +18098,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18096,6 +18120,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18118,6 +18143,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19002,6 +19028,7 @@ export namespace Prisma {
     carrier?: SortOrder
     shippedAt?: SortOrder
     deliveredAt?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19027,6 +19054,7 @@ export namespace Prisma {
     carrier?: SortOrder
     shippedAt?: SortOrder
     deliveredAt?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19048,6 +19076,7 @@ export namespace Prisma {
     carrier?: SortOrder
     shippedAt?: SortOrder
     deliveredAt?: SortOrder
+    notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20872,6 +20901,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20893,6 +20923,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21131,6 +21162,7 @@ export namespace Prisma {
     carrier?: StringNullableFilter<"Order"> | string | null
     shippedAt?: DateTimeNullableFilter<"Order"> | Date | string | null
     deliveredAt?: DateTimeNullableFilter<"Order"> | Date | string | null
+    notes?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
   }
@@ -22145,6 +22177,7 @@ export namespace Prisma {
     carrier?: string | null
     shippedAt?: Date | string | null
     deliveredAt?: Date | string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22273,6 +22306,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22294,6 +22328,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22315,6 +22350,7 @@ export namespace Prisma {
     carrier?: NullableStringFieldUpdateOperationsInput | string | null
     shippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
