@@ -719,7 +719,7 @@ export const shopeeRouter = createTRPCRouter({
         where: { id: input.orderId },
       });
 
-      if (!order || order.shopId !== input.shopId) {
+      if (order?.shopId !== input.shopId) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Order not found",
@@ -816,5 +816,179 @@ export const shopeeRouter = createTRPCRouter({
       });
 
       return { count: result.count };
+    }),
+
+  /**
+   * Get order analytics (Story 5.6)
+   */
+  getOrderAnalytics: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        dateRange: z.enum(["today", "week", "month", "quarter", "year", "all"]).default("month"),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser || (shopUser.role !== "OWNER" && shopUser.role !== "ACCOUNTANT")) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to view analytics",
+        });
+      }
+
+      // Calculate date range
+      const now = new Date();
+      let startDate: Date;
+      let previousStartDate: Date;
+
+      switch (input.dateRange) {
+        case "today":
+          startDate = new Date(now.setHours(0, 0, 0, 0));
+          previousStartDate = new Date(startDate);
+          previousStartDate.setDate(previousStartDate.getDate() - 1);
+          break;
+        case "week":
+          startDate = new Date(now.setDate(now.getDate() - 7));
+          previousStartDate = new Date(startDate);
+          previousStartDate.setDate(previousStartDate.getDate() - 7);
+          break;
+        case "month":
+          startDate = new Date(now.setDate(now.getDate() - 30));
+          previousStartDate = new Date(startDate);
+          previousStartDate.setDate(previousStartDate.getDate() - 30);
+          break;
+        case "quarter":
+          startDate = new Date(now.setDate(now.getDate() - 90));
+          previousStartDate = new Date(startDate);
+          previousStartDate.setDate(previousStartDate.getDate() - 90);
+          break;
+        case "year":
+          startDate = new Date(now.setDate(now.getDate() - 365));
+          previousStartDate = new Date(startDate);
+          previousStartDate.setDate(previousStartDate.getDate() - 365);
+          break;
+        default:
+          startDate = new Date(0);
+          previousStartDate = new Date(0);
+      }
+
+      // Fetch current period orders
+      const currentOrders = await ctx.db.order.findMany({
+        where: {
+          shopId: input.shopId,
+          orderDate: input.dateRange !== "all" ? { gte: startDate } : undefined,
+        },
+        orderBy: { orderDate: "desc" },
+      });
+
+      // Fetch previous period orders for comparison
+      const previousOrders = input.dateRange !== "all" 
+        ? await ctx.db.order.findMany({
+            where: {
+              shopId: input.shopId,
+              orderDate: {
+                gte: previousStartDate,
+                lt: startDate,
+              },
+            },
+          })
+        : [];
+
+      // Calculate current period stats
+      const totalRevenue = currentOrders.reduce((sum, order) => 
+        sum + Number(order.totalAmount), 0
+      );
+      const totalOrders = currentOrders.length;
+      const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+
+      // Calculate previous period stats
+      const previousRevenue = previousOrders.reduce((sum, order) => 
+        sum + Number(order.totalAmount), 0
+      );
+      const previousOrderCount = previousOrders.length;
+
+      // Calculate percentage changes
+      const revenueChange = previousRevenue > 0 
+        ? ((totalRevenue - previousRevenue) / previousRevenue) * 100 
+        : 0;
+      const ordersChange = previousOrderCount > 0 
+        ? ((totalOrders - previousOrderCount) / previousOrderCount) * 100 
+        : 0;
+
+      // Order counts by status
+      const statusCounts = {
+        pending: currentOrders.filter(o => o.status === "pending").length,
+        processing: currentOrders.filter(o => o.status === "processing").length,
+        shipped: currentOrders.filter(o => o.status === "shipped").length,
+        completed: currentOrders.filter(o => o.status === "completed").length,
+        cancelled: currentOrders.filter(o => o.status === "cancelled").length,
+      };
+
+      // Revenue by date (last 30 days for chart)
+      const last30Days = new Date();
+      last30Days.setDate(last30Days.getDate() - 30);
+      const recentOrders = currentOrders.filter(o => 
+        new Date(o.orderDate) >= last30Days
+      );
+
+      // Group by date
+      const revenueByDate: Record<string, number> = {};
+      recentOrders.forEach(order => {
+        const dateKey = new Date(order.orderDate).toISOString().split('T')[0];
+        if (dateKey) {
+          revenueByDate[dateKey] = (revenueByDate[dateKey] ?? 0) + Number(order.totalAmount);
+        }
+      });
+
+      // Convert to array and sort
+      const revenueTrend = Object.entries(revenueByDate)
+        .map(([date, revenue]) => ({ date, revenue }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      // Top customers by order count
+      const customerCounts: Record<string, number> = {};
+      currentOrders.forEach(order => {
+        customerCounts[order.customerName] = (customerCounts[order.customerName] ?? 0) + 1;
+      });
+
+      const topCustomers = Object.entries(customerCounts)
+        .map(([name, count]) => ({ name, orderCount: count }))
+        .sort((a, b) => b.orderCount - a.orderCount)
+        .slice(0, 5);
+
+      // Recent orders (last 10)
+      const recentOrdersList = currentOrders.slice(0, 10);
+
+      return {
+        summary: {
+          totalRevenue,
+          totalOrders,
+          averageOrderValue,
+          revenueChange,
+          ordersChange,
+        },
+        statusCounts,
+        revenueTrend,
+        topCustomers,
+        recentOrders: recentOrdersList.map(order => ({
+          id: order.id,
+          orderNumber: order.orderNumber,
+          customerName: order.customerName,
+          totalAmount: order.totalAmount,
+          status: order.status,
+          orderDate: order.orderDate,
+          platform: order.platform,
+        })),
+      };
     }),
 });
