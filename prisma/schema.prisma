@@ -220,16 +220,23 @@ model Product {
   stock           Int      @default(0)
   price           Decimal  @db.Decimal(10, 2)
   imageUrl        String?
+  
+  // Inventory management fields (Epic 6)
+  lowStockThreshold Int?    @default(10)
+  cost              Decimal? @db.Decimal(10, 2) // Cost per unit for inventory value
+  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   // Relations
-  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shop           Shop            @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  stockMovements StockMovement[]
 
   @@unique([shopId, shopeeProductId])
   @@index([shopId])
   @@index([platform])
   @@index([shopeeProductId])
+  @@index([stock])
 }
 
 // Order model (from Shopee webhooks)
@@ -268,6 +275,43 @@ model Order {
   @@index([platform])
   @@index([shopeeOrderId])
   @@index([orderDate])
+}
+
+// Stock movement tracking (Epic 6)
+enum StockMovementType {
+  INCREASE
+  DECREASE
+}
+
+enum StockMovementSource {
+  MANUAL          // Manual adjustment by user
+  WEBHOOK         // From platform webhook
+  SYSTEM          // System adjustment
+  ORDER_CREATED   // Stock decreased due to order
+  ORDER_CANCELLED // Stock increased due to cancellation
+}
+
+model StockMovement {
+  id          String              @id @default(cuid())
+  productId   String
+  shopId      String
+  userId      String?             // User who made the change (for manual)
+  type        StockMovementType
+  source      StockMovementSource
+  quantity    Int                 // Amount changed (positive number)
+  stockBefore Int                 // Stock level before change
+  stockAfter  Int                 // Stock level after change
+  reason      String?             // Reason for manual adjustments
+  notes       String?             // Additional notes
+  createdAt   DateTime            @default(now())
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([shopId])
+  @@index([createdAt])
+  @@index([source])
 }
 
 // Webhook Payload model (raw webhook storage)

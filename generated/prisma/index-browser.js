@@ -225,6 +225,8 @@ exports.Prisma.ProductScalarFieldEnum = {
   stock: 'stock',
   price: 'price',
   imageUrl: 'imageUrl',
+  lowStockThreshold: 'lowStockThreshold',
+  cost: 'cost',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -250,6 +252,21 @@ exports.Prisma.OrderScalarFieldEnum = {
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StockMovementScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  shopId: 'shopId',
+  userId: 'userId',
+  type: 'type',
+  source: 'source',
+  quantity: 'quantity',
+  stockBefore: 'stockBefore',
+  stockAfter: 'stockAfter',
+  reason: 'reason',
+  notes: 'notes',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.WebhookPayloadScalarFieldEnum = {
@@ -310,6 +327,19 @@ exports.Platform = exports.$Enums.Platform = {
   TIKTOK: 'TIKTOK'
 };
 
+exports.StockMovementType = exports.$Enums.StockMovementType = {
+  INCREASE: 'INCREASE',
+  DECREASE: 'DECREASE'
+};
+
+exports.StockMovementSource = exports.$Enums.StockMovementSource = {
+  MANUAL: 'MANUAL',
+  WEBHOOK: 'WEBHOOK',
+  SYSTEM: 'SYSTEM',
+  ORDER_CREATED: 'ORDER_CREATED',
+  ORDER_CANCELLED: 'ORDER_CANCELLED'
+};
+
 exports.WebhookStatus = exports.$Enums.WebhookStatus = {
   PENDING: 'PENDING',
   PROCESSING: 'PROCESSING',
@@ -329,6 +359,7 @@ exports.Prisma.ModelName = {
   ShopeeIntegration: 'ShopeeIntegration',
   Product: 'Product',
   Order: 'Order',
+  StockMovement: 'StockMovement',
   WebhookPayload: 'WebhookPayload'
 };
 

@@ -991,4 +991,148 @@ export const shopeeRouter = createTRPCRouter({
         })),
       };
     }),
+
+  /**
+   * Get inventory list (Story 6.1)
+   */
+  getInventory: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        search: z.string().optional(),
+        platform: z.string().optional(),
+        stockFilter: z.enum(["all", "in_stock", "low_stock", "out_of_stock"]).default("all"),
+        limit: z.number().min(1).max(100).default(50),
+        cursor: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to view inventory",
+        });
+      }
+
+      // Build where clause
+      const where: any = { shopId: input.shopId };
+
+      if (input.search) {
+        where.OR = [
+          { name: { contains: input.search, mode: "insensitive" } },
+          { sku: { contains: input.search, mode: "insensitive" } },
+        ];
+      }
+
+      if (input.platform && input.platform !== "all") {
+        where.platform = input.platform.toUpperCase();
+      }
+
+      // Stock filter logic
+      if (input.stockFilter !== "all") {
+        if (input.stockFilter === "out_of_stock") {
+          where.stock = { lte: 0 };
+        } else if (input.stockFilter === "low_stock") {
+          // Products where stock <= lowStockThreshold but > 0
+          const products = await ctx.db.product.findMany({
+            where: {
+              ...where,
+              stock: { gt: 0 },
+            },
+          });
+          
+          // Filter in memory for low stock comparison
+          const lowStockProducts = products.filter(p => 
+            p.stock <= (p.lowStockThreshold ?? 10)
+          );
+          
+          return {
+            products: lowStockProducts.slice(0, input.limit),
+            nextCursor: undefined,
+          };
+        } else if (input.stockFilter === "in_stock") {
+          where.stock = { gt: 0 };
+        }
+      }
+
+      // Fetch products with pagination
+      const products = await ctx.db.product.findMany({
+        where,
+        take: input.limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        orderBy: { updatedAt: "desc" },
+      });
+
+      let nextCursor: string | undefined;
+      if (products.length > input.limit) {
+        const nextItem = products.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        products,
+        nextCursor,
+      };
+    }),
+
+  /**
+   * Get inventory summary stats (Story 6.1)
+   */
+  getInventorySummary: protectedProcedure
+    .input(z.object({ shopId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findUnique({
+        where: {
+          userId_shopId: {
+            userId: ctx.session.user.id,
+            shopId: input.shopId,
+          },
+        },
+      });
+
+      if (!shopUser) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to view inventory",
+        });
+      }
+
+      // Get all products for the shop
+      const products = await ctx.db.product.findMany({
+        where: { shopId: input.shopId },
+      });
+
+      // Calculate stats
+      const totalProducts = products.length;
+      const inStockCount = products.filter(p => p.stock > 0).length;
+      const outOfStockCount = products.filter(p => p.stock <= 0).length;
+      const lowStockCount = products.filter(p => 
+        p.stock > 0 && p.stock <= (p.lowStockThreshold ?? 10)
+      ).length;
+
+      // Calculate total inventory value
+      const totalInventoryValue = products.reduce((sum, p) => {
+        const cost = p.cost ? Number(p.cost) : 0;
+        return sum + (cost * p.stock);
+      }, 0);
+
+      return {
+        totalProducts,
+        inStockCount,
+        outOfStockCount,
+        lowStockCount,
+        totalInventoryValue,
+      };
+    }),
 });
