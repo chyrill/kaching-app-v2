@@ -1135,4 +1135,81 @@ export const shopeeRouter = createTRPCRouter({
         totalInventoryValue,
       };
     }),
+
+  adjustStock: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        shopId: z.string(),
+        type: z.enum(['INCREASE', 'DECREASE']),
+        quantity: z.number().min(1, 'Quantity must be at least 1'),
+        reason: z.string().min(1, 'Reason is required'),
+        notes: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { productId, shopId, type, quantity, reason, notes } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Get current product stock
+      const product = await ctx.db.product.findUnique({
+        where: { id: productId },
+      });
+
+      if (!product || product.shopId !== shopId) {
+        throw new Error('Product not found');
+      }
+
+      // Validate DECREASE operation doesn't result in negative stock
+      if (type === 'DECREASE' && product.stock < quantity) {
+        throw new Error(`Cannot decrease stock by ${quantity}. Current stock is ${product.stock}.`);
+      }
+
+      // Calculate new stock
+      const stockBefore = product.stock;
+      const stockAfter = type === 'INCREASE' 
+        ? stockBefore + quantity 
+        : stockBefore - quantity;
+
+      // Update stock and create movement record in a transaction
+      await ctx.db.$transaction([
+        // Update product stock
+        ctx.db.product.update({
+          where: { id: productId },
+          data: { stock: stockAfter },
+        }),
+        // Create stock movement record
+        ctx.db.stockMovement.create({
+          data: {
+            productId,
+            shopId,
+            userId: ctx.session.user.id,
+            type,
+            source: 'MANUAL',
+            quantity,
+            stockBefore,
+            stockAfter,
+            reason,
+            notes,
+          },
+        }),
+      ]);
+
+      return {
+        success: true,
+        stockBefore,
+        stockAfter,
+      };
+    }),
 });

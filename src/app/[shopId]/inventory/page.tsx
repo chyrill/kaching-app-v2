@@ -10,6 +10,8 @@ type InventoryPageProps = {
   params: { shopId: string | string[] };
 };
 
+type AdjustmentType = 'INCREASE' | 'DECREASE';
+
 export default function InventoryPage({ params }: InventoryPageProps) {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -20,6 +22,16 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [platformFilter, setPlatformFilter] = useState<string>("all");
   const [stockFilter, setStockFilter] = useState<"all" | "in_stock" | "low_stock" | "out_of_stock">("all");
+
+  // Adjustment modal state
+  const [showAdjustModal, setShowAdjustModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [adjustmentType, setAdjustmentType] = useState<AdjustmentType>('INCREASE');
+  const [adjustmentQuantity, setAdjustmentQuantity] = useState<string>('');
+  const [adjustmentReason, setAdjustmentReason] = useState<string>('');
+  const [adjustmentNotes, setAdjustmentNotes] = useState<string>('');
+  const [adjustmentError, setAdjustmentError] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
   useEffect(() => {
     setMounted(true);
@@ -33,7 +45,7 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   const currentShop = userShops?.find((s) => s.shopId === shopId);
 
   // Fetch inventory summary
-  const { data: summary, isLoading: isLoadingSummary } = api.shopee.getInventorySummary.useQuery(
+  const { data: summary, isLoading: isLoadingSummary, refetch: refetchSummary } = api.shopee.getInventorySummary.useQuery(
     { shopId: shopId! },
     { enabled: mounted && !!shopId }
   );
@@ -45,6 +57,7 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch: refetchInventory,
   } = api.shopee.getInventory.useInfiniteQuery(
     {
       shopId: shopId!,
@@ -59,7 +72,64 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     }
   );
 
+  // Adjust stock mutation
+  const adjustStock = api.shopee.adjustStock.useMutation({
+    onSuccess: (data) => {
+      setSuccessMessage(`Stock adjusted successfully! ${data.stockBefore} → ${data.stockAfter}`);
+      setShowAdjustModal(false);
+      resetAdjustmentForm();
+      // Refresh data
+      void refetchInventory();
+      void refetchSummary();
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    },
+    onError: (error) => {
+      setAdjustmentError(error.message);
+    },
+  });
+
   const allProducts = inventoryData?.pages.flatMap((page) => page.products) ?? [];
+
+  // Reset adjustment form
+  const resetAdjustmentForm = () => {
+    setSelectedProduct(null);
+    setAdjustmentType('INCREASE');
+    setAdjustmentQuantity('');
+    setAdjustmentReason('');
+    setAdjustmentNotes('');
+    setAdjustmentError('');
+  };
+
+  // Open adjustment modal
+  const openAdjustModal = (product: any) => {
+    setSelectedProduct(product);
+    setShowAdjustModal(true);
+    resetAdjustmentForm();
+    setSelectedProduct(product); // Set again after reset
+  };
+
+  // Handle adjustment submission
+  const handleAdjustStock = () => {
+    // Validate form
+    if (!adjustmentQuantity || parseInt(adjustmentQuantity) < 1) {
+      setAdjustmentError('Please enter a quantity of at least 1');
+      return;
+    }
+    if (!adjustmentReason) {
+      setAdjustmentError('Please select a reason');
+      return;
+    }
+
+    adjustStock.mutate({
+      productId: selectedProduct.id,
+      shopId: shopId!,
+      type: adjustmentType,
+      quantity: parseInt(adjustmentQuantity),
+      reason: adjustmentReason,
+      notes: adjustmentNotes || undefined,
+    });
+  };
 
   // Platform badge color mapping
   const getPlatformColor = (platform: string) => {
@@ -142,6 +212,18 @@ export default function InventoryPage({ params }: InventoryPageProps) {
         <div className="p-6">
           {/* Page Header */}
           <h1 className="mb-6 text-3xl font-bold text-gray-900">Inventory Management</h1>
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="mb-6 rounded-lg border-2 border-green-200 bg-green-50 p-4">
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <p className="text-green-800">{successMessage}</p>
+              </div>
+            </div>
+          )}
 
           {/* Summary Stats */}
           {isLoadingSummary ? (
@@ -326,6 +408,9 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                         <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                           Value
                         </th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -375,6 +460,14 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                             <td className="px-6 py-4 text-sm font-semibold text-gray-900">
                               {product.cost ? `₱${itemValue.toFixed(2)}` : "-"}
                             </td>
+                            <td className="px-6 py-4">
+                              <button
+                                onClick={() => openAdjustModal(product)}
+                                className="rounded-lg border-2 border-emerald-500 bg-white px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                              >
+                                Adjust Stock
+                              </button>
+                            </td>
                           </tr>
                         );
                       })}
@@ -399,6 +492,156 @@ export default function InventoryPage({ params }: InventoryPageProps) {
           )}
         </div>
       </main>
+
+      {/* Adjustment Modal */}
+      {showAdjustModal && selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg border-2 border-gray-200 bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Adjust Stock</h2>
+              <button
+                onClick={() => {
+                  setShowAdjustModal(false);
+                  resetAdjustmentForm();
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Product Info */}
+            <div className="mb-4 rounded-lg border-2 border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center gap-3">
+                {selectedProduct.imageUrl && (
+                  <img
+                    src={selectedProduct.imageUrl}
+                    alt={selectedProduct.name}
+                    className="h-12 w-12 rounded-lg border-2 border-gray-200 object-cover"
+                  />
+                )}
+                <div>
+                  <p className="font-semibold text-gray-900">{selectedProduct.name}</p>
+                  <p className="text-sm text-gray-600">Current Stock: <span className="font-bold">{selectedProduct.stock}</span></p>
+                </div>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {adjustmentError && (
+              <div className="mb-4 rounded-lg border-2 border-red-200 bg-red-50 p-3">
+                <p className="text-sm text-red-800">{adjustmentError}</p>
+              </div>
+            )}
+
+            {/* Adjustment Type */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Adjustment Type
+              </label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setAdjustmentType('INCREASE')}
+                  className={`flex-1 rounded-lg border-2 px-4 py-2 font-semibold transition ${
+                    adjustmentType === 'INCREASE'
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Increase
+                </button>
+                <button
+                  onClick={() => setAdjustmentType('DECREASE')}
+                  className={`flex-1 rounded-lg border-2 px-4 py-2 font-semibold transition ${
+                    adjustmentType === 'DECREASE'
+                      ? 'border-red-500 bg-red-50 text-red-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Decrease
+                </button>
+              </div>
+            </div>
+
+            {/* Quantity */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Quantity
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={adjustmentQuantity}
+                onChange={(e) => {
+                  setAdjustmentQuantity(e.target.value);
+                  setAdjustmentError('');
+                }}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+                placeholder="Enter quantity"
+              />
+            </div>
+
+            {/* Reason */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Reason
+              </label>
+              <select
+                value={adjustmentReason}
+                onChange={(e) => {
+                  setAdjustmentReason(e.target.value);
+                  setAdjustmentError('');
+                }}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+              >
+                <option value="">Select a reason</option>
+                <option value="Stock Received">Stock Received</option>
+                <option value="Sale">Sale</option>
+                <option value="Damaged">Damaged</option>
+                <option value="Returned">Returned</option>
+                <option value="Lost">Lost</option>
+                <option value="Correction">Inventory Correction</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            {/* Notes */}
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Notes (Optional)
+              </label>
+              <textarea
+                value={adjustmentNotes}
+                onChange={(e) => setAdjustmentNotes(e.target.value)}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+                rows={3}
+                placeholder="Add any additional notes..."
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowAdjustModal(false);
+                  resetAdjustmentForm();
+                }}
+                className="flex-1 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAdjustStock}
+                disabled={adjustStock.isPending}
+                className="flex-1 rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
+              >
+                {adjustStock.isPending ? 'Adjusting...' : 'Confirm'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
