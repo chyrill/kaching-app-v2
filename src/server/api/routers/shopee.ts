@@ -1269,4 +1269,93 @@ export const shopeeRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+
+  updateLowStockThreshold: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        shopId: z.string(),
+        threshold: z.number().min(0, 'Threshold must be at least 0'),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { productId, shopId, threshold } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Update threshold
+      const product = await ctx.db.product.update({
+        where: {
+          id: productId,
+          shopId, // Ensure product belongs to this shop
+        },
+        data: {
+          lowStockThreshold: threshold,
+        },
+      });
+
+      return {
+        success: true,
+        threshold: product.lowStockThreshold,
+      };
+    }),
+
+  getLowStockAlerts: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { shopId } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Fetch all products for this shop
+      const products = await ctx.db.product.findMany({
+        where: {
+          shopId,
+          stock: {
+            gt: 0, // Only products with stock
+          },
+        },
+      });
+
+      // Filter products where stock is at or below threshold
+      const alerts = products.filter(p => 
+        p.stock <= (p.lowStockThreshold ?? 10)
+      );
+
+      // Sort by urgency (lowest stock first, then by threshold ratio)
+      alerts.sort((a, b) => {
+        const aRatio = a.stock / (a.lowStockThreshold ?? 10);
+        const bRatio = b.stock / (b.lowStockThreshold ?? 10);
+        return aRatio - bRatio;
+      });
+
+      return {
+        alerts,
+        count: alerts.length,
+      };
+    }),
 });

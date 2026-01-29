@@ -37,6 +37,14 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [historyProduct, setHistoryProduct] = useState<any>(null);
 
+  // Threshold edit state
+  const [editingThreshold, setEditingThreshold] = useState<string | null>(null);
+  const [thresholdValue, setThresholdValue] = useState<string>('');
+  const [thresholdError, setThresholdError] = useState<string>('');
+
+  // Alerts modal state
+  const [showAlertsModal, setShowAlertsModal] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -114,6 +122,31 @@ export default function InventoryPage({ params }: InventoryPageProps) {
 
   const allMovements = movementsData?.pages.flatMap((page) => page.movements) ?? [];
 
+  // Fetch low stock alerts
+  const { data: alertsData, refetch: refetchAlerts } = api.shopee.getLowStockAlerts.useQuery(
+    { shopId: shopId! },
+    { enabled: mounted && !!shopId }
+  );
+
+  // Update threshold mutation
+  const updateThreshold = api.shopee.updateLowStockThreshold.useMutation({
+    onSuccess: (data) => {
+      setSuccessMessage(`Threshold updated to ${data.threshold}`);
+      setEditingThreshold(null);
+      setThresholdValue('');
+      setThresholdError('');
+      // Refresh data
+      void refetchInventory();
+      void refetchSummary();
+      void refetchAlerts();
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    },
+    onError: (error) => {
+      setThresholdError(error.message);
+    },
+  });
+
   const allProducts = inventoryData?.pages.flatMap((page) => page.products) ?? [];
 
   // Reset adjustment form
@@ -138,6 +171,35 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   const openHistoryModal = (product: any) => {
     setHistoryProduct(product);
     setShowHistoryModal(true);
+  };
+
+  // Start editing threshold
+  const startEditingThreshold = (product: any) => {
+    setEditingThreshold(product.id);
+    setThresholdValue((product.lowStockThreshold ?? 10).toString());
+    setThresholdError('');
+  };
+
+  // Cancel editing threshold
+  const cancelEditingThreshold = () => {
+    setEditingThreshold(null);
+    setThresholdValue('');
+    setThresholdError('');
+  };
+
+  // Save threshold
+  const saveThreshold = (productId: string) => {
+    const threshold = parseInt(thresholdValue);
+    if (isNaN(threshold) || threshold < 0) {
+      setThresholdError('Please enter a valid number (0 or greater)');
+      return;
+    }
+
+    updateThreshold.mutate({
+      productId,
+      shopId: shopId!,
+      threshold,
+    });
   };
 
   // Handle adjustment submission
@@ -272,7 +334,20 @@ export default function InventoryPage({ params }: InventoryPageProps) {
 
         <div className="p-6">
           {/* Page Header */}
-          <h1 className="mb-6 text-3xl font-bold text-gray-900">Inventory Management</h1>
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">Inventory Management</h1>
+            {alertsData && alertsData.count > 0 && (
+              <button
+                onClick={() => setShowAlertsModal(true)}
+                className="flex items-center gap-2 rounded-lg border-2 border-yellow-500 bg-yellow-50 px-4 py-2 font-semibold text-yellow-700 hover:bg-yellow-100 transition"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>{alertsData.count} Low Stock Alert{alertsData.count !== 1 ? 's' : ''}</span>
+              </button>
+            )}
+          </div>
 
           {/* Success Message */}
           {successMessage && (
@@ -464,6 +539,9 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                           Stock
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                          Low Stock Alert
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                           Status
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
@@ -512,6 +590,50 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                               }`}>
                                 {product.stock}
                               </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              {editingThreshold === product.id ? (
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    value={thresholdValue}
+                                    onChange={(e) => {
+                                      setThresholdValue(e.target.value);
+                                      setThresholdError('');
+                                    }}
+                                    className="w-20 rounded border-2 border-gray-200 px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none"
+                                    placeholder="10"
+                                  />
+                                  <button
+                                    onClick={() => saveThreshold(product.id)}
+                                    disabled={updateThreshold.isPending}
+                                    className="rounded border-2 border-emerald-500 bg-emerald-500 p-1 text-white hover:bg-emerald-600 disabled:opacity-50"
+                                  >
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    onClick={cancelEditingThreshold}
+                                    className="rounded border-2 border-gray-300 bg-white p-1 text-gray-600 hover:bg-gray-50"
+                                  >
+                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => startEditingThreshold(product)}
+                                  className="group flex items-center gap-2 text-sm text-gray-700 hover:text-emerald-600"
+                                >
+                                  <span className="font-semibold">{product.lowStockThreshold ?? 10}</span>
+                                  <svg className="h-4 w-4 opacity-0 group-hover:opacity-100 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                  </svg>
+                                </button>
+                              )}
                             </td>
                             <td className="px-6 py-4">
                               <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${stockStatus.color}`}>
@@ -866,6 +988,138 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                   setShowHistoryModal(false);
                   setHistoryProduct(null);
                 }}
+                className="w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Low Stock Alerts Modal */}
+      {showAlertsModal && alertsData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg border-2 border-gray-200 bg-white shadow-xl flex flex-col">
+            {/* Header */}
+            <div className="border-b-2 border-gray-200 bg-yellow-50 p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-yellow-100 p-2">
+                    <svg className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Low Stock Alerts</h2>
+                    <p className="text-sm text-gray-600">{alertsData.count} product{alertsData.count !== 1 ? 's' : ''} need{alertsData.count === 1 ? 's' : ''} attention</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowAlertsModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {alertsData.alerts.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-8">
+                    <svg className="mx-auto mb-4 h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-gray-600">No low stock alerts. All products are well stocked!</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {alertsData.alerts.map((product) => {
+                    const stockRatio = product.stock / (product.lowStockThreshold ?? 10);
+                    const urgencyLevel = stockRatio <= 0.25 ? 'critical' : stockRatio <= 0.5 ? 'high' : 'medium';
+                    
+                    return (
+                      <div
+                        key={product.id}
+                        className={`rounded-lg border-2 p-4 ${
+                          urgencyLevel === 'critical' 
+                            ? 'border-red-200 bg-red-50' 
+                            : urgencyLevel === 'high' 
+                            ? 'border-orange-200 bg-orange-50' 
+                            : 'border-yellow-200 bg-yellow-50'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex gap-4 flex-1">
+                            {/* Product Image */}
+                            {product.imageUrl && (
+                              <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                className="h-16 w-16 rounded-lg border-2 border-gray-200 object-cover"
+                              />
+                            )}
+
+                            {/* Product Info */}
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h3 className="font-bold text-gray-900">{product.name}</h3>
+                                <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
+                                  urgencyLevel === 'critical' 
+                                    ? 'bg-red-100 text-red-700 border-red-200' 
+                                    : urgencyLevel === 'high' 
+                                    ? 'bg-orange-100 text-orange-700 border-orange-200' 
+                                    : 'bg-yellow-100 text-yellow-700 border-yellow-200'
+                                } border`}>
+                                  {urgencyLevel === 'critical' ? 'CRITICAL' : urgencyLevel === 'high' ? 'HIGH' : 'MEDIUM'}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-2">
+                                SKU: {product.sku || "N/A"} • Platform: {product.platform}
+                              </p>
+                              <div className="flex items-center gap-4 text-sm">
+                                <span className="text-gray-700">
+                                  Current Stock: <span className="font-bold text-red-600">{product.stock}</span>
+                                </span>
+                                <span className="text-gray-400">•</span>
+                                <span className="text-gray-700">
+                                  Alert Threshold: <span className="font-bold">{product.lowStockThreshold ?? 10}</span>
+                                </span>
+                                <span className="text-gray-400">•</span>
+                                <span className="text-gray-700">
+                                  Price: <span className="font-bold">₱{Number(product.price).toFixed(2)}</span>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Button */}
+                          <button
+                            onClick={() => {
+                              setShowAlertsModal(false);
+                              openAdjustModal(product);
+                            }}
+                            className="rounded-lg border-2 border-emerald-500 bg-white px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                          >
+                            Restock
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t-2 border-gray-200 bg-gray-50 p-4">
+              <button
+                onClick={() => setShowAlertsModal(false)}
                 className="w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
               >
                 Close
