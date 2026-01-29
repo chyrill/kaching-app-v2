@@ -1212,4 +1212,61 @@ export const shopeeRouter = createTRPCRouter({
         stockAfter,
       };
     }),
+
+  getStockMovements: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        shopId: z.string(),
+        limit: z.number().min(1).max(100).default(50),
+        cursor: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { productId, shopId, limit, cursor } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Fetch movements with pagination
+      const movements = await ctx.db.stockMovement.findMany({
+        where: {
+          productId,
+          shopId,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+      });
+
+      let nextCursor: string | undefined = undefined;
+      if (movements.length > limit) {
+        const nextItem = movements.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        movements,
+        nextCursor,
+      };
+    }),
 });

@@ -33,6 +33,10 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   const [adjustmentError, setAdjustmentError] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
 
+  // History modal state
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [historyProduct, setHistoryProduct] = useState<any>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -89,6 +93,27 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     },
   });
 
+  // Fetch stock movements for history modal
+  const {
+    data: movementsData,
+    isLoading: isLoadingMovements,
+    fetchNextPage: fetchNextMovements,
+    hasNextPage: hasNextMovements,
+    isFetchingNextPage: isFetchingNextMovements,
+  } = api.shopee.getStockMovements.useInfiniteQuery(
+    {
+      productId: historyProduct?.id ?? '',
+      shopId: shopId!,
+      limit: 20,
+    },
+    {
+      enabled: showHistoryModal && !!historyProduct && !!shopId,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  const allMovements = movementsData?.pages.flatMap((page) => page.movements) ?? [];
+
   const allProducts = inventoryData?.pages.flatMap((page) => page.products) ?? [];
 
   // Reset adjustment form
@@ -107,6 +132,12 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     setShowAdjustModal(true);
     resetAdjustmentForm();
     setSelectedProduct(product); // Set again after reset
+  };
+
+  // Open history modal
+  const openHistoryModal = (product: any) => {
+    setHistoryProduct(product);
+    setShowHistoryModal(true);
   };
 
   // Handle adjustment submission
@@ -129,6 +160,36 @@ export default function InventoryPage({ params }: InventoryPageProps) {
       reason: adjustmentReason,
       notes: adjustmentNotes || undefined,
     });
+  };
+
+  // Format date for display
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+
+  // Get source badge color
+  const getSourceColor = (source: string) => {
+    switch (source) {
+      case 'MANUAL':
+        return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'WEBHOOK':
+        return 'bg-purple-100 text-purple-700 border-purple-200';
+      case 'SYSTEM':
+        return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'ORDER_CREATED':
+        return 'bg-orange-100 text-orange-700 border-orange-200';
+      case 'ORDER_CANCELLED':
+        return 'bg-red-100 text-red-700 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-700 border-gray-200';
+    }
   };
 
   // Platform badge color mapping
@@ -461,12 +522,20 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                               {product.cost ? `₱${itemValue.toFixed(2)}` : "-"}
                             </td>
                             <td className="px-6 py-4">
-                              <button
-                                onClick={() => openAdjustModal(product)}
-                                className="rounded-lg border-2 border-emerald-500 bg-white px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
-                              >
-                                Adjust Stock
-                              </button>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={() => openAdjustModal(product)}
+                                  className="rounded-lg border-2 border-emerald-500 bg-white px-3 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                                >
+                                  Adjust
+                                </button>
+                                <button
+                                  onClick={() => openHistoryModal(product)}
+                                  className="rounded-lg border-2 border-blue-500 bg-white px-3 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-50 transition"
+                                >
+                                  History
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -638,6 +707,168 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                 className="flex-1 rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
               >
                 {adjustStock.isPending ? 'Adjusting...' : 'Confirm'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* History Modal */}
+      {showHistoryModal && historyProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg border-2 border-gray-200 bg-white shadow-xl flex flex-col">
+            {/* Header */}
+            <div className="border-b-2 border-gray-200 bg-gray-50 p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Stock Movement History</h2>
+                  <p className="mt-1 text-sm text-gray-600">{historyProduct.name}</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowHistoryModal(false);
+                    setHistoryProduct(null);
+                  }}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Product Info */}
+              <div className="mt-4 flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white p-3">
+                {historyProduct.imageUrl && (
+                  <img
+                    src={historyProduct.imageUrl}
+                    alt={historyProduct.name}
+                    className="h-12 w-12 rounded-lg border-2 border-gray-200 object-cover"
+                  />
+                )}
+                <div>
+                  <p className="font-semibold text-gray-900">{historyProduct.name}</p>
+                  <p className="text-sm text-gray-600">
+                    SKU: {historyProduct.sku || "N/A"} • Current Stock: <span className="font-bold">{historyProduct.stock}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {isLoadingMovements ? (
+                <div className="text-center py-8">
+                  <div className="text-gray-600">Loading movement history...</div>
+                </div>
+              ) : allMovements.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="rounded-lg border-2 border-gray-200 bg-gray-50 p-8">
+                    <p className="text-gray-600">No stock movements recorded yet.</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Timeline */}
+                  <div className="space-y-4">
+                    {allMovements.map((movement, index) => (
+                      <div key={movement.id} className="relative">
+                        {/* Timeline line */}
+                        {index < allMovements.length - 1 && (
+                          <div className="absolute left-6 top-12 bottom-0 w-0.5 bg-gray-200" />
+                        )}
+
+                        {/* Movement card */}
+                        <div className="flex gap-4">
+                          {/* Timeline dot */}
+                          <div className={`flex-shrink-0 mt-1 h-12 w-12 rounded-full border-4 flex items-center justify-center ${
+                            movement.type === 'INCREASE' 
+                              ? 'border-emerald-200 bg-emerald-100' 
+                              : 'border-red-200 bg-red-100'
+                          }`}>
+                            {movement.type === 'INCREASE' ? (
+                              <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                              </svg>
+                            ) : (
+                              <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                              </svg>
+                            )}
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1 rounded-lg border-2 border-gray-200 bg-white p-4">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${
+                                    movement.type === 'INCREASE' 
+                                      ? 'bg-emerald-100 text-emerald-700 border-emerald-200' 
+                                      : 'bg-red-100 text-red-700 border-red-200'
+                                  }`}>
+                                    {movement.type === 'INCREASE' ? '+' : '-'}{movement.quantity}
+                                  </span>
+                                  <span className={`inline-flex rounded-full border px-2 py-1 text-xs font-semibold ${getSourceColor(movement.source)}`}>
+                                    {movement.source.replace(/_/g, ' ')}
+                                  </span>
+                                </div>
+                                <p className="text-sm font-semibold text-gray-900 mb-1">
+                                  {movement.reason}
+                                </p>
+                                {movement.notes && (
+                                  <p className="text-sm text-gray-600 mb-2">
+                                    {movement.notes}
+                                  </p>
+                                )}
+                                <div className="flex items-center gap-4 text-xs text-gray-500">
+                                  <span>
+                                    Stock: <span className="font-semibold">{movement.stockBefore}</span> → <span className="font-semibold">{movement.stockAfter}</span>
+                                  </span>
+                                  <span>•</span>
+                                  <span>
+                                    By: {movement.user.name || movement.user.email}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xs text-gray-500">
+                                  {formatDate(movement.createdAt)}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Load More */}
+                  {hasNextMovements && (
+                    <div className="mt-6 text-center">
+                      <button
+                        onClick={() => void fetchNextMovements()}
+                        disabled={isFetchingNextMovements}
+                        className="rounded-lg border-2 border-gray-200 bg-white px-6 py-2 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        {isFetchingNextMovements ? "Loading..." : "Load More"}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t-2 border-gray-200 bg-gray-50 p-4">
+              <button
+                onClick={() => {
+                  setShowHistoryModal(false);
+                  setHistoryProduct(null);
+                }}
+                className="w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Close
               </button>
             </div>
           </div>
