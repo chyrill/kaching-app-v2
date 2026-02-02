@@ -45,6 +45,21 @@ export default function InventoryPage({ params }: InventoryPageProps) {
   // Alerts modal state
   const [showAlertsModal, setShowAlertsModal] = useState(false);
 
+  // Bulk selection state
+  const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
+  const [showBulkAdjustModal, setShowBulkAdjustModal] = useState(false);
+  const [bulkAdjustmentType, setBulkAdjustmentType] = useState<AdjustmentType>('INCREASE');
+  const [bulkAdjustmentQuantity, setBulkAdjustmentQuantity] = useState<string>('');
+  const [bulkAdjustmentReason, setBulkAdjustmentReason] = useState<string>('');
+  const [bulkAdjustmentNotes, setBulkAdjustmentNotes] = useState<string>('');
+  const [bulkAdjustmentError, setBulkAdjustmentError] = useState<string>('');
+
+  // CSV import state
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [csvPreview, setCsvPreview] = useState<any[]>([]);
+  const [importError, setImportError] = useState<string>('');
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -147,6 +162,25 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     },
   });
 
+  // Bulk adjust stock mutation
+  const bulkAdjustStock = api.shopee.bulkAdjustStock.useMutation({
+    onSuccess: (data) => {
+      setSuccessMessage(`Successfully adjusted ${data.updatedCount} product${data.updatedCount !== 1 ? 's' : ''}`);
+      setShowBulkAdjustModal(false);
+      resetBulkAdjustmentForm();
+      setSelectedProducts(new Set());
+      // Refresh data
+      void refetchInventory();
+      void refetchSummary();
+      void refetchAlerts();
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    },
+    onError: (error) => {
+      setBulkAdjustmentError(error.message);
+    },
+  });
+
   const allProducts = inventoryData?.pages.flatMap((page) => page.products) ?? [];
 
   // Reset adjustment form
@@ -157,6 +191,15 @@ export default function InventoryPage({ params }: InventoryPageProps) {
     setAdjustmentReason('');
     setAdjustmentNotes('');
     setAdjustmentError('');
+  };
+
+  // Reset bulk adjustment form
+  const resetBulkAdjustmentForm = () => {
+    setBulkAdjustmentType('INCREASE');
+    setBulkAdjustmentQuantity('');
+    setBulkAdjustmentReason('');
+    setBulkAdjustmentNotes('');
+    setBulkAdjustmentError('');
   };
 
   // Open adjustment modal
@@ -222,6 +265,100 @@ export default function InventoryPage({ params }: InventoryPageProps) {
       reason: adjustmentReason,
       notes: adjustmentNotes || undefined,
     });
+  };
+
+  // Handle bulk adjustment submission
+  const handleBulkAdjustStock = () => {
+    // Validate form
+    if (!bulkAdjustmentQuantity || parseInt(bulkAdjustmentQuantity) < 1) {
+      setBulkAdjustmentError('Please enter a quantity of at least 1');
+      return;
+    }
+    if (!bulkAdjustmentReason) {
+      setBulkAdjustmentError('Please select a reason');
+      return;
+    }
+
+    bulkAdjustStock.mutate({
+      productIds: Array.from(selectedProducts),
+      shopId: shopId!,
+      type: bulkAdjustmentType,
+      quantity: parseInt(bulkAdjustmentQuantity),
+      reason: bulkAdjustmentReason,
+      notes: bulkAdjustmentNotes || undefined,
+    });
+  };
+
+  // Toggle product selection
+  const toggleProductSelection = (productId: string) => {
+    setSelectedProducts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(productId)) {
+        newSet.delete(productId);
+      } else {
+        newSet.add(productId);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle all products selection
+  const toggleAllProducts = () => {
+    if (selectedProducts.size === allProducts.length) {
+      setSelectedProducts(new Set());
+    } else {
+      setSelectedProducts(new Set(allProducts.map(p => p.id)));
+    }
+  };
+
+  // Parse CSV file
+  const handleCsvFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+      setImportError('Please select a CSV file');
+      return;
+    }
+
+    setCsvFile(file);
+    setImportError('');
+
+    // Read and parse CSV
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      const lines = text.split('\n').filter(line => line.trim());
+      
+      if (lines.length < 2) {
+        setImportError('CSV file is empty or invalid');
+        return;
+      }
+
+      // Parse header
+      const headers = lines[0]!.split(',').map(h => h.trim().toLowerCase());
+      const skuIndex = headers.indexOf('sku');
+      const quantityIndex = headers.indexOf('quantity');
+
+      if (skuIndex === -1 || quantityIndex === -1) {
+        setImportError('CSV must have "sku" and "quantity" columns');
+        return;
+      }
+
+      // Parse rows
+      const preview = lines.slice(1, 11).map((line, idx) => {
+        const values = line.split(',').map(v => v.trim());
+        return {
+          row: idx + 2,
+          sku: values[skuIndex] || '',
+          quantity: parseInt(values[quantityIndex] || '0'),
+        };
+      });
+
+      setCsvPreview(preview);
+    };
+
+    reader.readAsText(file);
   };
 
   // Format date for display
@@ -442,6 +579,36 @@ export default function InventoryPage({ params }: InventoryPageProps) {
             </div>
           ) : null}
 
+          {/* Bulk Actions Bar */}
+          {selectedProducts.size > 0 && (
+            <div className="mb-6 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="font-semibold text-emerald-900">
+                    {selectedProducts.size} product{selectedProducts.size !== 1 ? 's' : ''} selected
+                  </span>
+                  <button
+                    onClick={() => setSelectedProducts(new Set())}
+                    className="text-sm text-emerald-700 hover:text-emerald-900 underline"
+                  >
+                    Clear selection
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      resetBulkAdjustmentForm();
+                      setShowBulkAdjustModal(true);
+                    }}
+                    className="rounded-lg border-2 border-emerald-500 bg-white px-4 py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-50 transition"
+                  >
+                    Bulk Adjust Stock
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Filters & Search */}
           <div className="mb-6 rounded-lg border-2 border-gray-200 bg-white p-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -523,6 +690,14 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                   <table className="w-full">
                     <thead className="border-b-2 border-gray-200 bg-gray-50">
                       <tr>
+                        <th className="px-6 py-3 text-left">
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.size === allProducts.length && allProducts.length > 0}
+                            onChange={toggleAllProducts}
+                            className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                          />
+                        </th>
                         <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                           Product
                         </th>
@@ -559,6 +734,14 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                         
                         return (
                           <tr key={product.id} className="hover:bg-gray-50 transition">
+                            <td className="px-6 py-4">
+                              <input
+                                type="checkbox"
+                                checked={selectedProducts.has(product.id)}
+                                onChange={() => toggleProductSelection(product.id)}
+                                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                              />
+                            </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-3">
                                 {product.imageUrl && (
@@ -1123,6 +1306,147 @@ export default function InventoryPage({ params }: InventoryPageProps) {
                 className="w-full rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Adjustment Modal */}
+      {showBulkAdjustModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg border-2 border-gray-200 bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Bulk Adjust Stock</h2>
+              <button
+                onClick={() => {
+                  setShowBulkAdjustModal(false);
+                  resetBulkAdjustmentForm();
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Selected Products Info */}
+            <div className="mb-4 rounded-lg border-2 border-gray-200 bg-gray-50 p-4">
+              <p className="text-sm text-gray-600">
+                Adjusting stock for <span className="font-bold text-gray-900">{selectedProducts.size}</span> product{selectedProducts.size !== 1 ? 's' : ''}
+              </p>
+            </div>
+
+            {/* Error Message */}
+            {bulkAdjustmentError && (
+              <div className="mb-4 rounded-lg border-2 border-red-200 bg-red-50 p-3">
+                <p className="text-sm text-red-800">{bulkAdjustmentError}</p>
+              </div>
+            )}
+
+            {/* Adjustment Type */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Adjustment Type
+              </label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setBulkAdjustmentType('INCREASE')}
+                  className={`flex-1 rounded-lg border-2 px-4 py-2 font-semibold transition ${
+                    bulkAdjustmentType === 'INCREASE'
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Increase
+                </button>
+                <button
+                  onClick={() => setBulkAdjustmentType('DECREASE')}
+                  className={`flex-1 rounded-lg border-2 px-4 py-2 font-semibold transition ${
+                    bulkAdjustmentType === 'DECREASE'
+                      ? 'border-red-500 bg-red-50 text-red-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Decrease
+                </button>
+              </div>
+            </div>
+
+            {/* Quantity */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Quantity
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={bulkAdjustmentQuantity}
+                onChange={(e) => {
+                  setBulkAdjustmentQuantity(e.target.value);
+                  setBulkAdjustmentError('');
+                }}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+                placeholder="Enter quantity"
+              />
+            </div>
+
+            {/* Reason */}
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Reason
+              </label>
+              <select
+                value={bulkAdjustmentReason}
+                onChange={(e) => {
+                  setBulkAdjustmentReason(e.target.value);
+                  setBulkAdjustmentError('');
+                }}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+              >
+                <option value="">Select a reason</option>
+                <option value="Stock Received">Stock Received</option>
+                <option value="Sale">Sale</option>
+                <option value="Damaged">Damaged</option>
+                <option value="Returned">Returned</option>
+                <option value="Lost">Lost</option>
+                <option value="Correction">Inventory Correction</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            {/* Notes */}
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Notes (Optional)
+              </label>
+              <textarea
+                value={bulkAdjustmentNotes}
+                onChange={(e) => setBulkAdjustmentNotes(e.target.value)}
+                className="w-full rounded-lg border-2 border-gray-200 p-2 focus:border-emerald-500 focus:outline-none"
+                rows={3}
+                placeholder="Add any additional notes..."
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowBulkAdjustModal(false);
+                  resetBulkAdjustmentForm();
+                }}
+                className="flex-1 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleBulkAdjustStock}
+                disabled={bulkAdjustStock.isPending}
+                className="flex-1 rounded-lg border-2 border-emerald-500 bg-emerald-500 px-4 py-2 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50"
+              >
+                {bulkAdjustStock.isPending ? 'Adjusting...' : 'Confirm'}
               </button>
             </div>
           </div>

@@ -1358,4 +1358,90 @@ export const shopeeRouter = createTRPCRouter({
         count: alerts.length,
       };
     }),
+
+  bulkAdjustStock: protectedProcedure
+    .input(
+      z.object({
+        productIds: z.array(z.string()).min(1, 'At least one product must be selected'),
+        shopId: z.string(),
+        type: z.enum(['INCREASE', 'DECREASE']),
+        quantity: z.number().min(1, 'Quantity must be at least 1'),
+        reason: z.string().min(1, 'Reason is required'),
+        notes: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { productIds, shopId, type, quantity, reason, notes } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Fetch all products
+      const products = await ctx.db.product.findMany({
+        where: {
+          id: { in: productIds },
+          shopId, // Ensure all products belong to this shop
+        },
+      });
+
+      if (products.length !== productIds.length) {
+        throw new Error('Some products not found or do not belong to this shop');
+      }
+
+      // Validate DECREASE operations
+      if (type === 'DECREASE') {
+        const insufficientStock = products.filter(p => p.stock < quantity);
+        if (insufficientStock.length > 0) {
+          const names = insufficientStock.map(p => p.name).join(', ');
+          throw new Error(`Insufficient stock for: ${names}`);
+        }
+      }
+
+      // Perform bulk updates in a transaction
+      await ctx.db.$transaction(
+        products.map((product) => {
+          const stockBefore = product.stock;
+          const stockAfter = type === 'INCREASE' 
+            ? stockBefore + quantity 
+            : stockBefore - quantity;
+
+          return ctx.db.$transaction([
+            // Update product stock
+            ctx.db.product.update({
+              where: { id: product.id },
+              data: { stock: stockAfter },
+            }),
+            // Create stock movement record
+            ctx.db.stockMovement.create({
+              data: {
+                productId: product.id,
+                shopId,
+                userId: ctx.session.user.id,
+                type,
+                source: 'MANUAL',
+                quantity,
+                stockBefore,
+                stockAfter,
+                reason,
+                notes,
+              },
+            }),
+          ]);
+        }).flat()
+      );
+
+      return {
+        success: true,
+        updatedCount: products.length,
+      };
+    }),
 });
