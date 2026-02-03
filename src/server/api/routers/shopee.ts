@@ -1167,7 +1167,7 @@ export const shopeeRouter = createTRPCRouter({
         where: { id: productId },
       });
 
-      if (!product || product.shopId !== shopId) {
+      if (product?.shopId !== shopId) {
         throw new Error('Product not found');
       }
 
@@ -1442,6 +1442,145 @@ export const shopeeRouter = createTRPCRouter({
       return {
         success: true,
         updatedCount: products.length,
+      };
+    }),
+
+  getInventoryAnalytics: protectedProcedure
+    .input(
+      z.object({
+        shopId: z.string(),
+        dateRange: z.enum(['7d', '30d', '90d', 'all']).default('30d'),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { shopId, dateRange } = input;
+
+      // Verify user has access to this shop
+      const shopUser = await ctx.db.shopUser.findFirst({
+        where: {
+          shopId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!shopUser) {
+        throw new Error('You do not have access to this shop');
+      }
+
+      // Calculate date threshold
+      const now = new Date();
+      const dateThreshold = new Date();
+      if (dateRange === '7d') {
+        dateThreshold.setDate(now.getDate() - 7);
+      } else if (dateRange === '30d') {
+        dateThreshold.setDate(now.getDate() - 30);
+      } else if (dateRange === '90d') {
+        dateThreshold.setDate(now.getDate() - 90);
+      } else {
+        dateThreshold.setFullYear(2000); // All time
+      }
+
+      // Fetch all products
+      const products = await ctx.db.product.findMany({
+        where: { shopId },
+      });
+
+      // Fetch stock movements in date range
+      const movements = await ctx.db.stockMovement.findMany({
+        where: {
+          shopId,
+          createdAt: {
+            gte: dateThreshold,
+          },
+        },
+        include: {
+          product: true,
+        },
+      });
+
+      // Calculate total inventory value
+      const totalInventoryValue = products.reduce((sum, p) => {
+        const cost = p.cost ? Number(p.cost) : 0;
+        return sum + (cost * p.stock);
+      }, 0);
+
+      // Calculate top sellers (most movement activity)
+      const productMovements = new Map<string, { product: any, totalMoved: number, moveCount: number }>();
+      movements.forEach(m => {
+        if (m.type === 'DECREASE' && (m.source === 'ORDER_CREATED' || m.source === 'MANUAL')) {
+          const existing = productMovements.get(m.productId) || { product: m.product, totalMoved: 0, moveCount: 0 };
+          productMovements.set(m.productId, {
+            product: m.product,
+            totalMoved: existing.totalMoved + m.quantity,
+            moveCount: existing.moveCount + 1,
+          });
+        }
+      });
+
+      const topSellers = Array.from(productMovements.values())
+        .sort((a, b) => b.totalMoved - a.totalMoved)
+        .slice(0, 10)
+        .map(item => ({
+          product: item.product,
+          unitsSold: item.totalMoved,
+          moveCount: item.moveCount,
+          revenue: Number(item.product.price) * item.totalMoved,
+        }));
+
+      // Calculate turnover rate (units sold / average inventory)
+      const totalUnitsSold = topSellers.reduce((sum, s) => sum + s.unitsSold, 0);
+      const averageInventory = products.reduce((sum, p) => sum + p.stock, 0) / products.length;
+      const turnoverRate = averageInventory > 0 ? (totalUnitsSold / averageInventory).toFixed(2) : '0.00';
+
+      // Identify dead stock (no movement in date range)
+      const productsWithMovement = new Set(movements.map(m => m.productId));
+      const deadStock = products
+        .filter(p => !productsWithMovement.has(p.id) && p.stock > 0)
+        .sort((a, b) => b.stock - a.stock)
+        .slice(0, 10)
+        .map(p => ({
+          product: p,
+          daysStagnant: Math.floor((now.getTime() - p.updatedAt.getTime()) / (1000 * 60 * 60 * 24)),
+          inventoryValue: Number(p.cost || 0) * p.stock,
+        }));
+
+      // Generate reorder suggestions (low stock + high turnover)
+      const reorderSuggestions = products
+        .filter(p => {
+          const isLowStock = p.stock <= (p.lowStockThreshold ?? 10);
+          const movement = productMovements.get(p.id);
+          const hasHighTurnover = movement && movement.totalMoved > 5;
+          return isLowStock && hasHighTurnover;
+        })
+        .sort((a, b) => {
+          const aMovement = productMovements.get(a.id)?.totalMoved || 0;
+          const bMovement = productMovements.get(b.id)?.totalMoved || 0;
+          return bMovement - aMovement;
+        })
+        .slice(0, 10)
+        .map(p => {
+          const movement = productMovements.get(p.id)!;
+          const avgDailySales = movement.totalMoved / Math.max(1, dateRange === '7d' ? 7 : dateRange === '30d' ? 30 : 90);
+          const daysOfStock = p.stock / Math.max(1, avgDailySales);
+          const suggestedReorder = Math.ceil(avgDailySales * 14); // 2 weeks supply
+          return {
+            product: p,
+            currentStock: p.stock,
+            unitsSold: movement.totalMoved,
+            avgDailySales: Number(avgDailySales.toFixed(2)),
+            daysOfStockLeft: Number(daysOfStock.toFixed(1)),
+            suggestedReorderQty: suggestedReorder,
+          };
+        });
+
+      return {
+        totalInventoryValue,
+        turnoverRate,
+        totalUnitsSold,
+        topSellers,
+        deadStock,
+        reorderSuggestions,
+        dateRange,
       };
     }),
 });
