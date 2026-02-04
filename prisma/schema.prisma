@@ -76,6 +76,10 @@ model User {
   
   // Team invitations
   invitationsSent Invitation[] @relation("InvitationsSent")
+  
+  // Epic 11: Notifications relations
+  notificationPreferences NotificationPreferences[]
+  stockMovements          StockMovement[]
 }
 
 // Shop model (tenant entity for multi-tenancy)
@@ -98,6 +102,10 @@ model Shop {
   products          Product[]
   orders            Order[]
   webhookPayloads   WebhookPayload[]
+  stockMovements    StockMovement[]
+  
+  // Epic 11: Notifications relations
+  notificationPreferences NotificationPreferences[]
 
   @@index([ownerId])
 }
@@ -307,6 +315,8 @@ model StockMovement {
 
   // Relations
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shop    Shop    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([productId])
   @@index([shopId])
@@ -337,4 +347,52 @@ model WebhookPayload {
   @@index([status])
   @@index([eventType])
   @@index([createdAt])
+}
+
+// Notification Preferences model
+model NotificationPreferences {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  shopId    String
+  
+  // Email notification toggles
+  emailNewOrders           Boolean @default(true)
+  emailOrderStatusChange   Boolean @default(true)
+  emailLowStock            Boolean @default(true)
+  emailOutOfStock          Boolean @default(true)
+  emailWeeklyReport        Boolean @default(true)
+  
+  // Notification frequency
+  lowStockFrequency        String  @default("daily") // instant, daily, weekly
+  
+  // Threshold settings
+  lowStockThreshold        Int?    // Override global threshold for notifications
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([shopId])
+}
+
+// Email Log model (track sent emails)
+model EmailLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  shopId      String?
+  emailType   String   // new_order, order_status, low_stock, weekly_report
+  recipient   String
+  subject     String
+  status      String   @default("sent") // sent, failed, bounced
+  errorMessage String?
+  sentAt      DateTime @default(now())
+  
+  @@index([userId])
+  @@index([shopId])
+  @@index([emailType])
+  @@index([sentAt])
 }

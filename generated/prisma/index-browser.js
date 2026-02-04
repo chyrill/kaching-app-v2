@@ -284,6 +284,33 @@ exports.Prisma.WebhookPayloadScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NotificationPreferencesScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  shopId: 'shopId',
+  emailNewOrders: 'emailNewOrders',
+  emailOrderStatusChange: 'emailOrderStatusChange',
+  emailLowStock: 'emailLowStock',
+  emailOutOfStock: 'emailOutOfStock',
+  emailWeeklyReport: 'emailWeeklyReport',
+  lowStockFrequency: 'lowStockFrequency',
+  lowStockThreshold: 'lowStockThreshold',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EmailLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  shopId: 'shopId',
+  emailType: 'emailType',
+  recipient: 'recipient',
+  subject: 'subject',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  sentAt: 'sentAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -360,7 +387,9 @@ exports.Prisma.ModelName = {
   Product: 'Product',
   Order: 'Order',
   StockMovement: 'StockMovement',
-  WebhookPayload: 'WebhookPayload'
+  WebhookPayload: 'WebhookPayload',
+  NotificationPreferences: 'NotificationPreferences',
+  EmailLog: 'EmailLog'
 };
 
 /**

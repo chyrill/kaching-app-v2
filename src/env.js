@@ -24,6 +24,7 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: z.string().optional(),
     SHOPEE_PARTNER_ID: z.string().optional(),
     SHOPEE_PARTNER_KEY: z.string().optional(),
+    RESEND_API_KEY: z.string().optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -57,6 +58,7 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     SHOPEE_PARTNER_ID: process.env.SHOPEE_PARTNER_ID,
     SHOPEE_PARTNER_KEY: process.env.SHOPEE_PARTNER_KEY,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
   },
