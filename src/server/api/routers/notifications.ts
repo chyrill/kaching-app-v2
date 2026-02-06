@@ -207,4 +207,65 @@ export const notificationsRouter = createTRPCRouter({
 
       return stats;
     }),
+
+  /**
+   * Get low stock summary for a shop
+   */
+  getLowStockSummary: protectedProcedure
+    .input(z.object({
+      shopId: z.string(),
+    }))
+    .query(async ({ ctx, input }) => {
+      // Check user has access to this shop
+      const membership = await ctx.db.shopMembership.findFirst({
+        where: {
+          userId: ctx.session.user.id,
+          shopId: input.shopId,
+        },
+      });
+
+      if (!membership) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have access to this shop",
+        });
+      }
+
+      // Import dynamically to avoid circular dependencies
+      const { getLowStockSummary } = await import('~/lib/notifications/low-stock-check');
+      const summaries = await getLowStockSummary(input.shopId);
+      
+      return summaries[0] || null;
+    }),
+
+  /**
+   * Manually trigger low stock check for a shop (OWNER only)
+   */
+  checkLowStock: protectedProcedure
+    .input(z.object({
+      shopId: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      // Check user is OWNER
+      const membership = await ctx.db.shopMembership.findFirst({
+        where: {
+          userId: ctx.session.user.id,
+          shopId: input.shopId,
+          role: 'OWNER',
+        },
+      });
+
+      if (!membership) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Only shop owners can trigger low stock checks",
+        });
+      }
+
+      // Import dynamically to avoid circular dependencies
+      const { checkLowStockAndNotify } = await import('~/lib/notifications/low-stock-check');
+      const results = await checkLowStockAndNotify({ shopId: input.shopId });
+      
+      return results[0] || null;
+    }),
 });
